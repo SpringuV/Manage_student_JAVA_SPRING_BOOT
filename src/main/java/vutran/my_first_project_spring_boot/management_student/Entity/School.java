@@ -1,0 +1,139 @@
+package vutran.my_first_project_spring_boot.management_student.Entity;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+
+import java.util.List;
+
+@Entity
+@Table(name = "school")
+public class School {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "school_id")
+    private int id;
+
+    @Column(name = "school_name")
+    private String name;
+
+    @Column(name = "school_address")
+    private String address;
+
+    @Column(name = "school_phone")
+    private String phone;
+
+    // một trường có nhiều lớp
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference // đảm bảo không có chu kì lặp giữa các đối tượng
+    private List<Classes> classesList;
+
+    // một trường làm việc với nhiều giáo viên
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<Teacher> teacherList;
+
+    // một trường có nhiều học sinh, nhiều học sinh học ở 1 trường
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<Student> studentList;
+
+    // một trường dạy nhiều môn học, nhiều môn học cũng được dạy nhiều ở nhiều trường
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
+    @JoinTable(name = "school_subject", joinColumns = @JoinColumn(name ="school_id"), inverseJoinColumns = @JoinColumn(name ="subject_id"))
+    @JsonBackReference
+    private List<Subject> subjectList;
+
+    public School() {
+    }
+
+    public School(String name, String address, String phone, List<Classes> classesList, List<Teacher> teacherList, List<Student> studentList, List<Subject> subjectList) {
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.classesList = classesList;
+        this.teacherList = teacherList;
+        this.studentList = studentList;
+        this.subjectList = subjectList;
+    }
+
+    public School(String name, String address, String phone) {
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+    }
+
+    public List<Subject> getSubjectList() {
+        return subjectList;
+    }
+
+    public void setSubjectList(List<Subject> subjectList) {
+        this.subjectList = subjectList;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public List<Classes> getClassesList() {
+        return classesList;
+    }
+
+    public void setClassesList(List<Classes> classesList) {
+        this.classesList = classesList;
+    }
+
+    public List<Teacher> getTeacherList() {
+        return teacherList;
+    }
+
+    public void setTeacherList(List<Teacher> teacherList) {
+        this.teacherList = teacherList;
+    }
+
+    public List<Student> getStudentList() {
+        return studentList;
+    }
+
+    public void setStudentList(List<Student> studentList) {
+        this.studentList = studentList;
+    }
+
+    @Override
+    public String toString() {
+        return "School{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
+}
