@@ -23,6 +23,9 @@ public class School {
     @Column(name = "school_phone")
     private String phone;
 
+    @Column(name = "school_level")
+    private String level;
+
     // một trường có nhiều lớp
     @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonBackReference // đảm bảo không có chu kì lặp giữa các đối tượng
@@ -47,20 +50,30 @@ public class School {
     public School() {
     }
 
-    public School(String name, String address, String phone, List<Classes> classesList, List<Teacher> teacherList, List<Student> studentList, List<Subject> subjectList) {
+    public School(String name, String address, String phone, String level, List<Classes> classesList, List<Teacher> teacherList, List<Student> studentList, List<Subject> subjectList) {
         this.name = name;
         this.address = address;
         this.phone = phone;
+        this.level = level;
         this.classesList = classesList;
         this.teacherList = teacherList;
         this.studentList = studentList;
         this.subjectList = subjectList;
     }
 
-    public School(String name, String address, String phone) {
+    public School(String name, String address, String phone, String level) {
         this.name = name;
         this.address = address;
         this.phone = phone;
+        this.level = level;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public List<Subject> getSubjectList() {

@@ -1,0 +1,84 @@
+
+    // rest api
+
+//    @GetMapping
+//    public List<School> getAllSchool(){
+//        return this.schoolService.getAllSchools();
+//    }
+//    @GetMapping("/find-name/{name}")
+//    public List<School> getListSchoolName(@PathVariable String name){
+//        return schoolService.findListSchoolByNamePattern(name);
+//    }
+//
+//    @GetMapping("/find-id/{id}")
+//    public School getSchoolName(@PathVariable int id){
+//        return schoolService.getSchoolById(id);
+//    }
+//    // add school
+//    @PostMapping("/add")
+//    public ResponseEntity<School> addSchool(@RequestBody School school){ // tu dong bien json thanh students
+//        school.setId(0); //bat buoc them moi va tu phat sinh ra id khi khach hang co nhap id
+//        school = schoolService.addSchool(school);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(school);
+//    }
+//
+//    // modify school
+//    @PutMapping("/modify/{id}")
+//    public ResponseEntity<School> updateSchool(@PathVariable int id, @RequestBody School school){
+//        School existSchool = schoolService.getSchoolById(id);
+//        if(existSchool != null) {
+//            existSchool.setName(school.getName());
+//            existSchool.setAddress(school.getAddress());
+//            existSchool.setPhone(school.getPhone());
+//            existSchool.setTeacherList(school.getTeacherList());
+//            existSchool.setClassesList(school.getClassesList());
+//            existSchool.setStudentList(school.getStudentList());
+//            existSchool.setSubjectList(school.getSubjectList());
+//            schoolService.updateSchool(existSchool);
+//            return ResponseEntity.ok(existSchool);
+//        } else {
+//            try {
+//                throw new Exception("Not found school have id: "+ id);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+//
+//    // delete school
+//    @DeleteMapping("/modify/delete/{id}")
+//    public ResponseEntity<School> deleteSchoolByID(@PathVariable int id){
+//        School existSchool = schoolService.getSchoolById(id);
+//        if(existSchool != null) {
+//            schoolService.deleteSchoolById(id);
+//            return ResponseEntity.ok().build();
+//            // tim cach in ra error point
+//        } else {
+//            try {
+//                throw new Exception("Not found school have id: "+ id);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+    // @PutMapping("/modify/{id}")
+//    public ResponseEntity<School> updateSchool(@PathVariable int id, @RequestBody School school){
+//        School existSchool = schoolService.getSchoolById(id);
+//        if(existSchool != null) {
+//            existSchool.setName(school.getName());
+//            existSchool.setAddress(school.getAddress());
+//            existSchool.setPhone(school.getPhone());
+//            existSchool.setTeacherList(school.getTeacherList());
+//            existSchool.setClassesList(school.getClassesList());
+//            existSchool.setStudentList(school.getStudentList());
+//            existSchool.setSubjectList(school.getSubjectList());
+//            schoolService.updateSchool(existSchool);
+//            return ResponseEntity.ok(existSchool);
+//        } else {
+//            try {
+//                throw new Exception("Not found school have id: "+ id);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }

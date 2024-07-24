@@ -43,7 +43,12 @@ public class SchoolServiceImple implements SchoolService{
     }
 
     @Override
-    public List<School> findSchoolByNamePattern(String name) {
+    public List<School> findListSchoolByNamePattern(String name) {
         return this.schoolRepository.findByNameSchoolsPattern(name);
+    }
+
+    @Override
+    public School findBySchoolName(String name) {
+        return schoolRepository.findByNameSchool(name);
     }
 }
