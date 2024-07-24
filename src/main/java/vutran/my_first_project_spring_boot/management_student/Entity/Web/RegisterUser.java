@@ -1,6 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Entity.Web;
 
 import jakarta.validation.constraints.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class RegisterUser {
     @NotBlank(message = "Required Information")
@@ -22,6 +23,7 @@ public class RegisterUser {
     public RegisterUser() {
     }
 
+    @Autowired
     public RegisterUser(String username, String password, String lastName, String firstName, String email) {
         this.username = username;
         this.password = password;

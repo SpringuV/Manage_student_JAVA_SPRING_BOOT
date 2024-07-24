@@ -1,13 +1,21 @@
 package vutran.my_first_project_spring_boot.management_student.Rest;
 
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import vutran.my_first_project_spring_boot.management_student.Entity.School;
+import vutran.my_first_project_spring_boot.management_student.Entity.Web.AddSchool;
 import vutran.my_first_project_spring_boot.management_student.Service.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -20,66 +28,117 @@ public class SchoolController {
         this.schoolService = schoolService;
     }
 
-    @GetMapping
-    public List<School> getAllSchool(){
-        return this.schoolService.getAllSchools();
+    @GetMapping("/showManageSchool")
+    public String showSchool(Model model){
+        // get school from database
+        List<School> schoolList = schoolService.getAllSchools();
+        // check size
+        if (schoolList.isEmpty()){
+            model.addAttribute("errorSchoolList", "List School empty");
+            model.addAttribute("schoolList", new ArrayList<>());
+            return "School/indexSchool";
+        }
+
+        // forward to Form
+        model.addAttribute("schoolList", schoolList);
+        return "School/indexSchool";
     }
 
-    @GetMapping("/find-name/{name}")
-    public List<School> getSchoolName(@PathVariable String name){
-        return schoolService.findSchoolByNamePattern(name);
+    @GetMapping("/showFormAddSchool")
+    public String showFormAddSchool(Model model){
+        AddSchool addSchool = new AddSchool();
+        model.addAttribute("addSchool", addSchool);
+        return "School/addForm";
     }
 
-    @GetMapping("/find-id/{id}")
-    public School getSchoolName(@PathVariable int id){
-        return schoolService.getSchoolById(id);
+    @InitBinder
+    public void initBinder(WebDataBinder dataBinder){
+        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
+        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
     }
 
-    // add student
-    @PostMapping("/add")
-    public ResponseEntity<School> addSchool(@RequestBody School school){ // tu dong bien json thanh students
-        school.setId(0); //bat buoc them moi va tu phat sinh ra id khi khach hang co nhap id
-        school = schoolService.addSchool(school);
-        return ResponseEntity.status(HttpStatus.CREATED).body(school);
+    // add new school
+    @PostMapping("/add-process")
+    public String processAddSchool(@Valid @ModelAttribute AddSchool addSchool, BindingResult bindingResult, Model model, HttpSession httpSession){
+        String schoolName = addSchool.getSchoolName();
+
+        // form validation
+        if(bindingResult.hasErrors()){
+            model.addAttribute("myError", "Error");
+            return "School/addForm";
+        }
+
+        // check schoolExisted
+        School schoolExisted = schoolService.findBySchoolName(schoolName);
+        if(schoolExisted != null){
+            model.addAttribute("addSchool", new AddSchool());
+            model.addAttribute("myError", "School Existed");
+            return "School/addForm";
+        }
+
+        // school doesn't exist
+        School school = new School();
+        school.setName(addSchool.getSchoolName());
+        school.setAddress(addSchool.getSchoolAddress());
+        school.setPhone(addSchool.getSchoolPhone());
+        school.setLevel(addSchool.getSchoolLevel());
+        schoolService.addSchool(school);
+
+        // notify success
+        model.addAttribute("mySchool", school);
+        return "School/addForm";
     }
 
     // modify school
-    @PutMapping("/modify/{id}")
-    public ResponseEntity<School> updateSchool(@PathVariable int id, @RequestBody School school){
-        School existSchool = schoolService.getSchoolById(id);
-        if(existSchool != null) {
+    @GetMapping("/showModifyForm")
+    public String showModifyForm(@Valid @ModelAttribute School school, Model model){
+
+        School existSchool = schoolService.getSchoolById(school.getId());
+        if(existSchool == null){
+            model.addAttribute("school", new School());
+            model.addAttribute("Error", "Not found school with id: "+ school.getId());
+            return "School/indexSchool";
+        }
+
+        model.addAttribute("school", existSchool);
+        return "School/modifyForm";
+    }
+
+    @PostMapping("/modify-process")
+    public String processModify(@Valid @ModelAttribute School school, BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            model.addAttribute("Error", "Errors");
+            model.addAttribute("school", new School());
+            return "School/modifyForm";
+        }
+
+        School existSchool = schoolService.getSchoolById(school.getId());
+        if(existSchool != null){
             existSchool.setName(school.getName());
             existSchool.setAddress(school.getAddress());
             existSchool.setPhone(school.getPhone());
-            existSchool.setTeacherList(school.getTeacherList());
-            existSchool.setClassesList(school.getClassesList());
-            existSchool.setStudentList(school.getStudentList());
-            existSchool.setSubjectList(school.getSubjectList());
+            existSchool.setLevel(school.getLevel());
             schoolService.updateSchool(existSchool);
-            return ResponseEntity.ok(existSchool);
-        } else {
-            try {
-                throw new Exception("Not found school have id: "+ id);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
         }
+        model.addAttribute("success", "School updated successfully school with id " + existSchool.getId());
+        model.addAttribute("school", existSchool);
+        return "School/modifyForm";
     }
 
-    // delete school
-    @DeleteMapping("/modify/delete/{id}")
-    public ResponseEntity<School> deleteSchoolByID(@PathVariable int id){
-        School existSchool = schoolService.getSchoolById(id);
-        if(existSchool != null) {
-            schoolService.deleteSchoolById(id);
-            return ResponseEntity.ok().build();
-            // tim cach in ra error point
-        } else {
-            try {
-                throw new Exception("Not found school have id: "+ id);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+    @GetMapping("/modify-delete")
+    public String processDelete(@Valid @ModelAttribute School school, BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            model.addAttribute("Error", "Errors");
+            return "School/indexSchool";
         }
+        School existSchool = schoolService.getSchoolById(school.getId());
+        if(existSchool != null){
+            schoolService.deleteSchoolById(existSchool.getId());
+        }
+        List<School> schoolList = schoolService.getAllSchools();
+        model.addAttribute("schoolList", schoolList);
+        model.addAttribute("success","School deleted successfully school with id " + existSchool.getId());
+//        return "redirect:/api-school/showManageSchool";
+        return "School/indexSchool";
     }
 }

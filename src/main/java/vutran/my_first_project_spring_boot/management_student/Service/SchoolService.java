@@ -10,5 +10,6 @@ public interface SchoolService {
     public School addSchool(School school);
     public void deleteSchoolById(int id);
     public School updateSchool(School school);
-    public List<School> findSchoolByNamePattern(String name);
+    public List<School> findListSchoolByNamePattern(String name);
+    public School findBySchoolName(String name);
 }

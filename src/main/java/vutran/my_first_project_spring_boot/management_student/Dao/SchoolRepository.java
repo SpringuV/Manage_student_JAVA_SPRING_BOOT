@@ -15,4 +15,6 @@ public interface SchoolRepository extends JpaRepository<School, Integer> {
     @Query("SELECT s FROM School s WHERE s.name LIKE %:name%")
     List<School> findByNameSchoolsPattern(@Param("name") String name);
 
+    @Query("SELECT s FROM School s WHERE s.name LIKE :name")
+    School findByNameSchool(@Param("name") String name);
 }
