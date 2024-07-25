@@ -41,7 +41,7 @@
     <form action="#" th:action="@{/authenticateTheUser}" method="POST">
         <div id="autoHide">
             <div th:if="${param.error}">
-                <span style="color:red">Đăng nhập không thành công,<br/> vui lòng kiểm tra lại mật khẩu hoặc tài khoản!</span>
+                <span style="color:red">Login Failed,<br/> please check your username or password!</span>
             </div>
         </div>
         <!-- User name -->
@@ -73,11 +73,11 @@
         </div>
 
         <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mb-4">Đăng nhập</button>
+        <button type="submit" class="btn btn-primary btn-block mb-4">Longin</button>
 
         <!-- Register buttons -->
         <div class="text-center">
-            <p>Not a member? <a href="#" th:href="@{/register/showRegisterForm}">Đăng ký</a></p>
+            <p>Not a member? <a href="#" th:href="@{/register/showRegisterForm}">Register</a></p>
         </div>
     </form>
 

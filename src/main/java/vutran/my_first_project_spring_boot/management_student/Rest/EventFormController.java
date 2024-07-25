@@ -94,9 +94,19 @@ public class EventFormController {
         userNew.setLastName(registerUser.getLastName());
         userNew.setFirstName(registerUser.getFirstName());
         userNew.setEmail(registerUser.getEmail());
+        userNew.setPosition(registerUser.getPosition());
 
         // create authority
-        Authority defaultRole = authorityRepository.findByName("ROLE_USER");
+        Authority defaultRole = new Authority();
+        if(userNew.getPosition().equals("Teacher")){
+            defaultRole = authorityRepository.findByName("ROLE_TEACHER");
+        } else if (userNew.getPosition().equals("User")) {
+            defaultRole = authorityRepository.findByName("ROLE_USER");
+        } else if (userNew.getPosition().equals("Parent")) {
+            defaultRole = authorityRepository.findByName("ROLE_PARENT");
+        } else if (userNew.getPosition().equals("Student")) {
+            defaultRole = authorityRepository.findByName("ROLE_PARENT");
+        }
         Collection<Authority> roles = new ArrayList<>();
         roles.add(defaultRole);
         userNew.setCollectionAuthority(roles);

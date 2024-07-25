@@ -46,17 +46,21 @@ public class Teacher extends User{
     public Teacher() {
     }
 
-    public Teacher(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, Blob avatar) {
-        super(firstName, lastName, address, phoneNumber, username, password, enabled, email, avatar);
+    public Teacher(String firstName, String lastName, String address, String phoneNumber, String username, String email, String position, Blob avatar) {
+        super(firstName, lastName, address, phoneNumber, username, email, position, avatar);
     }
 
-    public Teacher(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, Blob avatar, School school, List<NoteBook> noteBookList, List<Subject> subjectList, List<Classes> classesList, List<Student> studentList) {
-        super(firstName, lastName, address, phoneNumber, username, password, enabled, email, avatar);
-        this.school = school;
-        this.noteBookList = noteBookList;
-        this.subjectList = subjectList;
-        this.classesList = classesList;
+    public Teacher(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, String position, Blob avatar) {
+        super(firstName, lastName, address, phoneNumber, username, password, enabled, email, position, avatar);
+    }
+
+    public Teacher(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, String position, Blob avatar, List<Student> studentList, List<Classes> classesList, List<Subject> subjectList, List<NoteBook> noteBookList, School school) {
+        super(firstName, lastName, address, phoneNumber, username, password, enabled, email, position, avatar);
         this.studentList = studentList;
+        this.classesList = classesList;
+        this.subjectList = subjectList;
+        this.noteBookList = noteBookList;
+        this.school = school;
     }
 
     public List<Student> getStudentList() {

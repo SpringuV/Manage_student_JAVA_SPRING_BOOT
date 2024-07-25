@@ -57,12 +57,17 @@ public class Student extends User{
     public Student() {
     }
 
-    public Student(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, Blob avatar) {
-        super(firstName, lastName, address, phoneNumber, username, password, enabled, email, avatar);
+    public Student(String firstName, String lastName, String address, String phoneNumber, String username, String email, String position, Blob avatar) {
+        super(firstName, lastName, address, phoneNumber, username, email, position, avatar);
     }
 
-    public Student(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, Blob avatar, Classes classes, Parent parent, List<Subject> subjectList, Transcript transcript, StudentCard studentCard, List<ScoreCard> scoreCardList, StudyRecord studyRecord, School school) {
-        super(firstName, lastName, address, phoneNumber, username, password, enabled, email, avatar);
+    public Student(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, String position, Blob avatar) {
+        super(firstName, lastName, address, phoneNumber, username, password, enabled, email, position, avatar);
+    }
+
+    public Student(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, String position, Blob avatar, Teacher teacher, Classes classes, Parent parent, List<Subject> subjectList, Transcript transcript, StudentCard studentCard, List<ScoreCard> scoreCardList, StudyRecord studyRecord, School school) {
+        super(firstName, lastName, address, phoneNumber, username, password, enabled, email, position, avatar);
+        this.teacher = teacher;
         this.classes = classes;
         this.parent = parent;
         this.subjectList = subjectList;

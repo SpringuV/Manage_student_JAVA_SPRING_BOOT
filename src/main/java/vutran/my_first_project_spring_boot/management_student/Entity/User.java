@@ -29,6 +29,8 @@ public class User {
     private Boolean enabled;
     @Column(name = "email")
     private String email;
+    @Column(name = "position")
+    private String position;
     @Lob
     @Column(name = "avatar")
     private Blob avatar;
@@ -42,8 +44,20 @@ public class User {
     public User() {
     }
 
+    // khong bao gồm pass và enabled vì ảnh hưởng tới Repository khi dùng @query
+    public User(String firstName, String lastName, String address, String phoneNumber, String username, String email, String position, Blob avatar) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.username = username;
+        this.email = email;
+        this.position = position;
+        this.avatar = avatar;
+    }
+
     // đầy đủ tham số
-    public User(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, Blob avatar, Collection<Authority> authority) {
+    public User(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, String position, Blob avatar, Collection<Authority> authority) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -52,12 +66,15 @@ public class User {
         this.password = password;
         this.enabled = enabled;
         this.email = email;
+        this.position = position;
         this.avatar = avatar;
         this.authority = authority;
     }
 
     // không bao gồm authority
-    public User(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, Blob avatar) {
+
+
+    public User(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, String position, Blob avatar) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -66,7 +83,16 @@ public class User {
         this.password = password;
         this.enabled = enabled;
         this.email = email;
+        this.position = position;
         this.avatar = avatar;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getEmail() {
@@ -150,7 +176,7 @@ public class User {
         this.enabled = enabled;
     }
 
-    public Collection<Authority>  getCollectionAuthority() {
+    public Collection<Authority> getCollectionAuthority() {
         return authority;
     }
 

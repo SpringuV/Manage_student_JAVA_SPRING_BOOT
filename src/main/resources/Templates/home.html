@@ -83,8 +83,8 @@
         </div>
     </div>
     <div class="col-lg-6">
-        <h3>He thong quan ly sinh vien</h3>
-        <h4>Trang chu</h4>
+        <h3>System manage student</h3>
+        <h4>Home page</h4>
         <div>
             <button sec:authorize="hasAnyRole('ADMIN', 'MANAGER', 'TEACHER', 'STUDENT', 'USER', 'PARENT')"
                     class="btn btn-success">Xem
@@ -93,9 +93,11 @@
             <button sec:authorize="hasAnyRole('ADMIN')" class="btn btn-success">Xóa</button>
         </div>
         <div>
-            <a sec:authorize="hasRole('ADMIN')" class="btn btn-primary" th:href="@{/api-school/showManageSchool}">School Manager</a>
+            <a sec:authorize="hasRole('ADMIN')" class="btn btn-primary" th:href="@{/api-school/showManageSchool}">School Manage</a>
         </div>
-
+        <div>
+            <a sec:authorize="hasRole('ADMIN')" class="btn btn-primary" th:href="@{/m-teacher/showManageTeacher}">Teacher manage</a>
+        </div>
     </div>
 </div>
 </body>

@@ -19,17 +19,30 @@ public class RegisterUser {
     @NotBlank(message = "Required Information")
     @Email(message = "Invalid Email")
     private String email;
+    @NotBlank(message = "Required Information")
+    private String position;
+
 
     public RegisterUser() {
     }
 
     @Autowired
-    public RegisterUser(String username, String password, String lastName, String firstName, String email) {
+    public RegisterUser(String username, String password, String lastName, String firstName, String email, String position) {
         this.username = username;
         this.password = password;
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
+        this.position = position;
+    }
+
+
+    public @NotBlank(message = "Required Information") String getPosition() {
+        return position;
+    }
+
+    public void setPosition(@NotBlank(message = "Required Information") String position) {
+        this.position = position;
     }
 
     public @NotBlank(message = "Required Information") @Size(min = 1, message = "Min length is 1") String getUsername() {
