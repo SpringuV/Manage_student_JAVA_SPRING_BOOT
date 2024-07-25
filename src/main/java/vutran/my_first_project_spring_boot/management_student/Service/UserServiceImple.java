@@ -51,13 +51,18 @@ public class UserServiceImple implements UserService{
 
     @Override
     public User fineUserByName(String username) {
-        return userRepository.findUserByName(username);
+        return userRepository.findUserByUserName(username);
+    }
+
+    @Override
+    public List<User> getListUserByPosition(String position) {
+        return userRepository.findAllUserByPosition(position);
     }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User userExist = userRepository.findUserByName(username);
+        User userExist = userRepository.findUserByUserName(username);
         if(userExist == null){
             throw new UsernameNotFoundException("Invalid Username Or Password");
         }

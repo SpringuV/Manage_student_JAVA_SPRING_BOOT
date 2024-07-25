@@ -5,8 +5,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import vutran.my_first_project_spring_boot.management_student.Entity.User;
 
+import java.util.List;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT u FROM User u WHERE u.username LIKE :username")
-    public User findUserByName (String username);
+    public User findUserByUserName (String username);
+
+    @Query("SELECT u FROM User u WHERE u.position LIKE :position")
+    public List<User> findAllUserByPosition(String position);
 }

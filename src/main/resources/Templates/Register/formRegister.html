@@ -55,7 +55,7 @@
                     <li th:each="e: ${#fields.hasErrors('lastName')}" th:text="${e}"></li>
                 </ul>
             </div>
-            <label class="form-label" for="lastname">Last Name</label>
+            <label class="form-label" for="lastname">Last Name: </label>
         </div>
 
         <div class="form-outline mb-4">
@@ -65,9 +65,18 @@
                     <li th:each="e: ${#fields.hasErrors('email')}" th:text="${e}"></li>
                 </ul>
             </div>
-            <label class="form-label" for="email">Email</label>
+            <label class="form-label" for="email">Email: </label>
         </div>
 
+        <div class="form-outline mb-4">
+            <label for="position" class="form-label">Current Occupation: </label>
+            <select th:field="*{position}" id="position" name="position" required>
+                <option th:value="User">User</option>
+                <option th:value="Parent">Parent</option>
+                <option th:value="Student">Student</option>
+                <option th:value="Teacher">Teacher</option>
+            </select>
+        </div>
         <button class="btn btn-primary w-100 py-2" type="submit">Register</button>
         <p class="mt-5 mb-3 text-body-secondary">© 2017–2024</p>
     </form>

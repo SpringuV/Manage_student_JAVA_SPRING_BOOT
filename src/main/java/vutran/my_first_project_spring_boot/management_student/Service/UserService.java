@@ -13,4 +13,5 @@ public interface UserService extends UserDetailsService {
     public void deleteUserById(int id);
     public User updateUser(User user);
     public User fineUserByName(String username);
+    public List<User> getListUserByPosition(String position);
 }
