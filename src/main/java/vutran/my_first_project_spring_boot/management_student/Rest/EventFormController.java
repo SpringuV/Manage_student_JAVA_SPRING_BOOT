@@ -91,6 +91,7 @@ public class EventFormController {
         userNew.setUsername(registerUser.getUsername());
         userNew.setPassword(bCryptPasswordEncoder.encode(registerUser.getPassword()));
         userNew.setEnabled(true);
+        userNew.setIdentity(registerUser.getIdentity());
         userNew.setLastName(registerUser.getLastName());
         userNew.setFirstName(registerUser.getFirstName());
         userNew.setEmail(registerUser.getEmail());

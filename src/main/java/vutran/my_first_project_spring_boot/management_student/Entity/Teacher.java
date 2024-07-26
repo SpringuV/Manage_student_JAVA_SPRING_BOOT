@@ -46,16 +46,12 @@ public class Teacher extends User{
     public Teacher() {
     }
 
-    public Teacher(String firstName, String lastName, String address, String phoneNumber, String username, String email, String position, Blob avatar) {
-        super(firstName, lastName, address, phoneNumber, username, email, position, avatar);
+    public Teacher(String firstName, String lastName, String identity, String address, String phoneNumber, String username, String email, String position, Blob avatar) {
+        super(firstName, lastName, identity, address, phoneNumber, username, email, position, avatar);
     }
 
-    public Teacher(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, String position, Blob avatar) {
-        super(firstName, lastName, address, phoneNumber, username, password, enabled, email, position, avatar);
-    }
-
-    public Teacher(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, String position, Blob avatar, List<Student> studentList, List<Classes> classesList, List<Subject> subjectList, List<NoteBook> noteBookList, School school) {
-        super(firstName, lastName, address, phoneNumber, username, password, enabled, email, position, avatar);
+    public Teacher(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, List<Student> studentList, List<Classes> classesList, List<Subject> subjectList, List<NoteBook> noteBookList, School school) {
+        super(avatar, position, email, enabled, password, username, identity, phoneNumber, address, lastName, firstName);
         this.studentList = studentList;
         this.classesList = classesList;
         this.subjectList = subjectList;

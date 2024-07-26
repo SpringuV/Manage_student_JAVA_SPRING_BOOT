@@ -13,6 +13,6 @@ public interface TeacherService {
     public Teacher addTeacher(Teacher teacher);
     public void deleteTeacherById(int id);
     public Teacher updateTeacher(Teacher teacher);
-    public List<Teacher> fineTeacherByName(String username);
+    public Teacher fineTeacherByUserName(String username);
     public List<Teacher> getListTeacherByPosition();
 }
