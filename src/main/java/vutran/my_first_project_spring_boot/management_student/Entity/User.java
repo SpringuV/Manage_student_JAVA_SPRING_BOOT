@@ -21,6 +21,8 @@ public class User {
     private String address;
     @Column(name = "phone_number")
     private String phoneNumber;
+    @Column(name = "identity")
+    private String identity;
     @Column(name = "username")
     private String username;
     @Column(name = "password")
@@ -45,9 +47,10 @@ public class User {
     }
 
     // khong bao gồm pass và enabled vì ảnh hưởng tới Repository khi dùng @query
-    public User(String firstName, String lastName, String address, String phoneNumber, String username, String email, String position, Blob avatar) {
+    public User(String firstName, String lastName,String identity, String address, String phoneNumber, String username, String email, String position, Blob avatar) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.identity = identity;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.username = username;
@@ -57,11 +60,12 @@ public class User {
     }
 
     // đầy đủ tham số
-    public User(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, String position, Blob avatar, Collection<Authority> authority) {
+    public User(String firstName, String lastName, String address, String phoneNumber, String identity, String username, String password, Boolean enabled, String email, String position, Blob avatar, Collection<Authority> authority) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        this.identity = identity;
         this.username = username;
         this.password = password;
         this.enabled = enabled;
@@ -72,19 +76,26 @@ public class User {
     }
 
     // không bao gồm authority
-
-
-    public User(String firstName, String lastName, String address, String phoneNumber, String username, String password, Boolean enabled, String email, String position, Blob avatar) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.username = username;
-        this.password = password;
-        this.enabled = enabled;
-        this.email = email;
-        this.position = position;
+    public User(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName) {
         this.avatar = avatar;
+        this.position = position;
+        this.email = email;
+        this.enabled = enabled;
+        this.password = password;
+        this.username = username;
+        this.identity = identity;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.lastName = lastName;
+        this.firstName = firstName;
+    }
+
+    public String getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
     }
 
     public String getPosition() {
@@ -177,7 +188,7 @@ public class User {
     }
 
     public Collection<Authority> getCollectionAuthority() {
-        return authority;
+        return this.authority;
     }
 
     public void setCollectionAuthority(Collection<Authority> authority) {

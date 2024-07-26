@@ -13,10 +13,10 @@ import java.util.List;
 public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
 
 //     native query
-    @Query(value = "SELECT * FROM users JOIN teacher ON teacher.id = user.id WHERE users.first_name = :firstname", nativeQuery = true)
-    public List<Teacher> findTeacherByName(@Param("firstname") String firstName);
+    @Query(value = "SELECT * FROM users JOIN teacher ON teacher.id = users.id WHERE users.username = :username", nativeQuery = true)
+    public Teacher findTeacherByUserName(@Param("username") String firstName);
 
-    @Query(value = "SELECT u.id, t.school_id, u.address, u.phone_number, u.username, u.position, u.email, u.first_name, u.last_name,u.avatar,  u.enabled, u.password " +
+    @Query(value = "SELECT u.id, t.school_id, u.address, u.phone_number, u.username, u.position, u.email, u.first_name, u.last_name,u.avatar,  u.enabled, u.password, u.identity " +
             "FROM users as u " +
             "JOIN teacher as t " +
             "ON t.id = u.id " +

@@ -47,8 +47,8 @@ public class TeacherServiceImple implements TeacherService{
     }
 
     @Override
-    public List<Teacher> fineTeacherByName(String username) {
-        return teacherRepository.findTeacherByName(username);
+    public Teacher fineTeacherByUserName(String username) {
+        return teacherRepository.findTeacherByUserName(username);
     }
 
     @Override

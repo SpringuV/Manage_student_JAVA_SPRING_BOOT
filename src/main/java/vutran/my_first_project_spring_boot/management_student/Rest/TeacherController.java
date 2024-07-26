@@ -3,19 +3,22 @@ package vutran.my_first_project_spring_boot.management_student.Rest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
+import vutran.my_first_project_spring_boot.management_student.Entity.Authority;
 import vutran.my_first_project_spring_boot.management_student.Entity.School;
 import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
-import vutran.my_first_project_spring_boot.management_student.Entity.User;
 import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
 import vutran.my_first_project_spring_boot.management_student.Service.TeacherService;
-import vutran.my_first_project_spring_boot.management_student.Service.UserService;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -24,11 +27,13 @@ public class TeacherController {
 
     private TeacherService teacherService;
     private SchoolService schoolService;
+    private AuthorityRepository authorityRepository;
 
     @Autowired
-    public TeacherController(TeacherService teacherService, SchoolService schoolService) {
+    public TeacherController(TeacherService teacherService, SchoolService schoolService, AuthorityRepository authorityRepository) {
         this.teacherService = teacherService;
         this.schoolService = schoolService;
+        this.authorityRepository = authorityRepository;
     }
 
 
@@ -100,5 +105,81 @@ public class TeacherController {
     @ResponseBody
     public School getSchoolName(@PathVariable("id") int id) {
         return schoolService.getSchoolById(id);
+    }
+
+    // show form add teacher
+    @GetMapping("showFormAddTeacher")
+    public  String showForm(Model model){
+        model.addAttribute("teacher", new Teacher());
+        List<School> schoolList = schoolService.getAllSchools();
+        if(schoolList.isEmpty()){
+            model.addAttribute("Error", "List School is Empty");
+            model.addAttribute("schoolList", new ArrayList<>());
+        } else {
+            model.addAttribute("schoolList", schoolList);
+        }
+        return "Teacher/addTeacher";
+    }
+
+    @PostMapping("/add-process")
+    public String addTeacher(@Valid @ModelAttribute Teacher teacher, BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            model.addAttribute("teacher", new Teacher());
+            model.addAttribute("Error", "Error in BindingResult");
+            return "Teacher/addTeacher";
+        }
+        // check teacher existed
+        Teacher teacherExist = teacherService.fineTeacherByUserName(teacher.getUsername());
+
+        // if teacher existed
+        if(teacherExist != null){
+            model.addAttribute("teacher", new Teacher());
+            model.addAttribute("Error", "Teacher existed");
+            return "Teacher/addTeacher";
+        }
+        // else create teacher
+        Teacher newTeacher = new Teacher();
+        newTeacher.setUsername(teacher.getUsername());
+        // encode password
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        newTeacher.setPassword(bCryptPasswordEncoder.encode(teacher.getPassword()));
+        newTeacher.setEnabled(true);
+        newTeacher.setFirstName(teacher.getFirstName());
+        newTeacher.setLastName(teacher.getLastName());
+        newTeacher.setIdentity(teacher.getIdentity());
+        newTeacher.setEmail(teacher.getEmail());
+        newTeacher.setPosition("Teacher");
+        newTeacher.setSchool(teacher.getSchool());
+        newTeacher.setPhoneNumber(teacher.getPhoneNumber());
+        newTeacher.setAddress(teacher.getAddress());
+
+        // set role teacher
+        Authority authority = authorityRepository.findByName("ROLE_TEACHER");
+        Collection<Authority> role = new ArrayList<>();
+        role.add(authority);
+        newTeacher.setCollectionAuthority(role);
+
+        // save teacher
+        teacherService.addTeacher(newTeacher);
+        model.addAttribute("success", "You created new Teacher have id: " + newTeacher.getId()+" and username: "+ newTeacher.getUsername());
+        model.addAttribute("teacher", newTeacher);
+        return "Teacher/addTeacher";
+    }
+
+    @GetMapping("/modify-delete")
+    public String deleteTeacher(@ModelAttribute Teacher teacher, RedirectAttributes redirectAttributes){
+        Teacher teacherExist = teacherService.getTeacherById(teacher.getId());
+        if(teacherExist != null){
+            teacherService.deleteTeacherById(teacherExist.getId());
+            redirectAttributes.addFlashAttribute("success", "You have deleted teacher have id: "+ teacherExist.getId());
+            List<Teacher> teacherList = teacherService.getListTeacherByPosition();
+            redirectAttributes.addFlashAttribute("teacherList", teacherList);
+            return "redirect:/m-teacher/showManageTeacher";
+        } else {
+            redirectAttributes.addFlashAttribute("Error", "Error process delete teacher, null !!");
+            List<Teacher> teacherList = teacherService.getListTeacherByPosition();
+            redirectAttributes.addFlashAttribute("teacherList", teacherList);
+            return "redirect:/m-teacher/showManageTeacher";
+        }
     }
 }

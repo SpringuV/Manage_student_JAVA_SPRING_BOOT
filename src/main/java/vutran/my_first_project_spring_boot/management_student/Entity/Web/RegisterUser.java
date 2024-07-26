@@ -21,21 +21,31 @@ public class RegisterUser {
     private String email;
     @NotBlank(message = "Required Information")
     private String position;
+    @NotBlank(message = "Required Information")
+    private String identity;
 
 
     public RegisterUser() {
     }
 
     @Autowired
-    public RegisterUser(String username, String password, String lastName, String firstName, String email, String position) {
+    public RegisterUser(String username, String password, String lastName, String firstName, String email, String position, String identity) {
         this.username = username;
         this.password = password;
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
         this.position = position;
+        this.identity = identity;
     }
 
+    public @NotBlank(message = "Required Information") String getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(@NotBlank(message = "Required Information") String identity) {
+        this.identity = identity;
+    }
 
     public @NotBlank(message = "Required Information") String getPosition() {
         return position;

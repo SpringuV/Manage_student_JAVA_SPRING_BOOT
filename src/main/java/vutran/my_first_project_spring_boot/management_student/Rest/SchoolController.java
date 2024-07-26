@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Entity.School;
 import vutran.my_first_project_spring_boot.management_student.Entity.Web.AddSchool;
 import vutran.my_first_project_spring_boot.management_student.Service.*;
@@ -126,19 +127,21 @@ public class SchoolController {
     }
 
     @GetMapping("/modify-delete")
-    public String processDelete(@Valid @ModelAttribute School school, BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
-            model.addAttribute("Error", "Errors");
-            return "School/indexSchool";
-        }
+    public String processDelete(@Valid @ModelAttribute School school , RedirectAttributes redirectAttributes){
         School existSchool = schoolService.getSchoolById(school.getId());
         if(existSchool != null){
             schoolService.deleteSchoolById(existSchool.getId());
-        }
-        List<School> schoolList = schoolService.getAllSchools();
-        model.addAttribute("schoolList", schoolList);
-        model.addAttribute("success","School deleted successfully school with id " + existSchool.getId());
+            List<School> schoolList = schoolService.getAllSchools();
+            redirectAttributes.addAttribute("schoolList", schoolList);
+            redirectAttributes.addAttribute("success","School deleted successfully school with id " + existSchool.getId());
 //        return "redirect:/api-school/showManageSchool";
-        return "School/indexSchool";
+            return "redirect:/api-school/showManageSchool";
+        } else{
+            List<School> schoolList = schoolService.getAllSchools();
+            redirectAttributes.addAttribute("schoolList", schoolList);
+            redirectAttributes.addAttribute("Error","Error process delete School, null !!");
+            return "redirect:/api-school/showManageSchool";
+        }
+
     }
 }
