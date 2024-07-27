@@ -1,0 +1,16 @@
+package vutran.my_first_project_spring_boot.management_student.Service;
+
+import vutran.my_first_project_spring_boot.management_student.Entity.ScoreCard;
+import vutran.my_first_project_spring_boot.management_student.Entity.Student;
+
+import java.util.List;
+
+public interface StudentService {
+    public Student getStudentById(int id);
+    public Student addStudent(Student student);
+    public void deleteStudentById(int id);
+    public Student updateStudent(Student student);
+    public List<Student> findALlStudentByPosition();
+    public Student getStudentByUsername(String username);
+    public Student getStudentByIdentity(String identity);
+}
