@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify Teacher</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="/resources/static/CSS/main.css" rel="stylesheet">
+    <script src="/resources/static/JavaScript/function.js"></script>
+</head>
+<body>
+<h1>Modify Parent</h1>
+<div>
+    <form th:action="@{/m-parent/modify-process}" th:object="${parent}" method="post">
+        <div th:if="${Error}" class="alert alert-danger">
+            <span th:text="${Error}"></span>
+        </div>
+        <div>
+            <label th:field="*{id}" for="parentid">Parent Id: </label>
+            <input type="hidden" th:field="*{id}" name="parentid" id="parentid">
+            <div th:if="${#fields.hasErrors('id')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('id')}" th:text="${Error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label for="teacherFirstName">Parent First Name: </label>
+            <input type="text" th:field="*{firstName}" placeholder="Input First Name parent"
+                   name="teacherFirstName" id="teacherFirstName">
+            <div th:if="${#fields.hasErrors('firstName')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('firstName')}" th:text="${Error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label for="teacherLastName">Parent Last Name: </label>
+            <input type="text" th:field="*{lastName}" placeholder="Input Last Name parent"
+                   name="teacherLastName" id="teacherLastName">
+            <div th:if="${#fields.hasErrors('lastName')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('lastName')}" th:text="${Error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label for="teacherAddress">Parent Address: </label>
+            <input type="text" th:field="*{address}" placeholder="Input address parent"
+                   name="teacherAdress" id="teacherAddress">
+            <div th:if="${#fields.hasErrors('address')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('address')}" th:text="${Error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label for="teacherPhone">Parent Phone: </label>
+            <input type="tel" th:field="*{phoneNumber}" placeholder="Input phone parent"
+                   name="teacherPhone" id="teacherPhone">
+            <div th:if="${#fields.hasErrors('phoneNumber')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('phoneNumber')}" th:text="${Error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label for="studentid">Student Id: </label>
+            <input type="tel" th:field="*{student}" placeholder="Input student id"
+                   name="studentid" id="studentid">
+            <div th:if="${#fields.hasErrors('student')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('student')}" th:text="${Error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label for="teacherEmail">Parent Mail: </label>
+            <input type="email" th:field="*{email}" placeholder="Input email student"
+                   name="teacherEmail" id="teacherEmail">
+            <div th:if="${#fields.hasErrors('email')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('email')}" th:text="${Error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">Modify</button>
+        </div>
+    </form>
+    <div th:if="${success}">
+        <h3>You updated a parent "<span th:text="${success}"></span> ",</h3>
+    </div>
+</div>
+<div>
+    <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
+    <a class="btn btn-primary" th:href="@{/m-parent/showManageParent}">Parent List Manage</a>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+</html>

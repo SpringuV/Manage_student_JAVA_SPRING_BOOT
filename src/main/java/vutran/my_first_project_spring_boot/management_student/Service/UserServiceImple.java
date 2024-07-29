@@ -50,7 +50,12 @@ public class UserServiceImple implements UserService{
     }
 
     @Override
-    public User fineUserByName(String username) {
+    public User findUserByIdentity(String identity) {
+        return userRepository.findUserByIdentity(identity);
+    }
+
+    @Override
+    public User findUserByName(String username) {
         return userRepository.findUserByUserName(username);
     }
 

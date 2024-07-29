@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Parent</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="/resources/static/CSS/main.css" rel="stylesheet">
+    <style>
+        table, th, td{
+            border: 1px solid black;
+            margin: 3px 3px 3px 3px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <form th:action="@{/m-parent/add-process}" th:object="${parent}" method="post">
+                <div th:if="${Error}" class="alert alert-danger">
+                    <span th:text="${Error}"></span>
+                </div>
+                <h3>Add Parent</h3>
+                <!-- User name -->
+                <div class="form-floating mb-1 mt-3">
+                    <input type="text" th:field="*{username}" name="username" placeholder="Input Parent username (*)"
+                           id="usernameid"  class="form-control" required/>
+                    <label class="form-label" for="usernameid">User name: </label>
+                    <div th:if="${#fields.hasErrors('username')}">
+                        <ul>
+                            <li th:each="e: ${#fields.hasErrors('username')}" th:text="${e}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Password input -->
+                <div class="form-floating mb-1">
+                    <input type="password" th:field="*{password}" name="password" placeholder="Input Parent Password"
+                           id="password" class="form-control" required/>
+                    <label class="form-label" for="password">Password: </label>
+                    <div th:if="${#fields.hasErrors('password')}">
+                        <ul>
+                            <li th:each="e: ${#fields.hasErrors('password')}" th:text="${e}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- input the correct attribute name of the entity-->
+                <div class="form-floating mb-1">
+                    <input type="text" th:field="*{firstName}" name="firstname" required
+                           placeholder="Input Teacher FirstName" id="firstname" class="form-control"/>
+                    <label class="form-label" for="firstname">First Name: </label>
+                    <div th:if="${#fields.hasErrors('firstName')}">
+                        <ul>
+                            <li th:each="e: ${#fields.hasErrors('firstName')}" th:text="${e}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="form-floating mb-1">
+                    <input type="text" th:field="*{lastName}" name="lastname" placeholder="Input Parent LastName"
+                           id="lastname" class="form-control" required/>
+                    <label class="form-label" for="lastname">Last Name: </label>
+                    <div th:if="${#fields.hasErrors('lastName')}">
+                        <ul>
+                            <li th:each="e: ${#fields.hasErrors('lastName')}" th:text="${e}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="form-floating mb-1">
+                    <input type="text" th:field="*{address}" name="address" placeholder="Input Parent Address"
+                           id="address" class="form-control" required/>
+                    <label class="form-label" for="address">Address: </label>
+                    <div th:if="${#fields.hasErrors('address')}">
+                        <ul>
+                            <li th:each="e: ${#fields.hasErrors('address')}" th:text="${e}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="form-floating mb-1">
+                    <input type="tel" th:field="*{phoneNumber}" name="phoneNumber" placeholder="Input Parent Phone"
+                           id="phoneNumber" class="form-control" required/>
+                    <label class="form-label" for="phoneNumber">PhoneNumber: </label>
+                    <div th:if="${#fields.hasErrors('phoneNumber')}">
+                        <ul>
+                            <li th:each="e: ${#fields.hasErrors('phoneNumber')}" th:text="${e}"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-floating mb-4">
+                    <input type="text" th:field="*{identity}" name="identity" placeholder="Input Parent identity"
+                           id="identity" class="form-control" required/>
+                    <label class="form-label" for="identity">Identity: </label>
+                    <div th:if="${#fields.hasErrors('identity')}">
+                        <ul>
+                            <li th:each="e: ${#fields.hasErrors('identity')}" th:text="${e}"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-floating mb-1">
+                    <input type="email" th:field="*{email}" placeholder="Input Parent Email" name="email" id="email"
+                           class="form-control" required/>
+                    <label class="form-label" for="email">Email: </label>
+                    <div th:if="${#fields.hasErrors('email')}">
+                        <ul>
+                            <li th:each="e: ${#fields.hasErrors('email')}" th:text="${e}"></li>
+                        </ul>
+                    </div>
+                </div>
+                <button class="btn btn-primary py-2" type="submit">Add</button>
+            </form>
+        </div>
+        <!--        <div class="col-lg-6">-->
+        <!--            <div class="row">-->
+        <!--            <h3>List School</h3>-->
+        <!--                <table>-->
+        <!--                    <th>Id School</th>-->
+        <!--                    <th>School Name</th>-->
+        <!--                    <th>School Address</th>-->
+        <!--                    <th>School Level</th>-->
+        <!--                    <th>School Phone</th>-->
+        <!--                    <tr th:each="school : ${schoolList}">-->
+        <!--                        <td th:text="${school.getId()}"></td>-->
+        <!--                        <td th:text="${school.getName()}"></td>-->
+        <!--                        <td th:text="${school.getAddress()}"></td>-->
+        <!--                        <td th:text="${school.getLevel()}"></td>-->
+        <!--                        <td th:text="${school.getPhone()}"></td>-->
+        <!--                    </tr>-->
+        <!--                </table>-->
+        <!--            </div>-->
+        <!--        </div>-->
+    </div>
+    <div th:if="${success}" class="alert alert-success">
+        <span th:text="${success}"></span>
+    </div>
+    <div>
+        <a class="btn btn-primary" th:href="@{/m-parent/showManageParent}">Return ListParent</a>
+    </div>
+    <p class="mt-5 mb-3 text-body-secondary">© 2017–2024</p>
+</div>
+<script src="/resources/static/JavaScript/function.js"></script>
+<script src="/docs/5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+</html>
