@@ -111,6 +111,7 @@ public class TeacherController {
     @GetMapping("showFormAddTeacher")
     public  String showForm(Model model){
         model.addAttribute("teacher", new Teacher());
+        // show list school
         List<School> schoolList = schoolService.getAllSchools();
         if(schoolList.isEmpty()){
             model.addAttribute("Error", "List School is Empty");

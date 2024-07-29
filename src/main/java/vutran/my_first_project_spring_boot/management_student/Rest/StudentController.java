@@ -95,6 +95,52 @@ public class StudentController {
         }
     }
 
+    @GetMapping("/showModifyFormStudent")
+    public String formModifyStudent(Student student,Model model){
+
+        Student studentExist = studentService.getStudentById(student.getId());
+
+        // check student exist
+        if(studentExist != null){
+            model.addAttribute("student", studentExist);
+            return "Student/modifyFormStudent";
+        } else{
+            model.addAttribute("student", new Student());
+            model.addAttribute("Error", "Not found student");
+            return "Student/modifyFormStudent";
+        }
+    }
+
+    @PostMapping("/modify-process")
+    public String modifyStudent(@ModelAttribute Student student ,Model model){
+        // check student exist
+        Student studentExist = studentService.getStudentById(student.getId());
+
+        // exits, modify
+        if(studentExist != null){
+            studentExist.setFirstName(student.getFirstName());
+            studentExist.setLastName(student.getLastName());
+            studentExist.setAddress(student.getAddress());
+            studentExist.setSchool(student.getSchool());
+            studentExist.setEmail(student.getEmail());
+            studentExist.setParent(student.getParent());
+            studentExist.setPhoneNumber(student.getPhoneNumber());
+            studentExist.setTeacher(student.getTeacher());
+            studentExist.setClasses(student.getClasses());
+
+            studentService.updateStudent(studentExist);
+            model.addAttribute("student", student);
+            model.addAttribute("success", "You modified student have id: " + studentExist.getId());
+            return "Student/modifyFormStudent";
+        }
+        // else: notify error
+        else{
+            model.addAttribute("student", new Student());
+            model.addAttribute("Error", "Error in process modify student");
+            return "Student/modifyFormStudent";
+        }
+    }
+
     @GetMapping("modify-delete")
     public String processDelete(@ModelAttribute Student student, RedirectAttributes redirectAttributes){
         // check student exist
@@ -104,7 +150,7 @@ public class StudentController {
             return "redirect:/m-student/showManageStudent";
         } else {
             studentService.deleteStudentById(studentExist.getId());
-            redirectAttributes.addFlashAttribute("success", "You deleted student have id: "+studentExist.getId()+" Name: "+studentExist.getFirstName()+" success");
+            redirectAttributes.addFlashAttribute("success", "You deleted student have id: "+studentExist.getId()+" Name: "+studentExist.getFirstName());
             return "redirect:/m-student/showManageStudent";
         }
     }

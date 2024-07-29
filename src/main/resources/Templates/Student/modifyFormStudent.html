@@ -9,80 +9,90 @@
     <script src="/resources/static/JavaScript/function.js"></script>
 </head>
 <body>
-<h1>Modify Teacher</h1>
+<h1>Modify Student</h1>
 <div>
-    <form th:action="@{/m-teacher/modify-process}" th:object="${teacher}" method="post">
+    <form th:action="@{/m-student/modify-process}" th:object="${student}" method="post">
         <div th:if="${Error}" class="alert alert-danger">
             <span th:text="${Error}"></span>
         </div>
         <div>
-            <label th:field="*{id}">Teacher Id: </label>
-            <input type="hidden" th:field="*{id}" name="teacherid">
+            <label th:field="*{id}" for="studentid">Student Id: </label>
+            <input type="hidden" th:field="*{id}" name="studentid" id="studentid">
             <div th:if="${#fields.hasErrors('id')}">
                 <ul>
-                    <li th:each="error: ${#fields.hasErrors('id')}" th:text="${error}"></li>
+                    <li th:each="error: ${#fields.hasErrors('id')}" th:text="${Error}"></li>
                 </ul>
             </div>
         </div>
         <div>
-            <label for="teacherFirstName">Teacher First Name: </label>
-            <input type="text" th:field="*{firstName}" placeholder="Input First Name teacher"
+            <label for="teacherFirstName">Student First Name: </label>
+            <input type="text" th:field="*{firstName}" placeholder="Input First Name student"
                    name="teacherFirstName" id="teacherFirstName">
             <div th:if="${#fields.hasErrors('firstName')}">
                 <ul>
-                    <li th:each="error: ${#fields.hasErrors('firstName')}" th:text="${error}"></li>
+                    <li th:each="error: ${#fields.hasErrors('firstName')}" th:text="${Error}"></li>
                 </ul>
             </div>
         </div>
         <div>
-            <label for="teacherLastName">Teacher Last Name: </label>
-            <input type="text" th:field="*{lastName}" placeholder="Input Last Name teacher"
+            <label for="teacherLastName">Student Last Name: </label>
+            <input type="text" th:field="*{lastName}" placeholder="Input Last Name student"
                    name="teacherLastName" id="teacherLastName">
             <div th:if="${#fields.hasErrors('lastName')}">
                 <ul>
-                    <li th:each="error: ${#fields.hasErrors('lastName')}" th:text="${error}"></li>
+                    <li th:each="error: ${#fields.hasErrors('lastName')}" th:text="${Error}"></li>
                 </ul>
             </div>
         </div>
         <div>
-            <label for="teacherAddress">Teacher Address: </label>
-            <input type="text" th:field="*{address}" placeholder="Input address teacher"
+            <label for="teacherAddress">Student Address: </label>
+            <input type="text" th:field="*{address}" placeholder="Input address student"
                    name="teacherAdress" id="teacherAddress">
             <div th:if="${#fields.hasErrors('address')}">
                 <ul>
-                    <li th:each="error: ${#fields.hasErrors('address')}" th:text="${error}"></li>
+                    <li th:each="error: ${#fields.hasErrors('address')}" th:text="${Error}"></li>
                 </ul>
             </div>
         </div>
         <div>
-            <label for="teacherPhone">Teacher Phone: </label>
-            <input type="tel" th:field="*{phoneNumber}" placeholder="Input phone teacher"
+            <label for="teacherPhone">Student Phone: </label>
+            <input type="tel" th:field="*{phoneNumber}" placeholder="Input phone student"
                    name="teacherPhone" id="teacherPhone">
             <div th:if="${#fields.hasErrors('phoneNumber')}">
                 <ul>
-                    <li th:each="error: ${#fields.hasErrors('phoneNumber')}" th:text="${error}"></li>
+                    <li th:each="error: ${#fields.hasErrors('phoneNumber')}" th:text="${Error}"></li>
                 </ul>
             </div>
         </div>
         <div>
-            <label for="teacherEmail">Teacher Mail: </label>
-            <input type="email" th:field="*{email}" placeholder="Input mail teacher"
+            <label for="teacherEmail">Student Mail: </label>
+            <input type="email" th:field="*{email}" placeholder="Input email student"
                    name="teacherEmail" id="teacherEmail">
             <div th:if="${#fields.hasErrors('email')}">
                 <ul>
-                    <li th:each="error: ${#fields.hasErrors('email')}" th:text="${error}"></li>
+                    <li th:each="error: ${#fields.hasErrors('email')}" th:text="${Error}"></li>
                 </ul>
             </div>
         </div>
         <div>
-            <label for="schoolid">Teacher work at school id: </label>
+            <label for="schoolid">Student study at school id: </label>
             <input type="text" th:field="*{school}" placeholder="Input school id"
                    name="schoolid" id="schoolid">
             <label>Name School: </label>
             <span id="schoolName"></span>
             <div th:if="${#fields.hasErrors('school')}">
                 <ul>
-                    <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
+                    <li th:each="error: ${#fields.hasErrors('school')}" th:text="${Error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label for="schoolid">Homeroom Teacher id: </label>
+            <input type="text" th:field="*{teacher}" placeholder="Input teacher id"
+                   name="teacherid" id="teacherid">
+            <div th:if="${#fields.hasErrors('teacher')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('teacher')}" th:text="${Error}"></li>
                 </ul>
             </div>
         </div>
@@ -91,12 +101,12 @@
         </div>
     </form>
     <div th:if="${success}">
-        <h3>You updated a school "<span th:text="${success}"></span> ",</h3>
+        <h3>You updated a student "<span th:text="${success}"></span> ",</h3>
     </div>
 </div>
 <div>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-    <a class="btn btn-primary" th:href="@{/m-teacher/showManageTeacher}">School List Manage</a>
+    <a class="btn btn-primary" th:href="@{/m-student/showManageStudent}">Student List Manage</a>
 </div>
 </body>
 <script>

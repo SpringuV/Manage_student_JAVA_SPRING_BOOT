@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Manager Student</title>
@@ -34,6 +34,7 @@
                 <th>Username</th>
                 <th>Address</th>
                 <th>Phone</th>
+                <th>Email</th>
                 <th>Class</th>
                 <th>Homeroom Teacher</th>
                 <th>Study at School</th>
@@ -41,18 +42,23 @@
                 <th>Position</th>
                 <th>Feature</th>
                 <tr th:each="student : ${studentList}">
-                    <td th:text="${student.id}"></td>
-                    <td th:text="${student.firstName}"></td>
-                    <td th:text="${student.lastName}"></td>
-                    <td th:text="${student.username}"></td>
-                    <td th:text="${student.address}"></td>
+                    <td th:text="${student.id != null ? student.id : 'null'}"></td>
+                    <td th:text="${student.firstName != null ? student.firstName : 'null'}"></td>
+                    <td th:text="${student.lastName != null ? student.lastName : 'null'}"></td>
+                    <td th:text="${student.username != null ? student.username : 'null'}"></td>
+                    <td th:text="${student.address != null ? student.address : 'null'}"></td>
+                    <td th:text="${student.phoneNumber != null ? student.phoneNumber : 'null'}"></td>
+                    <td th:text="${student.email != null ? student.email : 'null'}"></td>
                     <td th:text="${student.classes != null ? student.classes : 'null'}"></td>
     <!--                cach 2:
                         <td> <span th:unless="${student.teacher}" th:text="'null'"></span>
                         <span th:if="${student.teacher}" th:text="${student.teacher}"></span></td>-->
-                    <td th:text="${student.teacher != null ? student.teacher : 'null'}"></td>
+                    <td>
+                        <span  th:if="${student.teacher != null}" th:text="${student.teacher.username} +' ('+ ${student.teacher.id}+')'"></span>
+                        <span th:unless="${student.teacher != null}">null</span>
+                    </td>
                     <!--            cach 1:-->
-                    <td th:text="${student.school.name != null ? student.school.name : 'null'} + ' (' +${student.school.id != null ? student.school.id : 'null'}+ ')'"></td>
+                    <td th:text="${student.school.name != null ? student.school.name : 'null'}"></td>
                     <!--            cach 2:-->
                     <!--            <td>-->
                     <!--                <span th:text="'Name: '+${teacher.school.name}"></span>-->
@@ -60,13 +66,13 @@
                     <!--                <span th:text="'Id: ' + ${teacher.school.id}"></span>-->
                     <!--            </td>-->
                     <td th:text="${student.parent != null ? student.parent : 'null'}"></td>
-                    <td th:text="${teacher.position}"></td>
+                    <td th:text="${student.position}"></td>
                     <td>
                         <div>
                             <a th:href="@{/m-student/showModifyFormStudent(id=${student.id})}" class="btn btn-success">Modify</a>
                         </div>
                         <div>
-                            <a th:href="@{/m-student/modify-delete(id=${teacher.id})}" class="btn btn-danger">Delete</a>
+                            <a th:href="@{/m-student/modify-delete(id=${student.id})}" class="btn btn-danger">Delete</a>
                         </div>
                     </td>
                 </tr>

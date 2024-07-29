@@ -13,12 +13,10 @@ public class Student extends User{
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "teacher_id")
-    @JsonManagedReference
     private Teacher teacher;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "class_id")
-    @JsonManagedReference
     private Classes classes;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -29,7 +27,6 @@ public class Student extends User{
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
     @JoinTable(name = "student_subject",
             joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
-    @JsonManagedReference
     private List<Subject> subjectList;
 
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
@@ -41,7 +38,6 @@ public class Student extends User{
 
     // một học sinh có nhiều phiếu điểm
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH})
-    @JsonBackReference
     private List<ScoreCard> scoreCardList;
 
     // một học sinh có 1 học bạ
@@ -51,7 +47,6 @@ public class Student extends User{
     // Nhiều học sinh chỉ học ở một trường
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "school_id")
-    @JsonManagedReference
     private School school;
 
     public Student() {

@@ -12,6 +12,7 @@ public interface UserService extends UserDetailsService {
     public User addUser(User user);
     public void deleteUserById(int id);
     public User updateUser(User user);
-    public User fineUserByName(String username);
+    public User findUserByIdentity(String position);
+    public User findUserByName(String username);
     public List<User> getListUserByPosition(String position);
 }

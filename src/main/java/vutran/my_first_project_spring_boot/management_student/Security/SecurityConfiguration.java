@@ -53,7 +53,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api-classes/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api-classes/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api-classes/**").hasRole("ADMIN")
-                        // class
+                        // teacher
                         .requestMatchers(HttpMethod.GET, "/m-teacher/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/m-teacher/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/m-teacher/**").hasRole("ADMIN")
@@ -73,6 +73,11 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/m-student/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/m-student/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/m-student/**").hasRole("ADMIN")
+                        // parent
+                        .requestMatchers(HttpMethod.GET, "/m-parent/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/m-parent/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/m-parent/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/m-parent/**").hasRole("ADMIN")
                         // scorecard
                         .requestMatchers(HttpMethod.GET, "/api-score-card/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api-score-card/**").hasRole("ADMIN")

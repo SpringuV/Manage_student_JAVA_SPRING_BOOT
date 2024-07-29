@@ -77,7 +77,7 @@ public class EventFormController {
             return "Register/formRegister";
         }
         // check user existed
-        User userCheck = userService.fineUserByName(username);
+        User userCheck = userService.findUserByName(username);
         if(userCheck != null) {
             model.addAttribute("registerUser", new RegisterUser());
             model.addAttribute("myError", "Account existed");
@@ -106,7 +106,7 @@ public class EventFormController {
         } else if (userNew.getPosition().equals("Parent")) {
             defaultRole = authorityRepository.findByName("ROLE_PARENT");
         } else if (userNew.getPosition().equals("Student")) {
-            defaultRole = authorityRepository.findByName("ROLE_PARENT");
+            defaultRole = authorityRepository.findByName("ROLE_STUDENT");
         }
         Collection<Authority> roles = new ArrayList<>();
         roles.add(defaultRole);
