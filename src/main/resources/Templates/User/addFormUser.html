@@ -71,6 +71,16 @@
                 </div>
 
                 <div class="form-outline mb-4">
+                    <input type="text" th:field="*{address}" name="address" id="address" class="form-control" required/>
+                    <div th:if="${#fields.hasErrors('address')}">
+                        <ul>
+                            <li th:each="e: ${#fields.hasErrors('address')}" th:text="${e}"></li>
+                        </ul>
+                    </div>
+                    <label class="form-label" for="address">Address: </label>
+                </div>
+
+                <div class="form-outline mb-4">
                     <input type="text" th:field="*{identity}" name="identity" id="identity" class="form-control" required/>
                     <div th:if="${#fields.hasErrors('identity')}">
                         <ul>
@@ -93,7 +103,7 @@
                 <div class="form-outline mb-4">
                     <label for="position" class="form-label">Current Occupation: </label>
                     <select th:field="*{position}" id="position" name="position" required>
-                        <option th:value="#" selected>----</option>
+                        <option value="#" selected>----</option>
                         <option th:value="User">User</option>
                         <option th:value="Parent">Parent</option>
                         <option th:value="Student">Student</option>

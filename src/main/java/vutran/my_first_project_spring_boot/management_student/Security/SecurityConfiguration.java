@@ -15,12 +15,22 @@ import vutran.my_first_project_spring_boot.management_student.Service.UserServic
 import javax.sql.DataSource;
 
 @Configuration
-public class SecurityConfiguration {
+public class SecurityConfiguration  {
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return  new BCryptPasswordEncoder();
     }
+
+//    @Bean
+//    public CustomAuthenticationEntryPoint customAuthenticationEntryPoint(){
+//        return new CustomAuthenticationEntryPoint();
+//    }
+//
+//    @Bean
+//    public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+//        return new CustomAuthenticationSuccessHandler();
+//    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserService userService){
@@ -115,6 +125,7 @@ public class SecurityConfiguration {
                 logout -> logout.permitAll()
         ).exceptionHandling(
                 configurer -> configurer.accessDeniedPage("/showPage403")
+//                        .authenticationEntryPoint(customAuthenticationEntryPoint())
         );
         httpSecurity.httpBasic(Customizer.withDefaults());
         httpSecurity.csrf(csrf -> csrf.disable());

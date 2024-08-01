@@ -41,4 +41,9 @@ public class ClassServiceImple implements ClassService{
     public Classes updateClass(Classes classes) {
         return this.classRepository.saveAndFlush(classes);
     }
+
+    @Override
+    public Classes findClassByNameAndSchoolId(String name, int id) {
+        return this.classRepository.findClassByNameAndSchoolId(name, id);
+    }
 }
