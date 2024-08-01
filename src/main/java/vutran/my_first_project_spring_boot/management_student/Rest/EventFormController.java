@@ -9,10 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Authority;
 import vutran.my_first_project_spring_boot.management_student.Entity.User;
@@ -43,7 +40,11 @@ public class EventFormController {
 
     // login
     @GetMapping("/showLoginPage")
-    public String showLoginPage(){
+    public String showLoginPage(@RequestParam(value = "expired", required = false) String expired){
+        // Có thể kiểm tra xem tham số expired có tồn tại hay không
+//        if (expired != null) {
+//            // Xử lý logic nếu cần khi tham số expired tồn tại
+//        }z``
         return "login";
     }
 

@@ -107,6 +107,9 @@
         <div>
             <a sec:authorize="hasAnyRole('MANAGER','ADMIN')"  class="btn btn-primary" th:href="@{/m-user/showManageUser}">User manage</a>
         </div>
+        <div>
+            <a sec:authorize="hasRole('ADMIN')"  class="btn btn-primary" th:href="@{/m-class/showManageClass}">Class manage</a>
+        </div>
     </div>
 </div>
 </body>

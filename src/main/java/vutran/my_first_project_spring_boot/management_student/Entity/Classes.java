@@ -36,7 +36,7 @@ public class Classes {
     private NoteBook noteBook;
 
     // nhiều lớp chỉ được một trường quản lý
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "school_id")
     @JsonManagedReference
     private School school;

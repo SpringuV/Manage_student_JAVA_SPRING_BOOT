@@ -19,7 +19,7 @@ public class Student extends User{
     @JoinColumn(name = "class_id")
     private Classes classes;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = false)
     @JoinColumn(name = "parent_id")
     private Parent parent;
 
