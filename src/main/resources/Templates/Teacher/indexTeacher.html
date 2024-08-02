@@ -38,6 +38,7 @@
                 <th>Address</th>
                 <th>Phone</th>
                 <th>Work at School</th>
+                <th>Class</th>
                 <th>Position</th>
                 <th>Feature</th>
                 <tr th:each="teacher : ${teacherList}">
@@ -55,6 +56,7 @@
                     <!--                <br/>-->
                     <!--                <span th:text="'Id: ' + ${teacher.school.id}"></span>-->
                     <!--            </td>-->
+                    <td th:text="${teacher.classesList}"></td>
                     <td th:text="${teacher.position}"></td>
                     <td>
                         <a th:href="@{/m-teacher/showModifyFormTeacher(id=${teacher.id})}" class="btn btn-success">Modify</a>

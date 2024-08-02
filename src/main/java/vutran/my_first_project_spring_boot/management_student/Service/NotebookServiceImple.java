@@ -41,4 +41,9 @@ public class NotebookServiceImple implements NotebookService{
     public NoteBook updateNoteBook(NoteBook noteBook) {
         return this.notebookRepository.saveAndFlush(noteBook);
     }
+
+    @Override
+    public NoteBook findNoteBookByClassIdAndSchoolId(int class_id, int school) {
+        return this.notebookRepository.findNoteBookByClassIdAndSchoolId(class_id, school);
+    }
 }

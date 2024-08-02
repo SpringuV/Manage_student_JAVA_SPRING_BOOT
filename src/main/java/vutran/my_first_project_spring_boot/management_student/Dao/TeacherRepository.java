@@ -8,6 +8,7 @@ import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
 import vutran.my_first_project_spring_boot.management_student.Entity.User;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
@@ -21,5 +22,5 @@ public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
             "JOIN teacher as t " +
             "ON t.id = u.id " +
             "WHERE u.position LIKE 'Teacher'", nativeQuery = true)
-    public List<Teacher> getAllTeacher();
+    public Set<Teacher> getAllTeacher();
 }

@@ -8,6 +8,8 @@ import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class TeacherServiceImple implements TeacherService{
@@ -22,14 +24,16 @@ public class TeacherServiceImple implements TeacherService{
     }
 
     @Override
-    public List<Teacher> getAllTeacher() {
-        return teacherRepository.findAll();
+    public Set<Teacher> getAllTeacher() {
+        return teacherRepository.getAllTeacher();
     }
 
     @Override
     public Teacher getTeacherById(int id) {
         return teacherRepository.findById(id).get();
     }
+
+
 
     @Override
     public Teacher addTeacher(Teacher teacher) {
@@ -52,7 +56,12 @@ public class TeacherServiceImple implements TeacherService{
     }
 
     @Override
-    public List<Teacher> getListTeacherByPosition() {
+    public Set<Teacher> getListTeacherByPosition() {
         return teacherRepository.getAllTeacher();
+    }
+
+    @Override
+    public Optional<Teacher> findById(int id) {
+        return teacherRepository.findById(id);
     }
 }

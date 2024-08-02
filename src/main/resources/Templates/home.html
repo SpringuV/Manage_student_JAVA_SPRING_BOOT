@@ -92,23 +92,26 @@
             <button sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="btn btn-success">Sửa</button>
             <button sec:authorize="hasAnyRole('ADMIN')" class="btn btn-success">Xóa</button>
         </div>
-        <div>
+        <div class="mt-1">
             <a sec:authorize="hasRole('ADMIN')" class="btn btn-primary" th:href="@{/api-school/showManageSchool}">School Manage</a>
         </div>
-        <div>
+        <div class="mt-1">
             <a sec:authorize="hasAnyRole('MANAGER','ADMIN')" class="btn btn-primary" th:href="@{/m-teacher/showManageTeacher}">Teacher manage</a>
         </div>
-        <div>
+        <div class="mt-1">
             <a sec:authorize="hasAnyRole('MANAGER','ADMIN', 'TEACHER')"  class="btn btn-primary" th:href="@{/m-student/showManageStudent}">Student manage</a>
         </div>
-        <div>
+        <div class="mt-1">
             <a sec:authorize="hasAnyRole('MANAGER','ADMIN', 'TEACHER')"  class="btn btn-primary" th:href="@{/m-parent/showManageParent}">Parent manage</a>
         </div>
-        <div>
+        <div class="mt-1">
             <a sec:authorize="hasAnyRole('MANAGER','ADMIN')"  class="btn btn-primary" th:href="@{/m-user/showManageUser}">User manage</a>
         </div>
-        <div>
+        <div class="mt-1">
             <a sec:authorize="hasRole('ADMIN')"  class="btn btn-primary" th:href="@{/m-class/showManageClass}">Class manage</a>
+        </div>
+        <div class="mt-1">
+            <a sec:authorize="hasRole('ADMIN')"  class="btn btn-primary" th:href="@{/m-note/showManageNotebook}">NoteBook manage</a>
         </div>
     </div>
 </div>

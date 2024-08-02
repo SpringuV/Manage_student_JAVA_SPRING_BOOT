@@ -95,6 +95,18 @@
                         </ul>
                     </div>
                 </div>
+
+                <div class="form-floating mb-1">
+                    <input type="text" th:field="*{classesList}" name="classList" placeholder="Input Teacher work at class"
+                           id="class" class="form-control" required/>
+                    <label class="form-label" for="class">Class name: </label>
+                    <div th:if="${#fields.hasErrors('classesList')}">
+                        <ul>
+                            <li th:each="e: ${#fields.hasErrors('classesList')}" th:text="${e}"></li>
+                        </ul>
+                    </div>
+                </div>
+
                 <div class="form-floating mb-1">
                     <input type="text" th:field="*{school}" name="phoneNumber" placeholder="Input Teacher work at school id"
                            id="school" class="form-control" required/>
