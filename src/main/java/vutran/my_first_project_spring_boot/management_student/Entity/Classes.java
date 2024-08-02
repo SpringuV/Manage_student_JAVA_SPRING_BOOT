@@ -113,8 +113,8 @@ public class Classes {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", grade='" + grade + '\'' +
-                ", noteBook=" + noteBook +
-                ", school=" + school +
+                ", noteBook=" + (noteBook != null ? noteBook.toString() : "null" )+
+                ", school=" + (school != null ? school.toString() : "null") +
                 '}';
     }
 }

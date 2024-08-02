@@ -1,10 +1,13 @@
 package vutran.my_first_project_spring_boot.management_student.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "note_book")
@@ -14,18 +17,22 @@ public class NoteBook {
     @Column(name = "note_id")
     private int id;
 
+    @ManyToOne
+    @JoinColumn(name = "school_id")
+    private School school;
+
     // một sổ đầu bài tương ứng 1 lớp
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "note_class_id")
     private Classes classes;
 
     // một sổ có nhiều giáo viên kí
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "teacher_notebook",
             joinColumns = @JoinColumn(name = "notebook_id"),
             inverseJoinColumns = @JoinColumn(name = "teacher_id"))
-    @JsonBackReference
-    private List<Teacher> teacherList;
+    @JsonManagedReference
+    private Set<Teacher> teacherList;
 
     @Column(name = "note_content_lec")
     private String contentLecture;
@@ -46,12 +53,20 @@ public class NoteBook {
         this.teacherComment = teacherComment;
     }
 
-    public NoteBook(Classes classes, List<Teacher> teacherList, String contentLecture, Date teachingDay, String teacherComment) {
+    public NoteBook(Classes classes, Set<Teacher> teacherList, String contentLecture, Date teachingDay, String teacherComment) {
         this.classes = classes;
         this.teacherList = teacherList;
         this.contentLecture = contentLecture;
         this.teachingDay = teachingDay;
         this.teacherComment = teacherComment;
+    }
+
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
     }
 
     public int getId() {
@@ -70,11 +85,11 @@ public class NoteBook {
         this.classes = classes;
     }
 
-    public List<Teacher> getTeacherList() {
+    public Set<Teacher> getTeacherList() {
         return teacherList;
     }
 
-    public void setTeacherList(List<Teacher> teacherList) {
+    public void setTeacherList(Set<Teacher> teacherList) {
         this.teacherList = teacherList;
     }
 
@@ -106,7 +121,9 @@ public class NoteBook {
     public String toString() {
         return "NoteBook{" +
                 "id=" + id +
-                ", classes=" + classes +
+                ", classes=" + (classes != null ? classes.toString() : "null") +
+                ", teacherList=" + (teacherList != null ? teacherList.toString() : "null") +
+                ", school=" + (school != null ? school.toString() : "null") +
                 ", contentLecture='" + contentLecture + '\'' +
                 ", teachingDay=" + teachingDay +
                 ", teacherComment='" + teacherComment + '\'' +

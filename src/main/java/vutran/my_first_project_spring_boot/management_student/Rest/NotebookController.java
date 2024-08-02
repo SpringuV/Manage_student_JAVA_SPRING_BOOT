@@ -4,73 +4,77 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import vutran.my_first_project_spring_boot.management_student.Entity.NoteBook;
+import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
 import vutran.my_first_project_spring_boot.management_student.Service.NotebookService;
+import vutran.my_first_project_spring_boot.management_student.Service.TeacherService;
 
-import java.util.List;
+import java.util.*;
 
 @Controller
-@RequestMapping("/api-note")
+@RequestMapping("/m-note")
 public class NotebookController {
 
-    private final NotebookService notebookService;
+    private NotebookService notebookService;
+    private TeacherService teacherService;
 
     @Autowired
-    public NotebookController(NotebookService notebookService) {
+    public NotebookController(NotebookService notebookService, TeacherService teacherService) {
         this.notebookService = notebookService;
+        this.teacherService = teacherService;
     }
 
-    @GetMapping
-    public List<NoteBook> showListNote(){
-        return notebookService.getAllNoteBooks();
-    }
-
-    @GetMapping("/{id}")
-    public NoteBook getNoteById(@PathVariable int id){
-        return notebookService.getNoteBookById(id);
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<NoteBook> addNote(@RequestBody NoteBook noteBook){
-        noteBook.setId(0);
-        noteBook = notebookService.addNoteBook(noteBook);
-        return ResponseEntity.status(HttpStatus.CREATED).body(noteBook);
-    }
-
-    @PutMapping("/modify/{id}")
-    public ResponseEntity<NoteBook> updateNote(@PathVariable int id, @RequestBody NoteBook noteBook){
-        NoteBook existNoteBook = notebookService.getNoteBookById(id);
-        if(existNoteBook != null) {
-            existNoteBook.setClasses(noteBook.getClasses());
-            existNoteBook.setTeacherList(noteBook.getTeacherList());
-            existNoteBook.setContentLecture(noteBook.getContentLecture());
-            existNoteBook.setTeachingDay(noteBook.getTeachingDay());
-            existNoteBook.setTeacherComment(noteBook.getTeacherComment());
-            notebookService.updateNoteBook(existNoteBook);
-            return ResponseEntity.ok(existNoteBook);
-        } else {
-            try {
-                throw new Exception("Not found notebook have id: "+ id);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<NoteBook> deleteNoteBook(@PathVariable int id){
-        NoteBook existNote = notebookService.getNoteBookById(id);
-        if(existNote != null){
-            notebookService.deleteNoteBookById(id);
-            return ResponseEntity.ok().build();
+    @GetMapping("/showManageNotebook")
+    public String showListNote(Model model){
+        List<NoteBook> noteBookList = notebookService.getAllNoteBooks();
+        if(noteBookList.isEmpty()){
+            model.addAttribute("Error", "Error, Notebook List Empty!!");
+            model.addAttribute("teachers", new ArrayList<>());
+            model.addAttribute("notebookList", new ArrayList<>());
+            return "School/NoteBook/indexNotebook";
         } else{
-            try {
-                throw new Exception("Not found notebook have id: "+ id);
-            } catch (Exception e){
-                throw new RuntimeException(e);
-            }
+            model.addAttribute("teachers", teacherService.getListTeacherByPosition());
+            model.addAttribute("notebookList", noteBookList);
+            return "School/NoteBook/indexNotebook";
         }
     }
 
+    @GetMapping("/showFormAddNotebook")
+    public String showForm(Model model){
+        model.addAttribute("NoteBook", new NoteBook());
+        model.addAttribute("teachers", teacherService.getListTeacherByPosition());
+        return "School/NoteBook/addFormNoteBook";
+    }
+
+    @PostMapping("/add-process")
+    public String addProcess(@ModelAttribute NoteBook noteBook, Model model){
+        Set<Teacher> teacherSet = new HashSet<>();
+        for(Teacher teacher: noteBook.getTeacherList()){
+            Optional<Teacher> teacherOptional = teacherService.findById(teacher.getId());
+            if(teacherOptional.isPresent()){
+                teacherSet.add(teacherOptional.get());
+            } else{
+                model.addAttribute("Error", "Teacher with ID " + teacher.getId() + " not found.");
+                model.addAttribute("NoteBook", new NoteBook());
+                model.addAttribute("teachers", teacherService.getListTeacherByPosition());
+                return "School/NoteBook/addFormNoteBook";
+            }
+        }
+        // Check if note already exists
+        NoteBook noteBookExist = notebookService.findNoteBookByClassIdAndSchoolId(noteBook.getClasses().getId(), noteBook.getSchool().getId());
+        if(noteBookExist != null){
+            model.addAttribute("Error", "Error, NoteBook Existed!!!");
+            model.addAttribute("NoteBook", new NoteBook());
+            model.addAttribute("teachers", teacherService.getListTeacherByPosition());
+            return "School/NoteBook/addFormNoteBook";
+        }
+        noteBook.setTeacherList(teacherSet);
+        notebookService.addNoteBook(noteBook);
+        model.addAttribute("success", "You created new notebook have id: "+ noteBook.getId());
+        model.addAttribute("NoteBook", noteBook);
+        model.addAttribute("teachers", teacherService.getListTeacherByPosition());
+        return "School/NoteBook/addFormNoteBook";
+    }
 }

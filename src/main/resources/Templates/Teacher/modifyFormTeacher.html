@@ -78,11 +78,19 @@
             <label for="schoolid">Teacher work at school id: </label>
             <input type="text" th:field="*{school}" placeholder="Input school id"
                    name="schoolid" id="schoolid">
-            <label>Name School: </label>
-            <span id="schoolName"></span>
             <div th:if="${#fields.hasErrors('school')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-floating mb-1">
+            <input type="text" th:field="*{classesList}" name="classList" placeholder="Input Teacher work at class"
+                   id="class" class="form-control" required/>
+            <label class="form-label" for="class">Class name: </label>
+            <div th:if="${#fields.hasErrors('classesList')}">
+                <ul>
+                    <li th:each="e: ${#fields.hasErrors('classesList')}" th:text="${e}"></li>
                 </ul>
             </div>
         </div>
@@ -99,23 +107,6 @@
     <a class="btn btn-primary" th:href="@{/m-teacher/showManageTeacher}">School List Manage</a>
 </div>
 </body>
-<script>
-    function fetchSchoolName() {
-        const schoolId = document.getElementById('schoolid').value;
-        if (schoolId) {
-            fetch(`/m-teacher/getSchoolName/${schoolId}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('schoolName').innerText = data.name || 'Not found';
-                })
-                .catch(error => {
-                    document.getElementById('schoolName').innerText = 'Error fetching school name';
-                });
-        } else {
-            document.getElementById('schoolName').innerText = 'Error';
-        }
-    }
-</script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>

@@ -14,4 +14,10 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(),ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
+//    @ExceptionHandler
+//    public ResponseEntity<ErrorResponse> errorResponseResponseEntity(Exception e){
+//        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.REQUEST_TIMEOUT.value(), e.getMessage());
+//        return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(errorResponse);
+//    }
+
 }

@@ -10,4 +10,5 @@ public interface NotebookService {
     public NoteBook addNoteBook(NoteBook noteBook);
     public void deleteNoteBookById(int id);
     public NoteBook updateNoteBook(NoteBook noteBook);
+    public NoteBook findNoteBookByClassIdAndSchoolId(int class_id, int school);
 }

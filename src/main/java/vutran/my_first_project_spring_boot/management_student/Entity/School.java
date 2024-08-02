@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "school")
@@ -25,6 +26,9 @@ public class School {
 
     @Column(name = "school_level")
     private String level;
+
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
+    private Set<NoteBook> noteBookSet;
 
     // một trường có nhiều lớp
     @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -66,6 +70,14 @@ public class School {
         this.address = address;
         this.phone = phone;
         this.level = level;
+    }
+
+    public Set<NoteBook> getNoteBookSet() {
+        return noteBookSet;
+    }
+
+    public void setNoteBookSet(Set<NoteBook> noteBookSet) {
+        this.noteBookSet = noteBookSet;
     }
 
     public String getLevel() {

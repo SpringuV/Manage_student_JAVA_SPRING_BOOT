@@ -17,9 +17,7 @@ import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
 import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
 import vutran.my_first_project_spring_boot.management_student.Service.TeacherService;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/m-teacher")
@@ -40,11 +38,11 @@ public class TeacherController {
     @GetMapping("/showManageTeacher")
     public String showTeacherList(Model model){
         // get list teacher from database
-        List<Teacher> teacherList = teacherService.getListTeacherByPosition();
+        Set<Teacher> teacherList = teacherService.getListTeacherByPosition();
 
         if(teacherList.isEmpty()){
             model.addAttribute("errorTeacherList", "Not found teacher !!");
-            model.addAttribute("teacherList", new ArrayList<>());
+            model.addAttribute("teacherList", new HashSet<>());
             return "Teacher/indexTeacher";
         }
 
@@ -86,6 +84,7 @@ public class TeacherController {
             existTeacher.setEmail(teacher.getEmail());
             existTeacher.setSchool(teacher.getSchool());
             existTeacher.setAddress(teacher.getAddress());
+            existTeacher.setClassesList(teacher.getClassesList());
             existTeacher.setLastName(teacher.getLastName());
             existTeacher.setFirstName(teacher.getFirstName());
             existTeacher.setPhoneNumber(teacher.getPhoneNumber());
@@ -115,7 +114,7 @@ public class TeacherController {
         List<School> schoolList = schoolService.getAllSchools();
         if(schoolList.isEmpty()){
             model.addAttribute("Error", "List School is Empty");
-            model.addAttribute("schoolList", new ArrayList<>());
+            model.addAttribute("schoolList", new HashSet<>());
         } else {
             model.addAttribute("schoolList", schoolList);
         }
@@ -150,6 +149,7 @@ public class TeacherController {
         newTeacher.setIdentity(teacher.getIdentity());
         newTeacher.setEmail(teacher.getEmail());
         newTeacher.setPosition("Teacher");
+        newTeacher.setClassesList(teacher.getClassesList());
         newTeacher.setSchool(teacher.getSchool());
         newTeacher.setPhoneNumber(teacher.getPhoneNumber());
         newTeacher.setAddress(teacher.getAddress());
@@ -173,12 +173,12 @@ public class TeacherController {
         if(teacherExist != null){
             teacherService.deleteTeacherById(teacherExist.getId());
             redirectAttributes.addFlashAttribute("success", "You have deleted teacher have id: "+ teacherExist.getId());
-            List<Teacher> teacherList = teacherService.getListTeacherByPosition();
+            Set<Teacher> teacherList = teacherService.getListTeacherByPosition();
             redirectAttributes.addFlashAttribute("teacherList", teacherList);
             return "redirect:/m-teacher/showManageTeacher";
         } else {
             redirectAttributes.addFlashAttribute("Error", "Error process delete teacher, null !!");
-            List<Teacher> teacherList = teacherService.getListTeacherByPosition();
+            Set<Teacher> teacherList = teacherService.getListTeacherByPosition();
             redirectAttributes.addFlashAttribute("teacherList", teacherList);
             return "redirect:/m-teacher/showManageTeacher";
         }
