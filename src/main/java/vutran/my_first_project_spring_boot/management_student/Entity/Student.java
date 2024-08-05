@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import java.sql.Blob;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Student extends User{
@@ -27,7 +28,7 @@ public class Student extends User{
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
     @JoinTable(name = "student_subject",
             joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
-    private List<Subject> subjectList;
+    private Set<Subject> subjectList;
 
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
     private Transcript transcript;
@@ -38,7 +39,7 @@ public class Student extends User{
 
     // một học sinh có nhiều phiếu điểm
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH})
-    private List<ScoreCard> scoreCardList;
+    private Set<ScoreCard> scoreCardList;
 
     // một học sinh có 1 học bạ
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
@@ -60,7 +61,7 @@ public class Student extends User{
         super(firstName, lastName, address, phoneNumber, identity, username, password, enabled, email, position, avatar, authority);
     }
 
-    public Student(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Teacher teacher, Classes classes, Parent parent, List<Subject> subjectList, Transcript transcript, StudentCard studentCard, List<ScoreCard> scoreCardList, StudyRecord studyRecord, School school) {
+    public Student(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Teacher teacher, Classes classes, Parent parent, Set<Subject> subjectList, Transcript transcript, StudentCard studentCard, Set<ScoreCard> scoreCardList, StudyRecord studyRecord, School school) {
         super(avatar, position, email, enabled, password, username, identity, phoneNumber, address, lastName, firstName);
         this.teacher = teacher;
         this.classes = classes;
@@ -97,11 +98,11 @@ public class Student extends User{
         this.parent = parent;
     }
 
-    public List<Subject> getSubjectList() {
+    public Set<Subject> getSubjectList() {
         return subjectList;
     }
 
-    public void setSubjectList(List<Subject> subjectList) {
+    public void setSubjectList(Set<Subject> subjectList) {
         this.subjectList = subjectList;
     }
 
@@ -121,11 +122,11 @@ public class Student extends User{
         this.studentCard = studentCard;
     }
 
-    public List<ScoreCard> getScoreCardList() {
+    public Set<ScoreCard> getScoreCardList() {
         return scoreCardList;
     }
 
-    public void setScoreCardList(List<ScoreCard> scoreCardList) {
+    public void setScoreCardList(Set<ScoreCard> scoreCardList) {
         this.scoreCardList = scoreCardList;
     }
 

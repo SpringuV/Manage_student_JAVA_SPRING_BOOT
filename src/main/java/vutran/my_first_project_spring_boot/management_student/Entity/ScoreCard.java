@@ -27,7 +27,7 @@ public class ScoreCard {
     private double score;
 
     // một môn có một phiếu điểm
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "subject_id")
     private Subject subject;
 

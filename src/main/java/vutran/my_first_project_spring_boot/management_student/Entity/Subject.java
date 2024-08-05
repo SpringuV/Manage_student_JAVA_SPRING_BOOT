@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "subject")
@@ -22,16 +23,19 @@ public class Subject {
     @JoinTable(name = "teacher_subject",
     joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "teacher_id"))
     @JsonBackReference // đảm bảo không có chu kỳ lặp giữa các đối tượng
-    private List<Teacher> teacherList;
+    private Set<Teacher> teacherList;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
     @JoinTable(name = "student_subject",
             joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
     @JsonBackReference
-    private List<Student> studentList;
+    private Set<Student> studentList;
 
-    @OneToOne(mappedBy = "subject", cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-    private ScoreCard scoreCard;
+    @OneToMany
+    private List<NoteBookDetail> noteBookDetailList;
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
+    private List<ScoreCard> scoreCard;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinTable(name = "school_subject", joinColumns = @JoinColumn(name ="subject_id"), inverseJoinColumns = @JoinColumn(name ="school_id"))
@@ -42,19 +46,13 @@ public class Subject {
     public Subject() {
     }
 
-    public Subject(String nameSubject, Transcript transcript, List<Teacher> teacherList, List<Student> studentList, ScoreCard scoreCard, List<School> schoolList) {
+    public Subject(String nameSubject, Transcript transcript, Set<Teacher> teacherList, Set<Student> studentList, List<ScoreCard> scoreCard, List<School> schoolList) {
         this.nameSubject = nameSubject;
         this.transcript = transcript;
         this.teacherList = teacherList;
         this.studentList = studentList;
         this.scoreCard = scoreCard;
         this.schoolList = schoolList;
-    }
-
-    public Subject(String nameSubject, Transcript transcript, ScoreCard scoreCard) {
-        this.nameSubject = nameSubject;
-        this.transcript = transcript;
-        this.scoreCard = scoreCard;
     }
 
     public int getId() {
@@ -81,27 +79,27 @@ public class Subject {
         this.transcript = transcript;
     }
 
-    public List<Teacher> getTeacherList() {
+    public Set<Teacher> getTeacherList() {
         return teacherList;
     }
 
-    public void setTeacherList(List<Teacher> teacherList) {
+    public void setTeacherList(Set<Teacher> teacherList) {
         this.teacherList = teacherList;
     }
 
-    public List<Student> getStudentList() {
+    public Set<Student> getStudentList() {
         return studentList;
     }
 
-    public void setStudentList(List<Student> studentList) {
+    public void setStudentList(Set<Student> studentList) {
         this.studentList = studentList;
     }
 
-    public ScoreCard getScoreCard() {
+    public List<ScoreCard> getScoreCard() {
         return scoreCard;
     }
 
-    public void setScoreCard(ScoreCard scoreCard) {
+    public void setScoreCard(List<ScoreCard> scoreCard) {
         this.scoreCard = scoreCard;
     }
 
@@ -111,15 +109,5 @@ public class Subject {
 
     public void setSchoolList(List<School> schoolList) {
         this.schoolList = schoolList;
-    }
-
-    @Override
-    public String toString() {
-        return "Subject{" +
-                "id=" + id +
-                ", nameSubject='" + nameSubject + '\'' +
-                ", transcript=" + transcript +
-                ", scoreCard=" + scoreCard +
-                '}';
     }
 }
