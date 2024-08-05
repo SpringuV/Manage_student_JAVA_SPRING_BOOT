@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify Detail NoteBook</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="/resources/static/CSS/main.css" rel="stylesheet">
+    <script src="/resources/static/JavaScript/function.js"></script>
+</head>
+<body>
+<h1>Modify Detail NoteBook</h1>
+<div>
+    <form th:action="@{/m-note-detail/modify-process}" th:object="${noteDetail}" method="post">
+        <div id="autoHide">
+            <div  th:if="${Error}" class="alert alert-danger">
+                <span th:text="${Error}"></span>
+            </div>
+        </div>
+        <div>
+            <label>Id NoteBook: <span th:text="${noteBook_id}"></span></label>
+            <input type="hidden" th:field="*{noteBook}" th:value="${noteBook_id}">
+        </div>
+        <div>
+            <label>Subject: </label>
+            <input type="text" th:field="*{subject}" placeholder="Input Subject" name="subject">
+            <div th:if="${#fields.hasErrors('subject')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('subject')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label>Teacher: </label>
+            <input type="text" th:field="*{teacher}" placeholder="Input teacher id" name="teacherId">
+            <div th:if="${#fields.hasErrors('teacher')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('teacher')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label>Teacher comment: </label>
+            <textarea th:field="*{teacherComment}" placeholder="Input Comment of Teacher" name="comment"></textarea>
+            <div th:if="${#fields.hasErrors('teacherComment')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('teacherComment')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label>Content Lecture: </label>
+            <input type="text" th:field="*{contentLecture}" placeholder="Input Content lecture" name="comment">
+            <div th:if="${#fields.hasErrors('contentLecture')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('contentLecture')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label>Teaching Hours: </label>
+            <input type="time" th:field="*{time}" placeholder="Input Time Teaching" name="time">
+            <div th:if="${#fields.hasErrors('time')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('time')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label>Teaching day: </label>
+            <input type="date" th:field="*{teachingDay}"  name="teachingDay">
+            <div th:if="${#fields.hasErrors('teachingDay')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('teachingDay')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">Modify</button>
+        </div>
+    </form>
+    <div th:if="${success}">
+        <h3>You updated a NoteBook Detail "<span th:text="${success}"></span> ",</h3>
+    </div>
+</div>
+<div>
+    <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
+    <a class="btn btn-primary" th:href="@{/m-note-detail/showManageDetailNote}">NoteDetail List Manage</a>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+</html>

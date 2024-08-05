@@ -15,7 +15,7 @@ public class Teacher extends User{
 
     @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE})
     @JsonBackReference // đảm bảo không có chu kỳ lặp giữa các đối tượng
-    private List<Student> studentList;
+    private Set<Student> studentList;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH})
     @JoinTable(name = "teacher_classes",
@@ -23,27 +23,22 @@ public class Teacher extends User{
             inverseJoinColumns = @JoinColumn(name = "class_id")
     )
     @JsonManagedReference
-    private List<Classes> classesList;
+    private Set<Classes> classesList;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
     @JoinTable(name = "teacher_subject",
             joinColumns = @JoinColumn(name = "teacher_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
     @JsonManagedReference
-    private List<Subject> subjectList;
-
-    // một giáo viên kí nhiều sổ đầu bài
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "teacher_notebook",
-            joinColumns = @JoinColumn(name = "teacher_id"),
-            inverseJoinColumns = @JoinColumn(name = "notebook_id"))
-    @JsonBackReference
-    private Set<NoteBook> noteBookList = new HashSet<>();
+    private Set<Subject> subjectList;
 
     // Một giáo viên có thể làm việc ở một trường
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
     @JoinColumn(name = "school_id")
     @JsonManagedReference
     private School school;
+
+    @OneToMany (mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<NoteBookDetail> noteBookDetailList;
 
     public Teacher() {
     }
@@ -52,45 +47,45 @@ public class Teacher extends User{
         super(firstName, lastName, identity, address, phoneNumber, username, email, position, avatar);
     }
 
-    public Teacher(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, List<Student> studentList, List<Classes> classesList, List<Subject> subjectList, Set<NoteBook> noteBookList, School school) {
+    public Teacher(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Set<Student> studentList, Set<Classes> classesList, Set<Subject> subjectList, List<NoteBookDetail> noteBookDetailList, School school) {
         super(avatar, position, email, enabled, password, username, identity, phoneNumber, address, lastName, firstName);
         this.studentList = studentList;
         this.classesList = classesList;
         this.subjectList = subjectList;
-        this.noteBookList = noteBookList;
+        this.noteBookDetailList = noteBookDetailList;
         this.school = school;
     }
 
-    public List<Student> getStudentList() {
+    public Set<Student> getStudentList() {
         return studentList;
     }
 
-    public void setStudentList(List<Student> studentList) {
+    public void setStudentList(Set<Student> studentList) {
         this.studentList = studentList;
     }
 
-    public List<Classes> getClassesList() {
+    public Set<Classes> getClassesList() {
         return classesList;
     }
 
-    public void setClassesList(List<Classes> classesList) {
+    public void setClassesList(Set<Classes> classesList) {
         this.classesList = classesList;
     }
 
-    public List<Subject> getSubjectList() {
+    public Set<Subject> getSubjectList() {
         return subjectList;
     }
 
-    public void setSubjectList(List<Subject> subjectList) {
+    public List<NoteBookDetail> getNoteBookDetailList() {
+        return noteBookDetailList;
+    }
+
+    public void setNoteBookDetailList(List<NoteBookDetail> noteBookDetailList) {
+        this.noteBookDetailList = noteBookDetailList;
+    }
+
+    public void setSubjectList(Set<Subject> subjectList) {
         this.subjectList = subjectList;
-    }
-
-    public Set<NoteBook> getNoteBookList() {
-        return noteBookList;
-    }
-
-    public void setNoteBookList(Set<NoteBook> noteBookList) {
-        this.noteBookList = noteBookList;
     }
 
     public School getSchool() {

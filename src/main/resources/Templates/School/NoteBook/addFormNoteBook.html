@@ -27,54 +27,6 @@
             </div>
         </div>
         <div>
-            <label>School: </label>
-            <input type="text" th:field="*{school}" placeholder="Input school" name="noteSchool">
-            <div th:if="${#fields.hasErrors('school')}">
-                <ul>
-                    <li th:each="e: ${#fields.hasErrors('school')}" th:text="${e}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label>Teacher: </label>
-            <div th:each="teacher : ${teachers}">
-                <input type="checkbox" th:value="${teacher.id}" th:field="*{teacherList}"  placeholder="Input address school" name="teacherId">
-                <span th:text="${teacher.firstName} +' ('+ ${teacher.school.id}+')'"></span>
-            </div>
-            <div th:if="${#fields.hasErrors('teacherList')}">
-                <ul>
-                    <li th:each="e: ${#fields.hasErrors('teacherList')}" th:text="${e}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label>Teacher comment: </label>
-            <textarea th:field="*{teacherComment}" placeholder="Input Comment of Teacher" name="schoolphone"></textarea>
-            <div th:if="${#fields.hasErrors('teacherComment')}">
-                <ul>
-                    <li th:each="e: ${#fields.hasErrors('teacherComment')}" th:text="${e}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label>Content Lecture: </label>
-            <input type="text" th:field="*{contentLecture}" placeholder="Input Content lecture" name="comment">
-            <div th:if="${#fields.hasErrors('contentLecture')}">
-                <ul>
-                    <li th:each="e: ${#fields.hasErrors('contentLecture')}" th:text="${e}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label>Teaching day: </label>
-            <input type="date" th:field="*{teachingDay}"  name="teachingDay">
-            <div th:if="${#fields.hasErrors('teachingDay')}">
-                <ul>
-                    <li th:each="e: ${#fields.hasErrors('teachingDay')}" th:text="${e}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
             <button class="btn btn-primary" type="submit">Add</button>
         </div>
     </form>
@@ -84,7 +36,7 @@
 </div>
 <div>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-    <a class="btn btn-primary" th:href="@{/api-school/showManageSchool}">School List Manage</a>
+    <a class="btn btn-primary" th:href="@{/m-note/showManageNotebook}">NoteBook List Manage</a>
 </div>
 </body>
 </html>

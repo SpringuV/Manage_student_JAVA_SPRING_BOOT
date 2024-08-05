@@ -19,16 +19,16 @@
             <input type="hidden" th:field="*{id}">
             <div th:if="${#fields.hasErrors('id')}">
                 <ul>
-                    <li th:each="e: ${#fields.hasErrors('id')}" th:text="${e}"></li>
+                    <li th:each="error: ${#fields.hasErrors('id')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>
         <div>
             <label>Class: </label>
-            <input type="text" th:field="*{classes}" placeholder="Input class" name="noteClass">
-            <div th:if="${#fields.hasErrors('classes')}">
+            <input type="text" th:field="*{classes.id}" placeholder="Input class" name="noteClass">
+            <div th:if="${#fields.hasErrors('classes.id')}">
                 <ul>
-                    <li th:each="e: ${#fields.hasErrors('classes')}" th:text="${e}"></li>
+                    <li th:each="error: ${#fields.hasErrors('classes.id')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>
@@ -37,46 +37,7 @@
             <input type="text" th:field="*{school}" placeholder="Input school" name="noteSchool">
             <div th:if="${#fields.hasErrors('school')}">
                 <ul>
-                    <li th:each="e: ${#fields.hasErrors('school')}" th:text="${e}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label>Teacher: </label>
-            <div th:each="teacher : ${teachers}">
-                <input type="checkbox" th:field="*{teacherList}" th:value="${teacher.id}" th:text="${teacher.firstName} +' ('+ ${teacher.id}+')'" placeholder="Input address school" name="teacherId">
-                <input type="hidden"   th:value="${teacher.id}">
-            </div>
-            <div th:if="${#fields.hasErrors('teacherList')}">
-                <ul>
-                    <li th:each="e: ${#fields.hasErrors('teacherList')}" th:text="${e}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label>Teacher comment: </label>
-            <textarea th:field="*{teacherComment}" placeholder="Input Comment of Teacher" name="schoolphone"></textarea>
-            <div th:if="${#fields.hasErrors('teacherComment')}">
-                <ul>
-                    <li th:each="e: ${#fields.hasErrors('teacherComment')}" th:text="${e}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label>Content Lecture: </label>
-            <input type="text" th:field="*{contentLecture}" placeholder="Input Content lecture" name="comment">
-            <div th:if="${#fields.hasErrors('contentLecture')}">
-                <ul>
-                    <li th:each="e: ${#fields.hasErrors('contentLecture')}" th:text="${e}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label>Teaching day: </label>
-            <input type="date" th:field="*{teachingDay}"  name="teachingDay">
-            <div th:if="${#fields.hasErrors('teachingDay')}">
-                <ul>
-                    <li th:each="e: ${#fields.hasErrors('teachingDay')}" th:text="${e}"></li>
+                    <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>
@@ -85,12 +46,12 @@
         </div>
     </form>
     <div th:if="${success}">
-        <h3>You updated a school "<span th:text="${success}"></span> ",</h3>
+        <h3>You updated a NoteBook "<span th:text="${success}"></span> ",</h3>
     </div>
 </div>
 <div>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-    <a class="btn btn-primary" th:href="@{/api-school/showManageSchool}">School List Manage</a>
+    <a class="btn btn-primary" th:href="@{/m-note/showManageNotebook}">NoteBook List Manage</a>
 </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
