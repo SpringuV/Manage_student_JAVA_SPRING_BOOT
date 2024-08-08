@@ -6,7 +6,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="/resources/static/CSS/main.css" rel="stylesheet">
-
     <style>
         table, th, td{
             border: 1px solid black;
@@ -14,7 +13,6 @@
         }
     </style>
 </head>
-
 <body>
 <div><h1>Manage Subject</h1></div>
 <div>
@@ -22,32 +20,33 @@
         <div th:if="${Error}">
             <span th:text="${Error}" class="alert alert-danger"></span>
         </div>
-        <div th:if="${success}">
-            <span th:text="${success}" class="alert alert-success"></span>
-        </div>
     </div>
     <table>
-        <th>Subject Id</th>
-        <th>Subject Name</th>
-        <th>Transcript</th>
-        <th>Teacher</th>
-        <th>Student</th>
-        <th>ScoreCard</th>
-        <th>School</th>
-        <th>Feature</th>
+        <thead>
+        <tr>
+            <th>Subject Id</th>
+            <th>Subject Name</th>
+            <th>School</th>
+            <th>Feature</th>
+        </tr>
+        </thead>
+        <tbody>
         <tr th:each="subject : ${subjectList}">
-            <td th:text="${subject.id}"></td>
-            <td th:text="${subject.nameSubject}"></td>
-            <td th:text="${subject.transcript != null ? subject.transcript : 'null'}"></td>
-            <td th:text="${subject.teacherList != null ? subject.teacherList : 'null'}"></td>
-            <td th:text="${subject.studentList != null ? subject.studentList : 'null'}"></td>
-            <td th:text="${subject.scoreCard != null ? subject.scoreCard : 'null'}"></td>
-            <td th:text="${subject.schoolList != null ? subject.schoolList : 'null'}"></td>
+            <td class="subject-id" th:text="${subject.id != null ? subject.id : 'null'}" data-id="${subject.id}" ></td>
+            <td th:text="${subject.nameSubject != null ? subject.nameSubject : 'null'}"></td>
             <td>
-                <a th:href="@{/m-subject/showModifyFormSubject(id=${subject.id})}" class="btn btn-success">Modify</a>
-                <a th:href="@{/m-subject/modify-delete(id=${subject.id})}" class="btn btn-danger">Delete</a>
+                <select class="school-select">
+                    <option value="">--Select School--</option>
+                    <option th:each="school : ${subject.schoolList}" th:value="${school.id}" th:text="${school.name}"></option>
+                </select>
+            </td>
+            <td>
+                <a class="btn btn-success" th:href="@{/m-subject/showModifyFormSubject(id=${subject.id})}">Modify</a>
+<!--                <a class="btn btn-success detail-link" >Detail</a>-->
+                <a class="btn btn-danger" th:href="@{/m-subject/modify-delete(id=${subject.id})}">Delete</a>
             </td>
         </tr>
+        </tbody>
     </table>
 </div>
 <div th:if="${success}">
@@ -57,6 +56,24 @@
     <a class="btn btn-primary" th:href="@{/m-subject/showFormAddSubject}">Add Subject</a>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selects = document.querySelectorAll('.school-select');
+        const detailLinks = document.querySelectorAll('.detail-link');
+
+        selects.forEach(select => {
+            select.addEventListener('change', function() {
+                const row = this.closest('tr'); // Find the closest row (tr)
+                const subjectId = row.querySelector('.subject-id').textContent.trim(); // Get subjectId from the row
+                const schoolId = this.value;
+                detailLinks.forEach(link => {
+                    link.href = `/m-subject-detail/showManageDetailSubject?id=${subjectId}&school=${schoolId}`;
+                });
+            });
+        });
+    });
+</script>
 </body>
 <script src="/resources/static/JavaScript/function.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

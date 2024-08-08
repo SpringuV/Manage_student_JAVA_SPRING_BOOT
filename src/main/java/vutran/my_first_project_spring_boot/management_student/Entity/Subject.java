@@ -11,19 +11,21 @@ import java.util.Set;
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "subject_id")
+    @Column(name = "id")
     private int id;
     @Column(name = "subject_name")
     private String nameSubject;
 
-    @OneToOne(mappedBy = "subject", cascade = CascadeType.ALL)
-    private Transcript transcript;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
+    @JoinTable(name = "school_subject", joinColumns = @JoinColumn(name ="subject_id"), inverseJoinColumns = @JoinColumn(name ="school_id"))
+    @JsonBackReference
+    private Set<School> schoolList;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
-    @JoinTable(name = "teacher_subject",
-    joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "teacher_id"))
-    @JsonBackReference // đảm bảo không có chu kỳ lặp giữa các đối tượng
-    private Set<Teacher> teacherList;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "subject_transcript",
+            joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "transcript_id")
+    )
+    private Set<Transcript> transcriptList;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
     @JoinTable(name = "student_subject",
@@ -31,28 +33,41 @@ public class Subject {
     @JsonBackReference
     private Set<Student> studentList;
 
-    @OneToMany
-    private List<NoteBookDetail> noteBookDetailList;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
+    @JoinTable(name = "subject_score_card", joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "score_card_id")
+    )
+    private Set<ScoreCard> scoreCard;
 
+    // một môn có nhiều tiết dạy trong notebook
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
-    private List<ScoreCard> scoreCard;
-
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
-    @JoinTable(name = "school_subject", joinColumns = @JoinColumn(name ="subject_id"), inverseJoinColumns = @JoinColumn(name ="school_id"))
-    @JsonBackReference
-    private List<School> schoolList;
-
+    private Set<NoteBookDetail> noteBookDetailList;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "subject")
+    private Set<Teacher> teacherSet;
 
     public Subject() {
     }
 
-    public Subject(String nameSubject, Transcript transcript, Set<Teacher> teacherList, Set<Student> studentList, List<ScoreCard> scoreCard, List<School> schoolList) {
+    public Subject(String nameSubject, Set<School> schoolList, Set<Teacher> teacherSet) {
         this.nameSubject = nameSubject;
-        this.transcript = transcript;
-        this.teacherList = teacherList;
-        this.studentList = studentList;
-        this.scoreCard = scoreCard;
         this.schoolList = schoolList;
+        this.teacherSet = teacherSet;
+    }
+
+    public Set<School> getSchoolList() {
+        return schoolList;
+    }
+
+    public void setSchoolList(Set<School> schoolList) {
+        this.schoolList = schoolList;
+    }
+
+    public Set<Teacher> getTeacherSet() {
+        return teacherSet;
+    }
+
+    public void setTeacherSet(Set<Teacher> teacherSet) {
+        this.teacherSet = teacherSet;
     }
 
     public int getId() {
@@ -69,45 +84,5 @@ public class Subject {
 
     public void setNameSubject(String nameSubject) {
         this.nameSubject = nameSubject;
-    }
-
-    public Transcript getTranscript() {
-        return transcript;
-    }
-
-    public void setTranscript(Transcript transcript) {
-        this.transcript = transcript;
-    }
-
-    public Set<Teacher> getTeacherList() {
-        return teacherList;
-    }
-
-    public void setTeacherList(Set<Teacher> teacherList) {
-        this.teacherList = teacherList;
-    }
-
-    public Set<Student> getStudentList() {
-        return studentList;
-    }
-
-    public void setStudentList(Set<Student> studentList) {
-        this.studentList = studentList;
-    }
-
-    public List<ScoreCard> getScoreCard() {
-        return scoreCard;
-    }
-
-    public void setScoreCard(List<ScoreCard> scoreCard) {
-        this.scoreCard = scoreCard;
-    }
-
-    public List<School> getSchoolList() {
-        return schoolList;
-    }
-
-    public void setSchoolList(List<School> schoolList) {
-        this.schoolList = schoolList;
     }
 }

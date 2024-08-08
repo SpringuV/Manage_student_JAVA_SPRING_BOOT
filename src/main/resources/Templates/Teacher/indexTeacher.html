@@ -37,17 +37,19 @@
                 <th>Username</th>
                 <th>Address</th>
                 <th>Phone</th>
+                <th>Teaching subject</th>
                 <th>Work at School</th>
                 <th>Class</th>
                 <th>Position</th>
                 <th>Feature</th>
                 <tr th:each="teacher : ${teacherList}">
                     <td th:text="${teacher.id}"></td>
-                    <td th:text="${teacher.firstName}"></td>
-                    <td th:text="${teacher.lastName}"></td>
-                    <td th:text="${teacher.username}"></td>
-                    <td th:text="${teacher.address}"></td>
-                    <td th:text="${teacher.phoneNumber}"></td>
+                    <td th:text="${teacher.firstName != null ? teacher.firstName : 'null'}"></td>
+                    <td th:text="${teacher.lastName != null ? teacher.lastName : 'null'}"></td>
+                    <td th:text="${teacher.username != null ? teacher.username : 'null'}"></td>
+                    <td th:text="${teacher.address != null ? teacher.address : 'null'}"></td>
+                    <td th:text="${teacher.phoneNumber != null ? teacher.phoneNumber : 'null'}"></td>
+                    <td th:text="${teacher.subject != null ? teacher.subject : 'null'}"></td>
                     <!--            cach 1:-->
                     <td th:text="${teacher.school.name} + ' (' +${teacher.school.id}+ ')'"></td>
                     <!--            cach 2:-->
@@ -56,15 +58,11 @@
                     <!--                <br/>-->
                     <!--                <span th:text="'Id: ' + ${teacher.school.id}"></span>-->
                     <!--            </td>-->
-                    <td th:text="${teacher.classesList}"></td>
-                    <td th:text="${teacher.position}"></td>
+                    <td th:text="${teacher.classesList != null ? teacher.classesList : 'null'}"></td>
+                    <td th:text="${teacher.position != null ? teacher.position : 'null'}"></td>
                     <td>
                         <a th:href="@{/m-teacher/showModifyFormTeacher(id=${teacher.id})}" class="btn btn-success">Modify</a>
                         <a th:href="@{/m-teacher/modify-delete(id=${teacher.id})}" class="btn btn-danger">Delete</a>
-                        <!--                    <form th:action="@{/api-school/modify-delete}" th:object="${school}" method="post">-->
-                        <!--                        <input type="hidden" th:value="${school.id}">-->
-                        <!--                        <button type="submit" class="btn btn-danger">Delete</button>-->
-                        <!--                    </form>-->
                     </td>
                 </tr>
             </table>

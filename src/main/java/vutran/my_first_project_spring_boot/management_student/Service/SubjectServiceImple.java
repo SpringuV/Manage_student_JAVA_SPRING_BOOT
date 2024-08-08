@@ -41,4 +41,14 @@ public class SubjectServiceImple implements SubjectService{
     public Subject updateSubject(Subject subject) {
         return this.subjectRepository.saveAndFlush(subject);
     }
+
+    @Override
+    public Subject getSubjectBySchoolIdAndName(int idSchool, String nameSubject) {
+        return this.subjectRepository.getSubjectBySchoolIdAndName(idSchool, nameSubject);
+    }
+
+    @Override
+    public List<Subject> getListSubjectOfSchoolId(int idSchool) {
+        return this.subjectRepository.getListSubjectOfSchoolId(idSchool);
+    }
 }

@@ -10,4 +10,7 @@ public interface SubjectService {
     public Subject addSubject(Subject subject);
     public void deleteSubjectById(int id);
     public Subject updateSubject(Subject subject);
+    public Subject getSubjectBySchoolIdAndName(int idSchool, String nameSubject);
+    public List<Subject> getListSubjectOfSchoolId(int idSchool);
+
 }

@@ -33,7 +33,7 @@
                     <label class="form-label" for="usernameid">User name: </label>
                     <div th:if="${#fields.hasErrors('username')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('username')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('username')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                     <label class="form-label" for="password">Password: </label>
                     <div th:if="${#fields.hasErrors('password')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('password')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('password')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                     <label class="form-label" for="firstname">First Name: </label>
                     <div th:if="${#fields.hasErrors('firstName')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('firstName')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('firstName')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                     <label class="form-label" for="lastname">Last Name: </label>
                     <div th:if="${#fields.hasErrors('lastName')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('lastName')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('lastName')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
 
                     <div th:if="${#fields.hasErrors('address')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('address')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('address')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                     <label class="form-label" for="phoneNumber">PhoneNumber: </label>
                     <div th:if="${#fields.hasErrors('phoneNumber')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('phoneNumber')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('phoneNumber')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
                     <label class="form-label" for="class">Class name: </label>
                     <div th:if="${#fields.hasErrors('classesList')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('classesList')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('classesList')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -113,7 +113,18 @@
                     <label class="form-label" for="school">Work at school id: </label>
                     <div th:if="${#fields.hasErrors('school')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('school')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="form-floating mb-1">
+                    <input type="text" th:field="*{subject}" name="subject" placeholder="Input subject id"
+                           id="subject" class="form-control" required/>
+                    <label class="form-label" for="subject">Subject id: </label>
+                    <div th:if="${#fields.hasErrors('school')}">
+                        <ul>
+                            <li th:each="error: ${#fields.hasErrors('subject')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -124,7 +135,7 @@
                     <label class="form-label" for="identity">Identity: </label>
                     <div th:if="${#fields.hasErrors('identity')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('identity')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('identity')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -135,7 +146,7 @@
                     <label class="form-label" for="email">Email: </label>
                     <div th:if="${#fields.hasErrors('email')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('email')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('email')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>

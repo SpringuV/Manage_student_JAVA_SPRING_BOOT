@@ -25,11 +25,9 @@ public class Teacher extends User{
     @JsonManagedReference
     private Set<Classes> classesList;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
-    @JoinTable(name = "teacher_subject",
-            joinColumns = @JoinColumn(name = "teacher_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
-    @JsonManagedReference
-    private Set<Subject> subjectList;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
 
     // Một giáo viên có thể làm việc ở một trường
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
@@ -47,11 +45,11 @@ public class Teacher extends User{
         super(firstName, lastName, identity, address, phoneNumber, username, email, position, avatar);
     }
 
-    public Teacher(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Set<Student> studentList, Set<Classes> classesList, Set<Subject> subjectList, List<NoteBookDetail> noteBookDetailList, School school) {
+    public Teacher(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Set<Student> studentList, Set<Classes> classesList,Subject subject, List<NoteBookDetail> noteBookDetailList, School school) {
         super(avatar, position, email, enabled, password, username, identity, phoneNumber, address, lastName, firstName);
         this.studentList = studentList;
         this.classesList = classesList;
-        this.subjectList = subjectList;
+        this.subject = subject;
         this.noteBookDetailList = noteBookDetailList;
         this.school = school;
     }
@@ -72,8 +70,12 @@ public class Teacher extends User{
         this.classesList = classesList;
     }
 
-    public Set<Subject> getSubjectList() {
-        return subjectList;
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
     public List<NoteBookDetail> getNoteBookDetailList() {
@@ -82,10 +84,6 @@ public class Teacher extends User{
 
     public void setNoteBookDetailList(List<NoteBookDetail> noteBookDetailList) {
         this.noteBookDetailList = noteBookDetailList;
-    }
-
-    public void setSubjectList(Set<Subject> subjectList) {
-        this.subjectList = subjectList;
     }
 
     public School getSchool() {
