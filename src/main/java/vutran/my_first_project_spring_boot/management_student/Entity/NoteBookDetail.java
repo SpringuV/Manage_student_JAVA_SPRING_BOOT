@@ -58,16 +58,16 @@ public class NoteBookDetail {
         this.time = time;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public Subject getSubject() {
         return subject;
     }
 
     public void setSubject(Subject subject) {
         this.subject = subject;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public void setId(int id) {

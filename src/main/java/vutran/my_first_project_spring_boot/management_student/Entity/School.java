@@ -151,14 +151,4 @@ public class School {
     public void setStudentList(List<Student> studentList) {
         this.studentList = studentList;
     }
-
-    @Override
-    public String toString() {
-        return "School{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
-                '}';
-    }
 }

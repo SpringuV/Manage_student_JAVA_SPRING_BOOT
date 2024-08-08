@@ -88,6 +88,7 @@ public class TeacherController {
             existTeacher.setLastName(teacher.getLastName());
             existTeacher.setFirstName(teacher.getFirstName());
             existTeacher.setPhoneNumber(teacher.getPhoneNumber());
+            existTeacher.setSubject(teacher.getSubject());
             teacherService.updateTeacher(existTeacher);
             model.addAttribute("teacher", teacher);
             model.addAttribute("success", "You updated teacher with id and name: "+ existTeacher.getId()+ " "+ existTeacher.getFirstName());
@@ -153,6 +154,7 @@ public class TeacherController {
         newTeacher.setSchool(teacher.getSchool());
         newTeacher.setPhoneNumber(teacher.getPhoneNumber());
         newTeacher.setAddress(teacher.getAddress());
+        newTeacher.setSubject(teacher.getSubject());
 
         // set role teacher
         Authority authority = authorityRepository.findByName("ROLE_TEACHER");

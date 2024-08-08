@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "score_card")
@@ -26,18 +27,17 @@ public class ScoreCard {
     @Column(name = "cscore_score")
     private double score;
 
-    // một môn có một phiếu điểm
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "subject_id")
-    private Subject subject;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
+    @JoinTable(name = "sub_score_card", joinColumns = @JoinColumn(name = "score_card_id"),
+            inverseJoinColumns = @JoinColumn(name = "sub_id")
+    )
+    private Set<Subject> subjectSet;
 
-
-
-    public ScoreCard(Student student, Date dayExam, double score, Subject subject) {
+    public ScoreCard(Student student, Date dayExam, double score, Set<Subject> subjectSet) {
         this.student = student;
         this.dayExam = dayExam;
         this.score = score;
-        this.subject = subject;
+        this.subjectSet = subjectSet;
     }
 
     public int getId() {
@@ -72,22 +72,11 @@ public class ScoreCard {
         this.score = score;
     }
 
-    public Subject getSubject() {
-        return subject;
+    public Set<Subject> getSubjectSet() {
+        return subjectSet;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
-
-    @Override
-    public String toString() {
-        return "ScoreCard{" +
-                "id=" + id +
-                ", student=" + student +
-                ", dayExam=" + dayExam +
-                ", score=" + score +
-                ", subject=" + subject +
-                '}';
+    public void setSubjectSet(Set<Subject> subjectSet) {
+        this.subjectSet = subjectSet;
     }
 }

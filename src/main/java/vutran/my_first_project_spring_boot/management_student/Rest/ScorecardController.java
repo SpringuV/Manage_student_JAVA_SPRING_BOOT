@@ -42,7 +42,7 @@ public class ScorecardController {
             scorecardExist.setDayExam(scoreCard.getDayExam());
             scorecardExist.setScore(scoreCard.getScore());
             scorecardExist.setStudent(scoreCard.getStudent());
-            scorecardExist.setSubject(scoreCard.getSubject());
+            scorecardExist.setSubjectSet(scoreCard.getSubjectSet());
             scoreCardService.updateScoreCard(scorecardExist);
             return ResponseEntity.ok(scorecardExist);
         } else {

@@ -74,6 +74,18 @@
                 </ul>
             </div>
         </div>
+
+        <div class="form-floating mb-1">
+            <input type="text" th:field="*{subject}" name="subject" placeholder="Input subject id"
+                   id="subject" class="form-control" required/>
+            <label class="form-label" for="subject">Subject id: </label>
+            <div th:if="${#fields.hasErrors('school')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('subject')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+
         <div>
             <label for="schoolid">Teacher work at school id: </label>
             <input type="text" th:field="*{school}" placeholder="Input school id"

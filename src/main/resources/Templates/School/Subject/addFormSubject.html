@@ -19,55 +19,26 @@
         </div>
         <div>
             <label>Subject Name: </label>
-            <input type="text" th:field="*{nameSubject}" placeholder="Input name subject" name="subjectname" required>
+            <select th:field="*{nameSubject}" required>
+                <option th:value="Literature">Literature</option>
+                <option th:value="Math">Math</option>
+                <option th:value="History">History</option>
+                <option th:value="Geography">Geography</option>
+                <option th:value="Biology">Biology</option>
+                <option th:value="Chemistry">Chemistry</option>
+                <option th:value="Civic-Education">Civic Education</option>
+                <option th:value="Music">Music</option>
+                <option th:value="Physical-Education">Physical Education</option>
+                <option th:value="Foreign-Language">Foreign Language</option>
+                <option th:value="Information-Technology">Information Technology</option>
+            </select>
             <div th:if="${#fields.hasErrors('nameSubject')}">
                 <ul>
                     <li th:each="e: ${#fields.hasErrors('nameSubject')}" th:text="${e}"></li>
                 </ul>
             </div>
         </div>
-        <div>
-            <label>Transcript: </label>
-            <input type="text" th:field="*{transcript}" placeholder="Input transcript" name="transcript">
-            <div th:if="${#fields.hasErrors('transcript')}">
-                <ul>
-                    <li th:each="e: ${#fields.hasErrors('transcript')}" th:text="${e}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label>List Teacher: </label>
-            <input type="checkbox" th:field="*{teacherList}"  name="teacherList">
-            <div th:if="${#fields.hasErrors('teacherList')}">
-                <ul>
-                    <li th:each="e: ${#fields.hasErrors('teacherList')}" th:text="${e}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label>List Student: </label>
-            <div th:each="student : ${students}">
-                <input type="checkbox" th:value="${student.id}" th:field="*{teacherList}" name="studentId">
-                <span th:text="${student.firstName} +' ('+ ${student.school.id}+')'"></span>
-            </div>
-            <div th:if="${#fields.hasErrors('studentList')}">
-                <ul>
-                    <li th:each="e: ${#fields.hasErrors('studentList')}" th:text="${e}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label>Score Card: </label>
-            <div th:each="score_card : ${scoreCards}">
-                <input type="checkbox" th:value="${score_card.id}" th:field="*{scoreCard}" name="scoreCard">
-                <span th:text="${score_card.id}"></span>
-            </div>
-            <div th:if="${#fields.hasErrors('scoreCard')}">
-                <ul>
-                    <li th:each="e: ${#fields.hasErrors('scoreCard')}" th:text="${e}"></li>
-                </ul>
-            </div>
-        </div>
+
         <div>
             <label>List School: </label>
             <div th:each="school : ${schools}">
@@ -90,7 +61,7 @@
 </div>
 <div>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-    <a class="btn btn-primary" th:href="@{/api-school/showManageSchool}">School List Manage</a>
+    <a class="btn btn-primary" th:href="@{/m-subject/showManageSubject}">Subject List Manage</a>
 </div>
 </body>
 </html>
