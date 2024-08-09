@@ -13,7 +13,7 @@
 <div>
     <form th:action="@{/m-transcript/add-process}" th:object="${transcript}" method="post">
         <div id="autoHide">
-            <div  th:if="${Error}" class="alert alert-danger">
+            <div th:if="${Error}" class="alert alert-danger">
                 <span th:text="${Error}"></span>
             </div>
         </div>

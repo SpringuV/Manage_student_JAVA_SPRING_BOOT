@@ -41,4 +41,9 @@ public class StudyrecordServiceImple implements StudyrecordService {
     public StudyRecord updateStudyRecord(StudyRecord studyRecord) {
         return this.studyrecordRepository.saveAndFlush(studyRecord);
     }
+
+    @Override
+    public StudyRecord getStudyRecordByStudentAndSchoolAndSchoolYear(int student_id, int school_id, String schoolYear) {
+        return this.studyrecordRepository.getStudyRecordByStudentAndSchoolAndSchoolYear(student_id,school_id, schoolYear);
+    }
 }

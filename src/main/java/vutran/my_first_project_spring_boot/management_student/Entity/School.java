@@ -54,10 +54,13 @@ public class School {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "school")
     private List<Transcript> transcriptList;
 
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
+    private List<StudyRecord> studyRecordList;
+
     public School() {
     }
 
-    public School(String name, String address, String phone, String level, List<Classes> classesList, List<Teacher> teacherList, List<Student> studentList, List<Subject> subjectList, List<Transcript> transcriptList) {
+    public School(String name, String address, String phone, String level, List<Classes> classesList, List<Teacher> teacherList, List<Student> studentList, List<Subject> subjectList, List<Transcript> transcriptList, List<StudyRecord> studyRecordList) {
         this.name = name;
         this.address = address;
         this.phone = phone;
@@ -67,6 +70,7 @@ public class School {
         this.studentList = studentList;
         this.subjectList = subjectList;
         this.transcriptList = transcriptList;
+        this.studyRecordList = studyRecordList;
     }
 
     public School(String name, String address, String phone, String level) {
@@ -74,6 +78,14 @@ public class School {
         this.address = address;
         this.phone = phone;
         this.level = level;
+    }
+
+    public List<StudyRecord> getStudyRecordList() {
+        return studyRecordList;
+    }
+
+    public void setStudyRecordList(List<StudyRecord> studyRecordList) {
+        this.studyRecordList = studyRecordList;
     }
 
     public Set<NoteBook> getNoteBookSet() {

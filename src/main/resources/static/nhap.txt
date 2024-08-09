@@ -368,3 +368,54 @@
                }
            }
        }
+
+   -- STUDY - RECORD
+   // get all
+       @GetMapping
+       public List<StudyRecord> getAllStudyRecord(){
+           return studyrecordService.getAllStudyRecords();
+       }
+
+       //add
+       @PostMapping("/add")
+       public ResponseEntity<StudyRecord> addStudyRecord(@RequestBody StudyRecord studyRecord){// tu dong bien json thanh students
+           studyRecord.setId(0); //bat buoc them moi va tu phat sinh ra id khi khach hang co nhap id
+           studyRecord = studyrecordService.addStudyRecord(studyRecord);
+           return ResponseEntity.status(HttpStatus.CREATED).body(studyRecord);
+       }
+
+       // modify parent
+       @PutMapping("/modify/{id}")
+       public ResponseEntity<StudyRecord> modifyStudyRecord(@PathVariable int id, @RequestBody StudyRecord studyRecord){
+           StudyRecord studyRecordExist = studyrecordService.getStudyRecordById(id);
+           if(studyRecordExist != null){
+               studyRecordExist.setStudent(studyRecord.getStudent());
+               studyRecordExist.setCommentOfTeacher(studyRecord.getCommentOfTeacher());
+               studyRecordExist.setResultConduct(studyRecord.getResultConduct());
+               studyRecordExist.setTranscriptList(studyRecord.getTranscriptList());
+               studyrecordService.updateStudyRecord(studyRecordExist);
+               return ResponseEntity.ok(studyRecordExist);
+           } else {
+               try {
+                   throw new Exception("Not found ScoreCard have id: "+ id);
+               } catch (Exception e) {
+                   throw new RuntimeException(e);
+               }
+           }
+       }
+
+       //delete
+       @DeleteMapping("/delete/{id}")
+       public ResponseEntity<StudyRecord> deleteStudyRecordById(@PathVariable int id){
+           StudyRecord studyRecordExist = studyrecordService.getStudyRecordById(id);
+           if(studyRecordExist != null){
+               studyrecordService.deleteStudyRecordById(id);
+               return ResponseEntity.ok().build();
+           } else {
+               try {
+                   throw new Exception("Not found parent have id: "+ id);
+               } catch (Exception e) {
+                   throw new RuntimeException(e);
+               }
+           }
+       }

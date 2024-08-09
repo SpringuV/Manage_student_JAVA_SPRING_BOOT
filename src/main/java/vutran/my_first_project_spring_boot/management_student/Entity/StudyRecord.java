@@ -14,9 +14,16 @@ public class StudyRecord {
     @Column(name = "sr_id")
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.PERSIST})
     @JoinColumn(name = "sr_student_id")
     private Student student;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "school_id")
+    private School school;
+
+    @Column(name = "school_year")
+    private String schoolYear;
 
     // một học bạ có nhiều bảng điểm;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
@@ -24,29 +31,35 @@ public class StudyRecord {
     @JsonBackReference
     private List<Transcript> transcriptList;
 
-    @Column(name = "sr_conduct")
+    @Column(name = "sr_conduct") // hanh kiem
     private String resultConduct;
     @Column(name = "sr_comment_teacher")
     private String commentOfTeacher;
-    @Column(name = "sr_comment_parent")
-    private String commentOfParent;
-
     public StudyRecord() {
     }
 
-    public StudyRecord(Student student, String resultConduct, String commentOfTeacher, String commentOfParent) {
+    public StudyRecord(Student student, String resultConduct, String commentOfTeacher, String schoolYear) {
         this.student = student;
         this.resultConduct = resultConduct;
         this.commentOfTeacher = commentOfTeacher;
-        this.commentOfParent = commentOfParent;
+        this.schoolYear = schoolYear;
     }
 
-    public StudyRecord(Student student, List<Transcript> transcriptList, String resultConduct, String commentOfTeacher, String commentOfParent) {
+    public StudyRecord(Student student, List<Transcript> transcriptList, String resultConduct, String commentOfTeacher,  School school, String schoolYear) {
         this.student = student;
         this.transcriptList = transcriptList;
         this.resultConduct = resultConduct;
         this.commentOfTeacher = commentOfTeacher;
-        this.commentOfParent = commentOfParent;
+        this.school = school;
+        this.schoolYear = schoolYear;
+    }
+
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
     }
 
     public int getId() {
@@ -89,22 +102,11 @@ public class StudyRecord {
         this.commentOfTeacher = commentOfTeacher;
     }
 
-    public String getCommentOfParent() {
-        return commentOfParent;
+    public String getSchoolYear() {
+        return schoolYear;
     }
 
-    public void setCommentOfParent(String commentOfParent) {
-        this.commentOfParent = commentOfParent;
-    }
-
-    @Override
-    public String toString() {
-        return "StudyRecord{" +
-                "id=" + id +
-                ", student=" + student +
-                ", resultConduct='" + resultConduct + '\'' +
-                ", commentOfTeacher='" + commentOfTeacher + '\'' +
-                ", commentOfParent='" + commentOfParent + '\'' +
-                '}';
+    public void setSchoolYear(String schoolYear) {
+        this.schoolYear = schoolYear;
     }
 }

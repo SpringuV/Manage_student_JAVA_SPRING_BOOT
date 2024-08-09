@@ -10,4 +10,5 @@ public interface StudyrecordService {
     public StudyRecord addStudyRecord(StudyRecord studyRecord);
     public void deleteStudyRecordById(int id);
     public StudyRecord updateStudyRecord(StudyRecord studyRecord);
+    public StudyRecord getStudyRecordByStudentAndSchoolAndSchoolYear(int student_id, int school_id, String schoolYear);
 }

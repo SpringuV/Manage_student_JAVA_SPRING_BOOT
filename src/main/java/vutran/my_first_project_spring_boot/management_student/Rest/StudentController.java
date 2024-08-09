@@ -73,8 +73,11 @@ public class StudentController {
             newStudent.setLastName(student.getLastName());
             newStudent.setFirstName(student.getFirstName());
             newStudent.setTeacher(student.getTeacher());
+            newStudent.setAvatar(student.getAvatar());
+            newStudent.setIdentity(student.getIdentity());
             newStudent.setSchool(student.getSchool());
             newStudent.setAddress(student.getAddress());
+            newStudent.setEmail(student.getEmail());
             newStudent.setEnabled(true);
             newStudent.setParent(student.getParent());
             newStudent.setClasses(student.getClasses());

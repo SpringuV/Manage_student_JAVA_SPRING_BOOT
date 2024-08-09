@@ -4,70 +4,140 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Entity.StudyRecord;
+import vutran.my_first_project_spring_boot.management_student.Entity.Transcript;
 import vutran.my_first_project_spring_boot.management_student.Service.StudyrecordService;
+import vutran.my_first_project_spring_boot.management_student.Service.TranscriptService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api-study-record")
+@RequestMapping("/m-study")
 public class StudyrecordController {
     private StudyrecordService studyrecordService;
+    private TranscriptService transcriptService;
 
     @Autowired
-    public StudyrecordController(StudyrecordService studyrecordService) {
+    public StudyrecordController(StudyrecordService studyrecordService, TranscriptService transcriptService) {
         this.studyrecordService = studyrecordService;
+        this.transcriptService = transcriptService;
     }
 
-    // get all
-    @GetMapping
-    public List<StudyRecord> getAllStudyRecord(){
-        return studyrecordService.getAllStudyRecords();
+    @GetMapping("/showManageStudyRecord")
+    public String showManage(Model model){
+        List<StudyRecord> studyRecordList = studyrecordService.getAllStudyRecords();
+        // check list empty
+        if(studyRecordList.isEmpty()){
+            model.addAttribute("Error", "Error, The List Empty!!!");
+            model.addAttribute("studyRecordList", new ArrayList<>());
+        } else {
+            model.addAttribute("studyRecordList", studyRecordList);
+        }
+         return "School/StudyRecord/indexStudyRecord";
     }
 
-    //add
-    @PostMapping("/add")
-    public ResponseEntity<StudyRecord> addStudyRecord(@RequestBody StudyRecord studyRecord){// tu dong bien json thanh students
-        studyRecord.setId(0); //bat buoc them moi va tu phat sinh ra id khi khach hang co nhap id
-        studyRecord = studyrecordService.addStudyRecord(studyRecord);
-        return ResponseEntity.status(HttpStatus.CREATED).body(studyRecord);
+    @GetMapping("/showFormAddStudyRecord")
+    public String showFormAdd(Model model){
+        model.addAttribute("studyRecord", new StudyRecord());
+        // get list transcript
+        List<Transcript> transcriptList = transcriptService.getAllTranscripts();
+        if(transcriptList.isEmpty()){
+            model.addAttribute("transcripts", new ArrayList<>());
+        } else {
+            model.addAttribute("transcripts", transcriptList);
+        }
+        return "School/StudyRecord/addFormStudyRecord";
     }
 
-    // modify parent
-    @PutMapping("/modify/{id}")
-    public ResponseEntity<StudyRecord> modifyStudyRecord(@PathVariable int id, @RequestBody StudyRecord studyRecord){
-        StudyRecord studyRecordExist = studyrecordService.getStudyRecordById(id);
+    @PostMapping("/add-process")
+    public String processAdd(@ModelAttribute StudyRecord studyRecord, Model model){
+        // get list transcript
+        List<Transcript> transcriptList = transcriptService.getAllTranscripts();
+        if(transcriptList.isEmpty()){
+            model.addAttribute("transcripts", new ArrayList<>());
+        } else {
+            model.addAttribute("transcripts", transcriptList);
+        }
+        // check study exist
+        StudyRecord studyRecordExist = studyrecordService.getStudyRecordByStudentAndSchoolAndSchoolYear(studyRecord.getStudent().getId(), studyRecord.getSchool().getId(), studyRecord.getSchoolYear());
         if(studyRecordExist != null){
-            studyRecordExist.setStudent(studyRecord.getStudent());
-            studyRecordExist.setCommentOfParent(studyRecord.getCommentOfParent());
-            studyRecordExist.setCommentOfTeacher(studyRecord.getCommentOfTeacher());
-            studyRecordExist.setResultConduct(studyRecord.getResultConduct());
+            model.addAttribute("Error", "Error, Study Existed !!!");
+            model.addAttribute("studyRecord", new StudyRecord());
+        } else {
+            StudyRecord newStudy = new StudyRecord();
+            newStudy.setResultConduct(studyRecord.getResultConduct());
+            newStudy.setSchool(studyRecord.getSchool());
+            newStudy.setSchoolYear(studyRecord.getSchoolYear());
+            newStudy.setStudent(studyRecord.getStudent());
+            newStudy.setTranscriptList(studyRecord.getTranscriptList());
+            newStudy.setCommentOfTeacher(studyRecord.getCommentOfTeacher());
+            studyrecordService.addStudyRecord(newStudy);
+            model.addAttribute("success", "You created new Study-record has id: "+ newStudy.getId());
+            model.addAttribute("studyRecord", newStudy);
+        }
+        return "School/StudyRecord/addFormStudyRecord";
+    }
+
+    @GetMapping("/showModifyFormStudyRecord")
+    public String showModifyForm(@ModelAttribute StudyRecord studyRecord, Model model){
+        // check study exist
+        StudyRecord studyRecordExist = studyrecordService.getStudyRecordById(studyRecord.getId());
+        if(studyRecordExist == null){
+            model.addAttribute("Error", "Error, Not found study record!!!");
+            model.addAttribute("studyRecord", new StudyRecord());
+        } else {
+            model.addAttribute("studyRecord", studyRecordExist);
+            // get list transcript
+            List<Transcript> transcriptList = transcriptService.getAllTranscripts();
+            if(transcriptList.isEmpty()){
+                model.addAttribute("transcripts", new ArrayList<>());
+            } else {
+                model.addAttribute("transcripts", transcriptList);
+            }
+        }
+        return "School/StudyRecord/modifyStudyRecord";
+    }
+
+    @PostMapping("/modify-process")
+    public String processModify(@ModelAttribute StudyRecord studyRecord, Model model){
+        // check study exist
+        StudyRecord studyRecordExist = studyrecordService.getStudyRecordById(studyRecord.getId());
+        if(studyRecordExist == null){
+            model.addAttribute("Error", "Error, Not found study record!!!");
+            model.addAttribute("studyRecord", new StudyRecord());
+        } else {
             studyRecordExist.setTranscriptList(studyRecord.getTranscriptList());
+            studyRecordExist.setCommentOfTeacher(studyRecord.getCommentOfTeacher());
+            studyRecordExist.setSchoolYear(studyRecord.getSchoolYear());
+            studyRecordExist.setResultConduct(studyRecord.getResultConduct());
             studyrecordService.updateStudyRecord(studyRecordExist);
-            return ResponseEntity.ok(studyRecordExist);
-        } else {
-            try {
-                throw new Exception("Not found ScoreCard have id: "+ id);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            model.addAttribute("success", "You modified a Study Record has Id: "+ studyRecordExist.getId());
+            model.addAttribute("studyRecord", studyRecordExist);
+            // get list transcript
+            List<Transcript> transcriptList = transcriptService.getAllTranscripts();
+            if(transcriptList.isEmpty()){
+                model.addAttribute("transcripts", new ArrayList<>());
+            } else {
+                model.addAttribute("transcripts", transcriptList);
             }
         }
+        return "School/StudyRecord/modifyStudyRecord";
     }
 
-    //delete
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<StudyRecord> deleteStudyRecordById(@PathVariable int id){
-        StudyRecord studyRecordExist = studyrecordService.getStudyRecordById(id);
-        if(studyRecordExist != null){
-            studyrecordService.deleteStudyRecordById(id);
-            return ResponseEntity.ok().build();
+    @GetMapping("/modify-delete")
+    public String processDelete(@ModelAttribute StudyRecord studyRecord, RedirectAttributes redirectAttributes){
+        // check study exist
+        StudyRecord studyRecordExist = studyrecordService.getStudyRecordById(studyRecord.getId());
+        if(studyRecordExist == null){
+            redirectAttributes.addFlashAttribute("Error", "Error, Not found study record!!!");
         } else {
-            try {
-                throw new Exception("Not found parent have id: "+ id);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            studyrecordService.deleteStudyRecordById(studyRecordExist.getId());
+            redirectAttributes.addFlashAttribute("success", "You deleted a StudyRecord has ID: "+ studyRecordExist.getId());
         }
+        return "redirect:/m-study/showManageStudyRecord";
     }
 }

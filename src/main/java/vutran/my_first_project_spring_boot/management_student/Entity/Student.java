@@ -44,8 +44,8 @@ public class Student extends User{
     private Set<ScoreCard> scoreCardList;
 
     // một học sinh có 1 học bạ
-    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
-    private StudyRecord studyRecord;
+    @OneToMany (mappedBy = "student", cascade = CascadeType.ALL)
+    private List<StudyRecord> studyRecordList;
 
     // Nhiều học sinh chỉ học ở một trường
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
@@ -63,7 +63,7 @@ public class Student extends User{
         super(firstName, lastName, address, phoneNumber, identity, username, password, enabled, email, position, avatar, authority);
     }
 
-    public Student(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Teacher teacher, Classes classes, Parent parent, Set<Subject> subjectList, Set<Transcript> transcriptSet, StudentCard studentCard, Set<ScoreCard> scoreCardList, StudyRecord studyRecord, School school) {
+    public Student(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Teacher teacher, Classes classes, Parent parent, Set<Subject> subjectList, Set<Transcript> transcriptSet, StudentCard studentCard, Set<ScoreCard> scoreCardList, List<StudyRecord> studyRecordList, School school) {
         super(avatar, position, email, enabled, password, username, identity, phoneNumber, address, lastName, firstName);
         this.teacher = teacher;
         this.classes = classes;
@@ -72,7 +72,7 @@ public class Student extends User{
         this.transcriptSet = transcriptSet;
         this.studentCard = studentCard;
         this.scoreCardList = scoreCardList;
-        this.studyRecord = studyRecord;
+        this.studyRecordList = studyRecordList;
         this.school = school;
     }
 
@@ -132,12 +132,12 @@ public class Student extends User{
         this.scoreCardList = scoreCardList;
     }
 
-    public StudyRecord getStudyRecord() {
-        return studyRecord;
+    public List<StudyRecord> getStudyRecordList() {
+        return studyRecordList;
     }
 
-    public void setStudyRecord(StudyRecord studyRecord) {
-        this.studyRecord = studyRecord;
+    public void setStudyRecordList(List<StudyRecord> studyRecordList) {
+        this.studyRecordList = studyRecordList;
     }
 
     public School getSchool() {

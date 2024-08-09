@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify StudyRecord</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link th:href="@{/CSS/main.css}" rel="stylesheet">
+    <script src="/resources/static/JavaScript/function.js"></script>
+</head>
+<body>
+<h1>Modify StudyRecord</h1>
+<div>
+    <form th:action="@{/m-study/modify-process}" th:object="${studyRecord}" method="post">
+        <div id="autoHide">
+            <div  th:if="${Error}" class="alert alert-danger">
+                <span th:text="${Error}"></span>
+            </div>
+            <div th:if="${success}" class="alert alert-success">
+                <h3>"<span th:text="${success}"></span>"</h3>
+            </div>
+        </div>
+        <div>
+            <label>StudyRecord Id: <span th:text="*{id}"></span></label>
+            <input type="hidden" th:field="*{id}">
+        </div>
+        <div>
+            <label>Student Id: <b><span th:text="*{student.firstName}"></span></b></label>
+        </div>
+        <div>
+            <label>School Id: <b><span th:text="*{school.name}"></span></b></label>
+        </div>
+        <div>
+            <label>School Year: </label>
+            <input type="text" th:field="*{schoolYear}" placeholder="Input school year" name="school-year">
+            <div th:if="${#fields.hasErrors('schoolYear')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('schoolYear')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label>Transcript: </label>
+            <div th:each="transcript : ${transcripts != null ? transcripts : 'null'}">
+                <input type="checkbox" th:value="${transcript.id}" th:field="*{transcriptList}">
+                <span th:text="${transcript.nameTranscript} +' (' + ${transcript.school.id} + ') ('+ ${transcript.schoolYear}+')'   "></span>
+            </div>
+            <div th:if="${#fields.hasErrors('transcriptList')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('transcriptList')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label>Result Conduct: </label>
+            <input type="text" th:field="*{resultConduct}" placeholder="Input conduct" name="conduct">
+            <div th:if="${#fields.hasErrors('resultConduct')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('resultConduct')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label>Comment of Teacher: </label>
+            <input type="text" th:field="*{commentOfTeacher}" placeholder="Input comment of teacher" name="conduct">
+            <div th:if="${#fields.hasErrors('commentOfTeacher')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('commentOfTeacher')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">Modify</button>
+        </div>
+    </form>
+</div>
+<div>
+    <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
+    <a class="btn btn-primary" th:href="@{/m-study/showManageStudyRecord}">StudyRecord List Manage</a>
+</div>
+</body>
+</html>
