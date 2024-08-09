@@ -41,4 +41,9 @@ public class TranscriptServiceImple implements TranscriptService{
     public Transcript updateTranscript(Transcript transcript) {
         return this.transcriptRepository.saveAndFlush(transcript);
     }
+
+    @Override
+    public Transcript getTranscriptBySemesterAndSchoolYear(int semester, String schoolYear) {
+        return this.transcriptRepository.getTranscriptBySemesterAndSchoolYear(semester, schoolYear);
+    }
 }

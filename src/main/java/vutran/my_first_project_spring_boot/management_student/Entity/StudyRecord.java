@@ -19,7 +19,8 @@ public class StudyRecord {
     private Student student;
 
     // một học bạ có nhiều bảng điểm;
-    @OneToMany(mappedBy = "studyRecord", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(name = "transcript_records", joinColumns = @JoinColumn(name = "study_record_id"), inverseJoinColumns = @JoinColumn(name = "transcript_id"))
     @JsonBackReference
     private List<Transcript> transcriptList;
 
