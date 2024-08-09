@@ -51,10 +51,13 @@ public class School {
     @JsonBackReference
     private List<Subject> subjectList;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "school")
+    private List<Transcript> transcriptList;
+
     public School() {
     }
 
-    public School(String name, String address, String phone, String level, List<Classes> classesList, List<Teacher> teacherList, List<Student> studentList, List<Subject> subjectList) {
+    public School(String name, String address, String phone, String level, List<Classes> classesList, List<Teacher> teacherList, List<Student> studentList, List<Subject> subjectList, List<Transcript> transcriptList) {
         this.name = name;
         this.address = address;
         this.phone = phone;
@@ -63,6 +66,7 @@ public class School {
         this.teacherList = teacherList;
         this.studentList = studentList;
         this.subjectList = subjectList;
+        this.transcriptList = transcriptList;
     }
 
     public School(String name, String address, String phone, String level) {
@@ -150,5 +154,13 @@ public class School {
 
     public void setStudentList(List<Student> studentList) {
         this.studentList = studentList;
+    }
+
+    public List<Transcript> getTranscriptList() {
+        return transcriptList;
+    }
+
+    public void setTranscriptList(List<Transcript> transcriptList) {
+        this.transcriptList = transcriptList;
     }
 }

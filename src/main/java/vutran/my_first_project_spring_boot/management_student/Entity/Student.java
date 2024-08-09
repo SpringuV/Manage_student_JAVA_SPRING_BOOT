@@ -30,8 +30,10 @@ public class Student extends User{
             joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private Set<Subject> subjectList;
 
-    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
-    private Transcript transcript;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
+    @JoinTable(name = "transcript_student",
+            joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "transcript_id"))
+    private Set<Transcript> transcriptSet;
 
     // mỗi học sinh có 1 thẻ học sinh
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
@@ -61,13 +63,13 @@ public class Student extends User{
         super(firstName, lastName, address, phoneNumber, identity, username, password, enabled, email, position, avatar, authority);
     }
 
-    public Student(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Teacher teacher, Classes classes, Parent parent, Set<Subject> subjectList, Transcript transcript, StudentCard studentCard, Set<ScoreCard> scoreCardList, StudyRecord studyRecord, School school) {
+    public Student(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Teacher teacher, Classes classes, Parent parent, Set<Subject> subjectList, Set<Transcript> transcriptSet, StudentCard studentCard, Set<ScoreCard> scoreCardList, StudyRecord studyRecord, School school) {
         super(avatar, position, email, enabled, password, username, identity, phoneNumber, address, lastName, firstName);
         this.teacher = teacher;
         this.classes = classes;
         this.parent = parent;
         this.subjectList = subjectList;
-        this.transcript = transcript;
+        this.transcriptSet = transcriptSet;
         this.studentCard = studentCard;
         this.scoreCardList = scoreCardList;
         this.studyRecord = studyRecord;
@@ -106,12 +108,12 @@ public class Student extends User{
         this.subjectList = subjectList;
     }
 
-    public Transcript getTranscript() {
-        return transcript;
+    public Set<Transcript> getTranscriptSet() {
+        return transcriptSet;
     }
 
-    public void setTranscript(Transcript transcript) {
-        this.transcript = transcript;
+    public void setTranscriptSet(Set<Transcript> transcriptSet) {
+        this.transcriptSet = transcriptSet;
     }
 
     public StudentCard getStudentCard() {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "transcript")
@@ -13,33 +14,57 @@ public class Transcript {
     @Column(name = "transcript_id")
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "subject_id")
-    private Subject subject;
+    @Column(name = "name_transcript")
+    private String nameTranscript;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "student_id")
-    private Student student;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH})
+    @JoinColumn(name = "school_id")
+    private School school;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "subject_transcript",
+            joinColumns = @JoinColumn(name = "transcript_id"), inverseJoinColumns = @JoinColumn(name = "subject_id")
+    )
+    private Set<Subject> subjectSet;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
+    @JoinTable(name = "transcript_student",
+            joinColumns = @JoinColumn(name = "transcript_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
+    private Set<Student> studentSet;
 
     @Column(name = "transcript_score")
     private double score;
     @Column(name = "transcript_semester")
-    private int  semester;
+    private int semester;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "stu_record_id")
+    @Column(name = "school_year")
+    private String schoolYear;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(name = "transcript_records", joinColumns = @JoinColumn(name = "transcript_id"), inverseJoinColumns = @JoinColumn(name = "study_record_id"))
     @JsonManagedReference
-    private StudyRecord studyRecord;
+    private List<StudyRecord> studyRecordList;
 
     public Transcript() {
     }
 
-    public Transcript(Subject subject, Student student, double score, int semester, StudyRecord studyRecord) {
-        this.subject = subject;
-        this.student = student;
+    public Transcript(String nameTranscript,Set<Subject> subjectSet, Set<Student> studentSet, double score, int semester,List<StudyRecord> studyRecordList, String schoolYear, School school) {
+        this.nameTranscript = nameTranscript;
+        this.subjectSet = subjectSet;
+        this.studentSet = studentSet;
         this.score = score;
         this.semester = semester;
-        this.studyRecord = studyRecord;
+        this.studyRecordList = studyRecordList;
+        this.schoolYear = schoolYear;
+        this.school = school;
+    }
+
+    public String getNameTranscript() {
+        return nameTranscript;
+    }
+
+    public void setNameTranscript(String nameTranscript) {
+        this.nameTranscript = nameTranscript;
     }
 
     public int getId() {
@@ -50,20 +75,28 @@ public class Transcript {
         this.id = id;
     }
 
-    public Subject getSubject() {
-        return subject;
+    public Set<Subject> getSubjectSet() {
+        return subjectSet;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
+    public void setSubjectSet(Set<Subject> subjectSet) {
+        this.subjectSet = subjectSet;
     }
 
-    public Student getStudent() {
-        return student;
+    public String getSchoolYear() {
+        return schoolYear;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setSchoolYear(String schoolYear) {
+        this.schoolYear = schoolYear;
+    }
+
+    public Set<Student> getStudentSet() {
+        return studentSet;
+    }
+
+    public void setStudentSet(Set<Student> studentSet) {
+        this.studentSet = studentSet;
     }
 
     public double getScore() {
@@ -82,23 +115,19 @@ public class Transcript {
         this.semester = semester;
     }
 
-    public StudyRecord getStudyRecord() {
-        return studyRecord;
+    public List<StudyRecord> getStudyRecordList() {
+        return studyRecordList;
     }
 
-    public void setStudyRecord(StudyRecord studyRecord) {
-        this.studyRecord = studyRecord;
+    public void setStudyRecordList(List<StudyRecord> studyRecordList) {
+        this.studyRecordList = studyRecordList;
     }
 
-    @Override
-    public String toString() {
-        return "Transcript{" +
-                "id=" + id +
-                ", subject=" + subject +
-                ", student=" + student +
-                ", score=" + score +
-                ", semester=" + semester +
-                ", studyRecord=" + studyRecord +
-                '}';
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
     }
 }
