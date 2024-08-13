@@ -16,7 +16,7 @@ public class Student extends User{
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST})
+    @ManyToOne
     @JoinColumn(name = "class_id")
     private Classes classes;
 
@@ -146,5 +146,16 @@ public class Student extends User{
 
     public void setSchool(School school) {
         this.school = school;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "teacher=" + teacher.getFirstName() +
+                ", classes=" + classes.getName() +
+                ", parent=" + parent.getFirstName() +
+                ", studentCard=" + studentCard.getId() +
+                ", school=" + school.getName() +
+                '}';
     }
 }

@@ -9,7 +9,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Authority;
 import vutran.my_first_project_spring_boot.management_student.Entity.Parent;
+import vutran.my_first_project_spring_boot.management_student.Entity.School;
+import vutran.my_first_project_spring_boot.management_student.Entity.Student;
 import vutran.my_first_project_spring_boot.management_student.Service.ParentService;
+import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
+import vutran.my_first_project_spring_boot.management_student.Service.StudentService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,11 +25,15 @@ public class ParentController {
 
     private ParentService parentService;
     private AuthorityRepository authorityRepository;
+    private SchoolService schoolService;
+    private StudentService studentService;
 
     @Autowired
-    public ParentController(ParentService parentService, AuthorityRepository authorityRepository) {
+    public ParentController(ParentService parentService, AuthorityRepository authorityRepository, SchoolService schoolService, StudentService studentService) {
         this.parentService = parentService;
         this.authorityRepository = authorityRepository;
+        this.schoolService = schoolService;
+        this.studentService = studentService;
     }
 
     @GetMapping("/showManageParent")
@@ -46,6 +54,19 @@ public class ParentController {
     @GetMapping("showFormAddParent")
     public String addParentForm(Model model){
         model.addAttribute("parent", new Parent());
+        model.addAttribute("schoolList", schoolService.getAllSchools());
+        return "Parent/addParentForm";
+    }
+
+    @GetMapping("/add-process")
+    public String selectSchoolProcess(Model model, @RequestParam(value = "school", required = false) int id_school){
+        model.addAttribute("parent", new Parent());
+        // get List student
+        List<Student> studentList = studentService.getListStudentBySchoolId(id_school);
+        model.addAttribute("studentList", studentList);
+        // get List school
+        List<School> schoolList = schoolService.getAllSchools();
+        model.addAttribute("schoolList", schoolList);
         return "Parent/addParentForm";
     }
 
@@ -71,10 +92,12 @@ public class ParentController {
         newParent.setUsername(parent.getUsername());
         newParent.setPassword(new BCryptPasswordEncoder().encode(parent.getPassword()));
         newParent.setEnabled(true);
+        newParent.setSchool(parent.getSchool());
         newParent.setEmail(parent.getEmail());
         newParent.setIdentity(parent.getIdentity());
         newParent.setAvatar(parent.getAvatar());
         newParent.setAddress(parent.getAddress());
+        newParent.setStudent(parent.getStudent());
         // role
         Authority authority = authorityRepository.findByName("ROLE_PARENT");
         Collection<Authority> roles = new ArrayList<>();
@@ -93,10 +116,12 @@ public class ParentController {
         Parent parentExist = parentService.getParentById(parent.getId());
         if (parentExist == null){
             model.addAttribute("Error", "Not found Parent!!");
+            model.addAttribute("schoolList", schoolService.getAllSchools());
             model.addAttribute("parent", new Parent());
             return "Parent/modifyParent";
         } else {
             model.addAttribute("parent", parentExist);
+            model.addAttribute("schoolList", schoolService.getAllSchools());
             return "Parent/modifyParent";
         }
     }
@@ -114,6 +139,7 @@ public class ParentController {
             parentExist.setEmail(parent.getEmail());
             parentExist.setIdentity(parent.getIdentity());
             parentExist.setLastName(parent.getLastName());
+            parentExist.setSchool(parent.getSchool());
             parentExist.setPhoneNumber(parent.getPhoneNumber());
             parentExist.setStudent(parent.getStudent());
             // tìm hiểu check pass encode
@@ -140,5 +166,4 @@ public class ParentController {
             return "redirect:/m-parent/showManageParent";
         }
     }
-
 }

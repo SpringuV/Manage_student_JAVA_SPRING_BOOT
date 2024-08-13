@@ -63,7 +63,7 @@ public class StudyrecordController {
             model.addAttribute("transcripts", transcriptList);
         }
         // check study exist
-        StudyRecord studyRecordExist = studyrecordService.getStudyRecordByStudentAndSchoolAndSchoolYear(studyRecord.getStudent().getId(), studyRecord.getSchool().getId(), studyRecord.getSchoolYear());
+        StudyRecord studyRecordExist = studyrecordService.getStudyRecordByStudentAndSchoolAndSchoolYear(studyRecord.getStudent().getId(), studyRecord.getSchoolYear());
         if(studyRecordExist != null){
             model.addAttribute("Error", "Error, Study Existed !!!");
             model.addAttribute("studyRecord", new StudyRecord());

@@ -64,4 +64,9 @@ public class TeacherServiceImple implements TeacherService{
     public Optional<Teacher> findById(int id) {
         return teacherRepository.findById(id);
     }
+
+    @Override
+    public List<Teacher> getListTeacherByIdSchool(int school_id) {
+        return teacherRepository.getListTeacherByIdSchool(school_id);
+    }
 }

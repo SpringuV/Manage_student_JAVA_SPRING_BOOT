@@ -22,7 +22,7 @@
         </div>
         <div>
             <label>Student Id: </label>
-            <input type="text" th:field="*{student}" placeholder="Input student id" name="student">
+            <input type="text" th:field="*{student}" placeholder="Input student id" name="student" required>
             <div th:if="${#fields.hasErrors('student')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('student')}" th:text="${error}"></li>
@@ -31,7 +31,7 @@
         </div>
         <div>
             <label>School Id: </label>
-            <input type="text" th:field="*{school}" placeholder="Input school id" name="school">
+            <input type="text" th:field="*{school}" placeholder="Input school id" name="school" required>
             <div th:if="${#fields.hasErrors('school')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
@@ -40,7 +40,7 @@
         </div>
         <div>
             <label>School Year: </label>
-            <input type="text" th:field="*{schoolYear}" placeholder="Input school year" name="school-year">
+            <input type="text" th:field="*{schoolYear}" placeholder="Input school year" name="school-year" required>
             <div th:if="${#fields.hasErrors('schoolYear')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('schoolYear')}" th:text="${error}"></li>
@@ -70,7 +70,7 @@
         </div>
         <div>
             <label>Comment of Teacher: </label>
-            <input type="text" th:field="*{commentOfTeacher}" placeholder="Input comment of teacher" name="conduct">
+            <input type="text" th:field="*{commentOfTeacher}" placeholder="Input comment of teacher" name="conduct" required>
             <div th:if="${#fields.hasErrors('commentOfTeacher')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('commentOfTeacher')}" th:text="${error}"></li>

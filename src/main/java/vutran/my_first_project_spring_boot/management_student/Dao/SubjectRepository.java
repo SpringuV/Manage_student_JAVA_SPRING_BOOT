@@ -15,6 +15,6 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
     @Query(value = "SELECT * FROM subject as s1 JOIN school_subject as s2 ON s1.id = s2.subject_id WHERE s2.school_id =:idSchool AND s1.subject_name =:nameSubject", nativeQuery = true)
     public Subject getSubjectBySchoolIdAndName(@Param("idSchool") int idSchool, @Param("nameSubject") String nameSubject);
 
-    @Query(value = "SELECT * FROM school_subject as SS JOIN subject as S ON SS.subject_id = S.id WHERE SS.school_id:=schoolId", nativeQuery = true)
+    @Query(value = "SELECT * FROM subject as S JOIN school_subject as SS ON SS.subject_id = S.id WHERE SS.school_id=:schoolId", nativeQuery = true)
     public List<Subject> getListSubjectOfSchoolId(@Param("schoolId") int schoolId);
 }

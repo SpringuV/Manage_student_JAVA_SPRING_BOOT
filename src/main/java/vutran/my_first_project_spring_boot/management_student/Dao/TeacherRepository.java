@@ -23,4 +23,7 @@ public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
             "ON t.id = u.id " +
             "WHERE u.position LIKE 'Teacher'", nativeQuery = true)
     public Set<Teacher> getAllTeacher();
+
+    @Query(value = "SELECT * FROM teacher WHERE teacher.school_id=:school_id", nativeQuery = true)
+    List<Teacher> getListTeacherByIdSchool(@Param("school_id") int school_id);
 }

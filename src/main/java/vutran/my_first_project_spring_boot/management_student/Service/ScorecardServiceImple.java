@@ -41,4 +41,9 @@ public class ScorecardServiceImple implements ScoreCardService{
     public ScoreCard updateScoreCard(ScoreCard scoreCard) {
         return this.scorecardRepository.saveAndFlush(scoreCard);
     }
+
+    @Override
+    public ScoreCard getScoreCardBySchoolYear_NameExam_Student_Subject(String schoolYear, String nameExam, int student_id, int subject_id) {
+        return this.scorecardRepository.getScoreCardBySchoolYear_NameExam_Student_Subject(schoolYear, nameExam, student_id, subject_id);
+    }
 }

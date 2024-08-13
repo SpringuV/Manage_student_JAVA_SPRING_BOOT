@@ -42,30 +42,30 @@
                 <th>Position</th>
                 <th>Feature</th>
                 <tr th:each="student : ${studentList}">
-                    <td th:text="${student.id != null ? student.id : 'null'}"></td>
-                    <td th:text="${student.firstName != null ? student.firstName : 'null'}"></td>
-                    <td th:text="${student.lastName != null ? student.lastName : 'null'}"></td>
-                    <td th:text="${student.username != null ? student.username : 'null'}"></td>
-                    <td th:text="${student.address != null ? student.address : 'null'}"></td>
-                    <td th:text="${student.phoneNumber != null ? student.phoneNumber : 'null'}"></td>
-                    <td th:text="${student.email != null ? student.email : 'null'}"></td>
-                    <td th:text="${student.classes != null ? student.classes : 'null'}"></td>
+                    <td th:text="${student.id != null ? student.id : '--null--'}"></td>
+                    <td th:text="${student.firstName != null ? student.firstName : '--null--'}"></td>
+                    <td th:text="${student.lastName != null ? student.lastName : '--null--'}"></td>
+                    <td th:text="${student.username != null ? student.username : '--null--'}"></td>
+                    <td th:text="${student.address != null ? student.address : '--null--'}"></td>
+                    <td th:text="${student.phoneNumber != null ? student.phoneNumber : '--null--'}"></td>
+                    <td th:text="${student.email != null ? student.email : '--null--'}"></td>
+                    <td th:text="${student.classes != null ? student.classes : '--null--'}"></td>
     <!--                cach 2:
                         <td> <span th:unless="${student.teacher}" th:text="'null'"></span>
                         <span th:if="${student.teacher}" th:text="${student.teacher}"></span></td>-->
                     <td>
                         <span  th:if="${student.teacher != null}" th:text="${student.teacher.username} +' ('+ ${student.teacher.id}+')'"></span>
-                        <span th:unless="${student.teacher != null}">null</span>
+                        <span th:unless="${student.teacher == null}">--null--</span>
                     </td>
                     <!--            cach 1:-->
-                    <td th:text="${student.school.name != null ? student.school.name : 'null'}"></td>
+                    <td th:text="${student.school.name != null ? student.school.name : '--null--'}"></td>
                     <!--            cach 2:-->
                     <!--            <td>-->
                     <!--                <span th:text="'Name: '+${teacher.school.name}"></span>-->
                     <!--                <br/>-->
                     <!--                <span th:text="'Id: ' + ${teacher.school.id}"></span>-->
                     <!--            </td>-->
-                    <td th:text="${student.parent != null ? student.parent : 'null'}"></td>
+                    <td th:text="${student.parent != null ? student.parent : '--null--'}"></td>
                     <td th:text="${student.position}"></td>
                     <td>
                         <div>

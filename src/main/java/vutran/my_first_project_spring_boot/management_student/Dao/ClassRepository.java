@@ -6,10 +6,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Classes;
 
+import java.util.List;
+
 @Repository
 public interface ClassRepository extends JpaRepository<Classes, Integer> {
 
     @Query(value = "SELECT * FROM class WHERE class.class_name =:name AND class.school_id = :id", nativeQuery = true)
     public Classes findClassByNameAndSchoolId(@Param("name") String name, @Param("id") int id);
 
+    @Query(value = "SELECT * FROM class WHERE class.school_id=:school_id", nativeQuery = true)
+    public List<Classes> getListClassByIdSchool(@Param("school_id") int id_school);
 }

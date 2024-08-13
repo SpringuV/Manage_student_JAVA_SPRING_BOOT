@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.sql.Date;
-import java.util.Set;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "score_card")
@@ -15,11 +15,17 @@ public class ScoreCard {
     @Column(name = "cscore_id")
     private int id;
 
+    @Column(name = "cs_name_exam")
+    private String nameExam;
+
     // một học sinh có nhiều phiếu điểm
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "student_id")
-    @JsonManagedReference
     private Student student;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "sc_school_id")
+    private School school;
 
     @Column(name = "cscore_dexam")
     private Date dayExam;
@@ -27,17 +33,47 @@ public class ScoreCard {
     @Column(name = "cscore_score")
     private double score;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
-    @JoinTable(name = "sub_score_card", joinColumns = @JoinColumn(name = "score_card_id"),
-            inverseJoinColumns = @JoinColumn(name = "sub_id")
-    )
-    private Set<Subject> subjectSet;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
+    @JoinColumn(name = "cs_subject_id")
+    private Subject subject;
 
-    public ScoreCard(Student student, Date dayExam, double score, Set<Subject> subjectSet) {
+    @Column(name = "cs_school_year")
+    private String schoolYear;
+
+    public ScoreCard() {
+    }
+
+    public ScoreCard(String nameExam, Student student, Date dayExam, double score, Subject subject, School school, String schoolYear) {
         this.student = student;
         this.dayExam = dayExam;
         this.score = score;
-        this.subjectSet = subjectSet;
+        this.subject = subject;
+        this.school = school;
+        this.schoolYear = schoolYear;
+    }
+
+    public String getNameExam() {
+        return nameExam;
+    }
+
+    public void setNameExam(String nameExam) {
+        this.nameExam = nameExam;
+    }
+
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
+
+    public String getSchoolYear() {
+        return schoolYear;
+    }
+
+    public void setSchoolYear(String schoolYear) {
+        this.schoolYear = schoolYear;
     }
 
     public int getId() {
@@ -72,11 +108,25 @@ public class ScoreCard {
         this.score = score;
     }
 
-    public Set<Subject> getSubjectSet() {
-        return subjectSet;
+    public Subject getSubject() {
+        return subject;
     }
 
-    public void setSubjectSet(Set<Subject> subjectSet) {
-        this.subjectSet = subjectSet;
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    @Override
+    public String toString() {
+        return "ScoreCard{" +
+                "id=" + id +
+                ", nameExam='" + nameExam + '\'' +
+                ", student=" + student +
+                ", school=" + school +
+                ", dayExam=" + dayExam +
+                ", score=" + score +
+                ", subject=" + subject +
+                ", schoolYear='" + schoolYear + '\'' +
+                '}';
     }
 }

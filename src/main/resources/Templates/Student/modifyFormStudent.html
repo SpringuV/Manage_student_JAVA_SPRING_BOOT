@@ -74,20 +74,20 @@
                 </ul>
             </div>
         </div>
-        <div>
-            <label for="schoolid">Student study at school id: </label>
-            <input type="text" th:field="*{school}" placeholder="Input school id"
-                   name="schoolid" id="schoolid">
-            <label>Name School: </label>
-            <span id="schoolName"></span>
+        <div class="form-floating mb-1">
+            <label class="form-label">Study at school: </label>
+            <select th:field="*{school}" required>
+                <option value="">--Select School--</option>
+                <option th:each="school : ${schoolList}" th:value="${school.id}" th:text="${school.name}"></option>
+            </select>
             <div th:if="${#fields.hasErrors('school')}">
                 <ul>
-                    <li th:each="error: ${#fields.hasErrors('school')}" th:text="${Error}"></li>
+                    <li th:each="e: ${#fields.hasErrors('school')}" th:text="${e}"></li>
                 </ul>
             </div>
         </div>
         <div>
-            <label for="schoolid">Homeroom Teacher id: </label>
+            <label>Homeroom Teacher id: </label>
             <input type="text" th:field="*{teacher}" placeholder="Input teacher id"
                    name="teacherid" id="teacherid">
             <div th:if="${#fields.hasErrors('teacher')}">

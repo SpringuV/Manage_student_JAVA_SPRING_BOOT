@@ -11,6 +11,9 @@ public class Parent extends User{
     @OneToOne(mappedBy = "parent", cascade = CascadeType.ALL)
     private Student student;
 
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH})
+    @JoinColumn(name = "p_school_id")
+    private School school;
     public Parent() {
     }
 
@@ -22,9 +25,18 @@ public class Parent extends User{
         super(firstName, lastName, address, phoneNumber, identity, username, password, enabled, email, position, avatar, authority);
     }
 
-    public Parent(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Student student) {
+    public Parent(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Student student, School school) {
         super(avatar, position, email, enabled, password, username, identity, phoneNumber, address, lastName, firstName);
         this.student = student;
+        this.school = school;
+    }
+
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
     }
 
     public Student getStudent() {
@@ -34,6 +46,4 @@ public class Parent extends User{
     public void setStudent(Student student) {
         this.student = student;
     }
-
-
 }

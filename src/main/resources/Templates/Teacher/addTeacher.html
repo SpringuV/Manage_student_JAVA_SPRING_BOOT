@@ -108,12 +108,14 @@
                 </div>
 
                 <div class="form-floating mb-1">
-                    <input type="text" th:field="*{school}" name="phoneNumber" placeholder="Input Teacher work at school id"
-                           id="school" class="form-control" required/>
-                    <label class="form-label" for="school">Work at school id: </label>
+                    <label class="form-label">Work at school: </label>
+                    <select th:field="*{school}" required>
+                        <option value="">--Select School--</option>
+                        <option th:each="school : ${schoolList}" th:value="${school.id}" th:text="${school.name}"></option>
+                    </select>
                     <div th:if="${#fields.hasErrors('school')}">
                         <ul>
-                            <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
+                            <li th:each="e: ${#fields.hasErrors('school')}" th:text="${e}"></li>
                         </ul>
                     </div>
                 </div>

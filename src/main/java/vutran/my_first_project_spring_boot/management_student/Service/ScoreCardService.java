@@ -11,4 +11,5 @@ public interface ScoreCardService {
     public ScoreCard addScoreCard(ScoreCard scoreCard);
     public void deleteScoreCardById(int id);
     public ScoreCard updateScoreCard(ScoreCard scoreCard);
+    public ScoreCard getScoreCardBySchoolYear_NameExam_Student_Subject(String schoolYear, String nameExam, int student_id, int subject_id);
 }

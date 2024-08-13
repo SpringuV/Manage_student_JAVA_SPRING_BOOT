@@ -11,5 +11,5 @@ public interface ClassService {
     public void deleteClassById(int id);
     public Classes updateClass(Classes classes);
     public Classes findClassByNameAndSchoolId(String name, int id);
-
+    public List<Classes> getListClassByIdSchool(int school_id);
 }

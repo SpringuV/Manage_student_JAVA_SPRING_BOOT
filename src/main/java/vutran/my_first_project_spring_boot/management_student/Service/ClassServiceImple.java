@@ -46,4 +46,9 @@ public class ClassServiceImple implements ClassService{
     public Classes findClassByNameAndSchoolId(String name, int id) {
         return this.classRepository.findClassByNameAndSchoolId(name, id);
     }
+
+    @Override
+    public List<Classes> getListClassByIdSchool(int school_id) {
+        return this.classRepository.getListClassByIdSchool(school_id);
+    }
 }

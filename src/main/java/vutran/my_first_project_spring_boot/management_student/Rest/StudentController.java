@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Authority;
 import vutran.my_first_project_spring_boot.management_student.Entity.Student;
+import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
 import vutran.my_first_project_spring_boot.management_student.Service.StudentService;
 
 import java.util.ArrayList;
@@ -22,11 +23,13 @@ public class StudentController {
 
     private StudentService studentService;
     private AuthorityRepository authorityRepository;
+    private SchoolService schoolService;
 
     @Autowired
-    public StudentController(StudentService studentService, AuthorityRepository authorityRepository) {
+    public StudentController(StudentService studentService, AuthorityRepository authorityRepository, SchoolService schoolService) {
         this.authorityRepository = authorityRepository;
         this.studentService = studentService;
+        this.schoolService = schoolService;
     }
 
     @GetMapping("/showManageStudent")
@@ -46,6 +49,7 @@ public class StudentController {
     @GetMapping("/showFormAddStudent")
     public String showFormAddStudent(Model model){
         model.addAttribute("student", new Student());
+        model.addAttribute("schoolList", schoolService.getAllSchools());
         return "Student/addStudentForm";
     }
 
@@ -100,16 +104,17 @@ public class StudentController {
 
     @GetMapping("/showModifyFormStudent")
     public String formModifyStudent(Student student,Model model){
-
         Student studentExist = studentService.getStudentById(student.getId());
 
         // check student exist
         if(studentExist != null){
             model.addAttribute("student", studentExist);
+            model.addAttribute("schoolList", schoolService.getAllSchools());
             return "Student/modifyFormStudent";
         } else{
             model.addAttribute("student", new Student());
             model.addAttribute("Error", "Not found student");
+            model.addAttribute("schoolList", schoolService.getAllSchools());
             return "Student/modifyFormStudent";
         }
     }
@@ -118,7 +123,6 @@ public class StudentController {
     public String modifyStudent(@ModelAttribute Student student ,Model model){
         // check student exist
         Student studentExist = studentService.getStudentById(student.getId());
-
         // exits, modify
         if(studentExist != null){
             studentExist.setFirstName(student.getFirstName());
@@ -130,7 +134,6 @@ public class StudentController {
             studentExist.setPhoneNumber(student.getPhoneNumber());
             studentExist.setTeacher(student.getTeacher());
             studentExist.setClasses(student.getClasses());
-
             studentService.updateStudent(studentExist);
             model.addAttribute("student", student);
             model.addAttribute("success", "You modified student have id: " + studentExist.getId());

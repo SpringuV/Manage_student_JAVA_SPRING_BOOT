@@ -18,4 +18,5 @@ public interface TeacherService {
     public Teacher fineTeacherByUserName(String username);
     public Set<Teacher> getListTeacherByPosition();
     public Optional<Teacher> findById(int id);
+    public List<Teacher> getListTeacherByIdSchool(int school_id);
 }

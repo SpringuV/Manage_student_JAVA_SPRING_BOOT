@@ -17,7 +17,7 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <form th:action="@{/m-student/add-process}" th:object="${student}" method="post">
                 <div th:if="${Error}" class="alert alert-danger">
                     <span th:text="${Error}"></span>
@@ -30,7 +30,7 @@
                     <label class="form-label" for="usernameid">User name: </label>
                     <div th:if="${#fields.hasErrors('username')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('username')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('username')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                     <label class="form-label" for="password">Password: </label>
                     <div th:if="${#fields.hasErrors('password')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('password')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('password')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                     <label class="form-label" for="firstname">First Name: </label>
                     <div th:if="${#fields.hasErrors('firstName')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('firstName')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('firstName')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                     <label class="form-label" for="lastname">Last Name: </label>
                     <div th:if="${#fields.hasErrors('lastName')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('lastName')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('lastName')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                     <label class="form-label" for="address">Address: </label>
                     <div th:if="${#fields.hasErrors('address')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('address')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('address')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -87,50 +87,43 @@
                     <label class="form-label" for="phoneNumber">PhoneNumber: </label>
                     <div th:if="${#fields.hasErrors('phoneNumber')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('phoneNumber')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('phoneNumber')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
-                <div class="form-floating mb-1">
-                    <input type="text" th:field="*{school}" name="phoneNumber" placeholder="Input Student study at school id"
-                           id="school" class="form-control" required/>
-                    <label class="form-label" for="school">Study at school id: </label>
+
+                <div class="mb-1">
+                    <label class="form-label">Study at school: </label>
+                    <form action="#" method="get" th:action="@{/m-student/add-process}">
+                        <select th:field="*{school}" required onchange="this.form.submit()">
+                            <option value="">--Select School--</option>
+                            <option th:each="school : ${schoolList}" th:value="${school.id}" th:text="${school.name}"></option>
+                        </select>
+                    </form>
                     <div th:if="${#fields.hasErrors('school')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('school')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
-
-                <div class="form-floating mb-1">
-                    <input type="text" th:field="*{parent}" name="parent" placeholder="Input Parent_id of Student"
-                           id="parent" class="form-control"/>
-                    <label class="form-label" for="parent">Parent id: </label>
-                    <div th:if="${#fields.hasErrors('parent')}">
-                        <ul>
-                            <li th:each="e: ${#fields.hasErrors('parent')}" th:text="${e}"></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="form-floating mb-1">
+                <div class="mb-1">
                     <input type="text" th:field="*{classes}" name="classes" placeholder="Input Class of Student Study"
                            id="classes" class="form-control" />
                     <label class="form-label" for="classes">Class id: </label>
                     <div th:if="${#fields.hasErrors('classes')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('classes')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('classes')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="form-floating mb-1">
+                <div class="mb-1">
                     <input type="text" th:field="*{teacher}" name="teacher" placeholder="Input HomeRoomTeacher of Student"
-                           id="teacher" class="form-control" required/>
+                           id="teacher" class="form-control"/>
                     <label class="form-label" for="teacher">Teacher id: </label>
                     <div th:if="${#fields.hasErrors('teacher')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('teacher')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('teacher')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -141,7 +134,7 @@
                     <label class="form-label" for="identity">Identity: </label>
                     <div th:if="${#fields.hasErrors('identity')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('identity')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('identity')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -151,32 +144,13 @@
                     <label class="form-label" for="email">Email: </label>
                     <div th:if="${#fields.hasErrors('email')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('email')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('email')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
                 <button class="btn btn-primary py-2" type="submit">Add</button>
             </form>
         </div>
-<!--        <div class="col-lg-6">-->
-<!--            <div class="row">-->
-<!--            <h3>List School</h3>-->
-<!--                <table>-->
-<!--                    <th>Id School</th>-->
-<!--                    <th>School Name</th>-->
-<!--                    <th>School Address</th>-->
-<!--                    <th>School Level</th>-->
-<!--                    <th>School Phone</th>-->
-<!--                    <tr th:each="school : ${schoolList}">-->
-<!--                        <td th:text="${school.getId()}"></td>-->
-<!--                        <td th:text="${school.getName()}"></td>-->
-<!--                        <td th:text="${school.getAddress()}"></td>-->
-<!--                        <td th:text="${school.getLevel()}"></td>-->
-<!--                        <td th:text="${school.getPhone()}"></td>-->
-<!--                    </tr>-->
-<!--                </table>-->
-<!--            </div>-->
-<!--        </div>-->
     </div>
     <div th:if="${success}" class="alert alert-success">
         <span th:text="${success}"></span>

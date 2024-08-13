@@ -43,7 +43,7 @@ public class StudyrecordServiceImple implements StudyrecordService {
     }
 
     @Override
-    public StudyRecord getStudyRecordByStudentAndSchoolAndSchoolYear(int student_id, int school_id, String schoolYear) {
-        return this.studyrecordRepository.getStudyRecordByStudentAndSchoolAndSchoolYear(student_id,school_id, schoolYear);
+    public StudyRecord getStudyRecordByStudentAndSchoolAndSchoolYear(int student_id, String schoolYear) {
+        return this.studyrecordRepository.getStudyRecordByStudentAndSchoolAndSchoolYear(student_id, schoolYear);
     }
 }

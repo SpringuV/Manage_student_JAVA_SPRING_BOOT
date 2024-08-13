@@ -33,10 +33,7 @@ public class Subject {
     @JsonBackReference
     private Set<Student> studentList;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
-    @JoinTable(name = "subject_score_card", joinColumns = @JoinColumn(name = "subject_id"),
-            inverseJoinColumns = @JoinColumn(name = "score_card_id")
-    )
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
     private Set<ScoreCard> scoreCard;
 
     // một môn có nhiều tiết dạy trong notebook
@@ -44,7 +41,7 @@ public class Subject {
     private Set<NoteBookDetail> noteBookDetailList;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "subject")
     private Set<Teacher> teacherSet;
-
+    
     public Subject() {
     }
 
