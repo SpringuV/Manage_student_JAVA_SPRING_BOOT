@@ -92,7 +92,6 @@ public class TeacherController {
             existTeacher.setEmail(teacher.getEmail());
             existTeacher.setSchool(teacher.getSchool());
             existTeacher.setAddress(teacher.getAddress());
-            existTeacher.setClassesList(teacher.getClassesList());
             existTeacher.setLastName(teacher.getLastName());
             existTeacher.setFirstName(teacher.getFirstName());
             existTeacher.setPhoneNumber(teacher.getPhoneNumber());
@@ -158,7 +157,6 @@ public class TeacherController {
         newTeacher.setIdentity(teacher.getIdentity());
         newTeacher.setEmail(teacher.getEmail());
         newTeacher.setPosition("Teacher");
-        newTeacher.setClassesList(teacher.getClassesList());
         newTeacher.setSchool(teacher.getSchool());
         newTeacher.setPhoneNumber(teacher.getPhoneNumber());
         newTeacher.setAddress(teacher.getAddress());

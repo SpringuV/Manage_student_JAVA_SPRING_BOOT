@@ -5,8 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import vutran.my_first_project_spring_boot.management_student.Entity.Classes;
+import vutran.my_first_project_spring_boot.management_student.Entity.School;
+import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
 import vutran.my_first_project_spring_boot.management_student.Service.ClassService;
+import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
+import vutran.my_first_project_spring_boot.management_student.Service.TeacherService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +21,14 @@ import java.util.List;
 @RequestMapping("/m-class")
 public class ClassController {
     private ClassService classService;
+    private TeacherService teacherService;
+    private SchoolService schoolService;
 
     @Autowired
-    public ClassController(ClassService classService) {
+    public ClassController(ClassService classService, TeacherService teacherService, SchoolService schoolService) {
         this.classService = classService;
+        this.teacherService = teacherService;
+        this.schoolService = schoolService;
     }
 
     @GetMapping("/showManageClass")
@@ -35,9 +45,17 @@ public class ClassController {
         }
     }
 
+    @GetMapping("/getListTeacherBySchool/{schoolId}")
+    @ResponseBody
+    public List<Teacher> getListTeacher(@RequestParam("schoolId") int school_id){
+        return teacherService.getListTeacherByIdSchool(school_id);
+    }
+
     @GetMapping("/showFormAddClass")
     public String addClass(Model model){
         model.addAttribute("classes", new Classes());
+        List<School> schoolList = schoolService.getAllSchools();
+        model.addAttribute("schoolList", schoolList);
         return "School/Classes/addFormClass";
     }
 
@@ -72,10 +90,12 @@ public class ClassController {
         // check student exist
         if(classExist != null){
             model.addAttribute("classes", classExist);
+            model.addAttribute("schoolList", schoolService.getAllSchools());
             return "School/Classes/formModifyClass";
         } else{
             model.addAttribute("classes", new Classes());
             model.addAttribute("Error", "Not found class");
+            model.addAttribute("schoolList", schoolService.getAllSchools());
             return "School/Classes/formModifyClass";
         }
     }
@@ -97,4 +117,14 @@ public class ClassController {
         return "School/Classes/formModifyClass";
     }
 
+    @GetMapping("/modify-delete")
+    public String processDelete(@ModelAttribute Classes classes, RedirectAttributes redirectAttributes){
+        Classes classExist = classService.getClassById(classes.getId());
+        if (classExist == null) {
+            redirectAttributes.addFlashAttribute("Error", "Error, Not found Class !!!");
+        } else {
+            redirectAttributes.addFlashAttribute("success", "You deleted success classes has id: "+classExist.getId() + "belong school "+ classExist.getSchool().getName());
+        }
+        return "redirect:/m-class/showManageClass";
+    }
 }

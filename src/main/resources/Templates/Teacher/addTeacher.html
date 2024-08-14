@@ -97,18 +97,6 @@
                     </div>
                 </div>
 
-                <div class="form-floating mb-1">
-                    <input type="text" th:field="*{classesList}" name="classList"
-                           placeholder="Input Teacher work at class"
-                           id="class" class="form-control"/>
-                    <label class="form-label" for="class">Class name: </label>
-                    <div th:if="${#fields.hasErrors('classesList')}">
-                        <ul>
-                            <li th:each="error: ${#fields.hasErrors('classesList')}" th:text="${error}"></li>
-                        </ul>
-                    </div>
-                </div>
-
                 <div class="mb-1">
                     <label class="form-label">Work at school: </label>
                     <select id="school_select" th:field="*{school}" required>

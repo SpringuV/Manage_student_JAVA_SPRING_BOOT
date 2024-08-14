@@ -20,13 +20,9 @@ public class Classes {
     @Column(name = "class_grade")
     private String grade;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {
-            CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
-    @JoinTable(name="class_teacher",
-        joinColumns = @JoinColumn(name = "class_id"),
-            inverseJoinColumns = @JoinColumn(name = "teacher_id"))
-    @JsonBackReference
-    private List<Teacher> teacherList; // Multiple teachers use one classroom
+    @OneToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
 
     @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JsonBackReference
@@ -75,14 +71,6 @@ public class Classes {
         this.grade = grade;
     }
 
-    public List<Teacher> getTeacherList() {
-        return teacherList;
-    }
-
-    public void setTeacherList(List<Teacher> teacherList) {
-        this.teacherList = teacherList;
-    }
-
     public List<Student> getStudentList() {
         return studentList;
     }
@@ -116,5 +104,13 @@ public class Classes {
                 ", noteBook=" + (noteBook != null ? noteBook.toString() : "null" )+
                 ", school=" + (school != null ? school.toString() : "null") +
                 '}';
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 }

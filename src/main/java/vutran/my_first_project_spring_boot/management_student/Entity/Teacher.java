@@ -15,13 +15,8 @@ public class Teacher extends User{
     @JsonBackReference // đảm bảo không có chu kỳ lặp giữa các đối tượng
     private Set<Student> studentList;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH})
-    @JoinTable(name = "teacher_classes",
-        joinColumns = @JoinColumn(name = "teacher_id"),
-            inverseJoinColumns = @JoinColumn(name = "class_id")
-    )
-    @JsonManagedReference
-    private Set<Classes> classesList;
+    @OneToOne(mappedBy = "teacher")
+    private Classes classes;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
     @JoinColumn(name = "subject_id")
@@ -43,10 +38,10 @@ public class Teacher extends User{
         super(firstName, lastName, identity, address, phoneNumber, username, email, position, avatar);
     }
 
-    public Teacher(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Set<Student> studentList, Set<Classes> classesList,Subject subject, List<NoteBookDetail> noteBookDetailList, School school) {
+    public Teacher(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Set<Student> studentList, Classes classes,Subject subject, List<NoteBookDetail> noteBookDetailList, School school) {
         super(avatar, position, email, enabled, password, username, identity, phoneNumber, address, lastName, firstName);
         this.studentList = studentList;
-        this.classesList = classesList;
+        this.classes = classes;
         this.subject = subject;
         this.noteBookDetailList = noteBookDetailList;
         this.school = school;
@@ -59,15 +54,7 @@ public class Teacher extends User{
     public void setStudentList(Set<Student> studentList) {
         this.studentList = studentList;
     }
-
-    public Set<Classes> getClassesList() {
-        return classesList;
-    }
-
-    public void setClassesList(Set<Classes> classesList) {
-        this.classesList = classesList;
-    }
-
+    
     public Subject getSubject() {
         return subject;
     }
@@ -90,5 +77,13 @@ public class Teacher extends User{
 
     public void setSchool(School school) {
         this.school = school;
+    }
+
+    public Classes getClasses() {
+        return classes;
+    }
+
+    public void setClasses(Classes classes) {
+        this.classes = classes;
     }
 }

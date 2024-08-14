@@ -97,16 +97,6 @@
                 </ul>
             </div>
         </div>
-        <div class="form-floating mb-1">
-            <input type="text" th:field="*{classesList}" name="classList" placeholder="Input Teacher work at class"
-                   id="class" class="form-control" required/>
-            <label class="form-label" for="class">Class name: </label>
-            <div th:if="${#fields.hasErrors('classesList')}">
-                <ul>
-                    <li th:each="error: ${#fields.hasErrors('classesList')}" th:text="${error}"></li>
-                </ul>
-            </div>
-        </div>
         <div>
             <button class="btn btn-primary" type="submit">Modify</button>
         </div>
@@ -127,7 +117,25 @@
         selectSchool.addEventListener('change', function(){
             const schoolId = selectSchool.value;
             if(schoolId){
+                fetch(`/m-teacher/getSubjectBySchool/${schoolId}`)
+                .then(response => response.json())
+                // take subject
+                .then(subjects =>{
+                    // clear previous subject
+                    selectSubject.innerHTML = '<option th:value="0">--Select Subject--</option>';
 
+                    // populate new subjects
+                    subjects.array.forEach(subject => {
+                        const option = document.createElement('option');
+                        option.value = subject.id;
+                        option.textContent = subject.nameSubject;
+                        selectSubject.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching subjects', error));
+            } else {
+                // clear subject if no school selected
+                selectSubject.innerHTML = '<option th:value="0">--Select Subject--</option>';
             }
         });
     });
