@@ -1,7 +1,6 @@
 package vutran.my_first_project_spring_boot.management_student.Rest;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,7 +14,6 @@ import vutran.my_first_project_spring_boot.management_student.Entity.Authority;
 import vutran.my_first_project_spring_boot.management_student.Entity.User;
 import vutran.my_first_project_spring_boot.management_student.Service.UserService;
 
-import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.Collection;
 

@@ -3,7 +3,6 @@ package vutran.my_first_project_spring_boot.management_student.Entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity

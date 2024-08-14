@@ -2,8 +2,6 @@ package vutran.my_first_project_spring_boot.management_student.Entity;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
-
 @Entity
 @Table(name = "authority")
 public class Authority {

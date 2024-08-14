@@ -1,6 +1,5 @@
 package vutran.my_first_project_spring_boot.management_student.Service;
 
-import vutran.my_first_project_spring_boot.management_student.Entity.Parent;
 import vutran.my_first_project_spring_boot.management_student.Entity.ScoreCard;
 
 import java.util.List;

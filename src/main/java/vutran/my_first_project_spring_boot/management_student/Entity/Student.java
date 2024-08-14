@@ -1,7 +1,5 @@
 package vutran.my_first_project_spring_boot.management_student.Entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.sql.Blob;

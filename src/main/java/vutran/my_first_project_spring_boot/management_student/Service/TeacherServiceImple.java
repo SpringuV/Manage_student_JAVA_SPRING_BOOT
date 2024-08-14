@@ -6,7 +6,6 @@ import vutran.my_first_project_spring_boot.management_student.Dao.TeacherReposit
 import vutran.my_first_project_spring_boot.management_student.Dao.UserRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;

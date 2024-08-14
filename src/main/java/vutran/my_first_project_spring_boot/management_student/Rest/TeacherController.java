@@ -13,8 +13,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Authority;
 import vutran.my_first_project_spring_boot.management_student.Entity.School;
+import vutran.my_first_project_spring_boot.management_student.Entity.Subject;
 import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
 import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
+import vutran.my_first_project_spring_boot.management_student.Service.SubjectService;
 import vutran.my_first_project_spring_boot.management_student.Service.TeacherService;
 
 import java.util.*;
@@ -26,14 +28,21 @@ public class TeacherController {
     private TeacherService teacherService;
     private SchoolService schoolService;
     private AuthorityRepository authorityRepository;
+    private SubjectService subjectService;
 
     @Autowired
-    public TeacherController(TeacherService teacherService, SchoolService schoolService, AuthorityRepository authorityRepository) {
+    public TeacherController(TeacherService teacherService, SchoolService schoolService, AuthorityRepository authorityRepository, SubjectService subjectService) {
         this.teacherService = teacherService;
         this.schoolService = schoolService;
         this.authorityRepository = authorityRepository;
+        this.subjectService = subjectService;
     }
 
+    @GetMapping("/m-teacher/getSubjectBySchool/{schoolId}")
+    @ResponseBody
+    public List<Subject> returnListSubject(@PathVariable int schoolId){
+        return subjectService.getListSubjectOfSchoolId(schoolId);
+    }
 
     @GetMapping("/showManageTeacher")
     public String showTeacherList(Model model){

@@ -163,7 +163,35 @@
     </div>
     <p class="mt-5 mb-3 text-body-secondary">© 2017–2024</p>
 </div>
-<script></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        const schoolSelect = document.getElementById("select_school");
+        const subjectSelect = document.getAnimations("subject_select");
+        schoolSelect.addEventListener('change', function(){
+            const schoolId = schoolSelect.value;
+            if(schoolId){
+                fetch(`/m-teacher/getSubjectBySchool/${schoolId}`)
+                .then(response => response.json())
+                .then(subjects => {
+                    // clear previous subjects
+                    subjectSelect.innerHTML = '<option value="#">--Select Subject--</option>';
+
+                    // Populate new subjects
+                    subjects.forEach(subject => {
+                        const option = document.createElement('option');
+                        option.value = subject.id;
+                        option.textContent = subject.nameSubject;
+                        subjectSelect.appenChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching Subject:', error));
+            } else {
+                // Clear subjects if no school is selected
+                subjectSelect.innerHTML = '<option value="#">--Select Subject--</option>';
+            }
+        });
+    });
+</script>
 <script src="/resources/static/JavaScript/function.js"></script>
 <script src="/docs/5.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import vutran.my_first_project_spring_boot.management_student.Entity.School;
 import vutran.my_first_project_spring_boot.management_student.Entity.Subject;
 
 import java.util.List;

@@ -3,7 +3,6 @@ package vutran.my_first_project_spring_boot.management_student.Entity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
-import java.util.Set;
 
 @Entity
 @Table(name = "notebook_detail")
