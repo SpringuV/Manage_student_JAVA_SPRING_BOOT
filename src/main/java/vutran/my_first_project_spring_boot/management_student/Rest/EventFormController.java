@@ -29,6 +29,12 @@ public class EventFormController {
         this.authorityRepository = authorityRepository;
     }
 
+    // after login success return to home
+    @GetMapping()
+    public String showHomePage(Model model){
+        return "home";
+    }
+
     //homepage
     @GetMapping("/backHomepage")
     public String returnHomePage(){

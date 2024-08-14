@@ -38,7 +38,7 @@ public class TeacherController {
         this.subjectService = subjectService;
     }
 
-    @GetMapping("/m-teacher/getSubjectBySchool/{schoolId}")
+    @GetMapping("/getSubjectBySchool/{schoolId}")
     @ResponseBody
     public List<Subject> returnListSubject(@PathVariable int schoolId){
         return subjectService.getListSubjectOfSchoolId(schoolId);
@@ -54,7 +54,6 @@ public class TeacherController {
             model.addAttribute("teacherList", new HashSet<>());
             return "Teacher/indexTeacher";
         }
-
         // forward to teacher form
         model.addAttribute("teacherList", teacherList);
         return "Teacher/indexTeacher";

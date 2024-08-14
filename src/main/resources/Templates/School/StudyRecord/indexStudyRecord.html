@@ -5,7 +5,8 @@
     <title>Manager StudyRecord</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="/resources/static/CSS/main.css" rel="stylesheet">
+    <link href="/static/CSS/main.css" rel="stylesheet">
+    <script src="/static/JavaScript/function.js"></script>
     <style>
         table, th, td{
             border: 1px solid black;
@@ -28,31 +29,32 @@
     </div>
     <table>
         <thead>
-            <th>Id</th>
-            <th>Student</th>
-            <th>School</th>
-            <th>School Year</th>
-            <th>Transcript</th>
-            <th>Result Conduct</th>
-            <th>Teacher Comment</th>
-            <th>Feature</th>
+        <th>Id</th>
+        <th>Student</th>
+        <th>School</th>
+        <th>School Year</th>
+        <th>Transcript</th>
+        <th>Result Conduct</th>
+        <th>Teacher Comment</th>
+        <th>Feature</th>
         </thead>
         <tbody>
-            <tr th:each="study : ${studyRecordList}">
-                <td th:text="${study.id}"></td>
-                <td th:text="${study.student.firstName}"></td>
-                <td th:text="${study.school.name}"></td>
-                <td th:text="${study.schoolYear}"></td>
-                <td>
-                    <span th:each="transcript : ${study.transcriptList != null ? study.transcriptList : 'null'}" th:utext="'Name: ' + ${transcript.nameTranscript} + '<br>Semester: '+ ${transcript.semester}+'<br>'"></span>
-                </td>
-                <td th:text="${study.resultConduct}"></td>
-                <td th:text="${study.commentOfTeacher}"></td>
-                <td>
-                    <a th:href="@{/m-study/showModifyFormStudyRecord(id=${study.id})}" class="btn btn-success">Modify</a>
-                    <a th:href="@{/m-study/modify-delete(id=${study.id})}" class="btn btn-danger">Delete</a>
-                </td>
-            </tr>
+        <tr th:each="study : ${studyRecordList}">
+            <td th:text="${study.id}"></td>
+            <td th:text="${study.student.firstName}"></td>
+            <td th:text="${study.school.name}"></td>
+            <td th:text="${study.schoolYear}"></td>
+            <td>
+                <span th:each="transcript : ${study.transcriptList != null ? study.transcriptList : 'null'}"
+                      th:utext="'Name: ' + ${transcript.nameTranscript} + '<br>Semester: '+ ${transcript.semester}+'<br>'"></span>
+            </td>
+            <td th:text="${study.resultConduct}"></td>
+            <td th:text="${study.commentOfTeacher}"></td>
+            <td>
+                <a th:href="@{/m-study/showModifyFormStudyRecord(id=${study.id})}" class="btn btn-success">Modify</a>
+                <a th:href="@{/m-study/modify-delete(id=${study.id})}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
         </tbody>
     </table>
 </div>

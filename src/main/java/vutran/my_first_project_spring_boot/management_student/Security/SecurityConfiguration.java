@@ -1,5 +1,6 @@
 package vutran.my_first_project_spring_boot.management_student.Security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -7,6 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import vutran.my_first_project_spring_boot.management_student.Service.UserService;
 
@@ -38,14 +40,14 @@ public class SecurityConfiguration  {
         return daoAuthenticationProvider;
     }
 
-//    @Bean
-//    @Autowired
-//    public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource){
-//        JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
-//        userDetailsManager.setUsersByUsernameQuery("SELECT username, password, enabled FROM user WHERE username = ?");
-//        userDetailsManager.setAuthoritiesByUsernameQuery("SELECT authority.name, users.username FROM authority JOIN users ON users.authority_id = authority.id WHERE users.username = ?");
-//        return userDetailsManager;
-//    }
+    @Bean
+    @Autowired
+    public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource){
+        JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
+        userDetailsManager.setUsersByUsernameQuery("SELECT username, password, enabled FROM user WHERE username = ?");
+        userDetailsManager.setAuthoritiesByUsernameQuery("SELECT authority.name, users.username FROM authority JOIN users ON users.authority_id = authority.id WHERE users.username = ?");
+        return userDetailsManager;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{

@@ -28,7 +28,8 @@
                 <h3>Add Users</h3>
                 <!-- User name -->
                 <div class="form-outline mb-4">
-                    <input type="text" th:field="*{username}" name="username" placeholder="Input Username (*)" id="usernameid"
+                    <input type="text" th:field="*{username}" name="username" placeholder="Input Username (*)"
+                           id="usernameid"
                            class="form-control" required/>
                     <div th:if="${#fields.hasErrors('username')}">
                         <ul>
@@ -40,7 +41,8 @@
 
                 <!-- Password input -->
                 <div class="form-outline mb-4">
-                    <input type="password" th:field="*{password}" name="password" id="password" class="form-control" required/>
+                    <input type="password" th:field="*{password}" name="password" id="password" class="form-control"
+                           required/>
                     <div th:if="${#fields.hasErrors('password')}">
                         <ul>
                             <li th:each="e: ${#fields.hasErrors('password')}" th:text="${e}"></li>
@@ -51,7 +53,8 @@
 
                 <!-- input the correct attribute name of the entity-->
                 <div class="form-outline mb-4">
-                    <input type="text" th:field="*{firstName}" name="firstname" id="firstname" class="form-control" required/>
+                    <input type="text" th:field="*{firstName}" name="firstname" id="firstname" class="form-control"
+                           required/>
                     <div th:if="${#fields.hasErrors('firstName')}">
                         <ul>
                             <li th:each="e: ${#fields.hasErrors('firstName')}" th:text="${e}"></li>
@@ -61,7 +64,8 @@
                 </div>
 
                 <div class="form-outline mb-4">
-                    <input type="text" th:field="*{lastName}" name="lastname" id="lastname" class="form-control" required/>
+                    <input type="text" th:field="*{lastName}" name="lastname" id="lastname" class="form-control"
+                           required/>
                     <div th:if="${#fields.hasErrors('lastName')}">
                         <ul>
                             <li th:each="e: ${#fields.hasErrors('lastName')}" th:text="${e}"></li>
@@ -81,7 +85,8 @@
                 </div>
 
                 <div class="form-outline mb-4">
-                    <input type="text" th:field="*{identity}" name="identity" id="identity" class="form-control" required/>
+                    <input type="text" th:field="*{identity}" name="identity" id="identity" class="form-control"
+                           required/>
                     <div th:if="${#fields.hasErrors('identity')}">
                         <ul>
                             <li th:each="e: ${#fields.hasErrors('identity')}" th:text="${e}"></li>

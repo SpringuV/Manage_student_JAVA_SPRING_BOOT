@@ -5,8 +5,8 @@
     <title>Manager Teacher</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="/resources/static/CSS/main.css" rel="stylesheet">
-
+    <link href="/static/CSS/main.css" rel="stylesheet">
+    <script src="/static/JavaScript/function.js"></script>
     <style>
         table, th, td{
             border: 1px solid black;
@@ -17,66 +17,71 @@
 
 <body>
 <div><h1>Teacher Manage</h1></div>
-    <div class="container">
-        <div class="row">
-            <div id="autoHide">
-                <div th:if="${errorTeacherList}">
-                    <span th:text="${errorTeacherList}" class="alert alert-danger"></span>
-                </div>
-                <div th:if="${Error}">
-                    <span th:text="${Error}" class="alert-danger"></span>
-                </div>
-                <div th:if="${success}">
-                    <span th:text="${success}" class="alert-success"></span>
-                </div>
+<div class="container">
+    <div class="row">
+        <div id="autoHide">
+            <div th:if="${errorTeacherList}">
+                <span th:text="${errorTeacherList}" class="alert alert-danger"></span>
             </div>
-            <table>
-                <th>Teacher Id</th>
-                <th>FirstName</th>
-                <th>LastName</th>
-                <th>Username</th>
-                <th>Address</th>
-                <th>Phone</th>
-                <th>Teaching subject</th>
-                <th>Work at School</th>
-                <th>Class</th>
-                <th>Position</th>
-                <th>Feature</th>
-                <tr th:each="teacher : ${teacherList}">
-                    <td th:text="${teacher.id}"></td>
-                    <td th:text="${teacher.firstName != null ? teacher.firstName : 'null'}"></td>
-                    <td th:text="${teacher.lastName != null ? teacher.lastName : 'null'}"></td>
-                    <td th:text="${teacher.username != null ? teacher.username : 'null'}"></td>
-                    <td th:text="${teacher.address != null ? teacher.address : 'null'}"></td>
-                    <td th:text="${teacher.phoneNumber != null ? teacher.phoneNumber : 'null'}"></td>
-                    <td th:text="${teacher.subject != null ? teacher.subject : 'null'}"></td>
-                    <!--            cach 1:-->
-                    <td th:text="${teacher.school.name} + ' (' +${teacher.school.id}+ ')'"></td>
-                    <!--            cach 2:-->
-                    <!--            <td>-->
-                    <!--                <span th:text="'Name: '+${teacher.school.name}"></span>-->
-                    <!--                <br/>-->
-                    <!--                <span th:text="'Id: ' + ${teacher.school.id}"></span>-->
-                    <!--            </td>-->
-                    <td th:text="${teacher.classesList != null ? teacher.classesList : 'null'}"></td>
-                    <td th:text="${teacher.position != null ? teacher.position : 'null'}"></td>
-                    <td>
-                        <a th:href="@{/m-teacher/showModifyFormTeacher(id=${teacher.id})}" class="btn btn-success">Modify</a>
-                        <a th:href="@{/m-teacher/modify-delete(id=${teacher.id})}" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-            </table>
+            <div th:if="${Error}">
+                <span th:text="${Error}" class="alert-danger"></span>
+            </div>
+            <div th:if="${success}">
+                <span th:text="${success}" class="alert-success"></span>
+            </div>
         </div>
-        <div th:if="${success}">
-            <span th:text="${success}" class="alert alert-danger"></span>
-        </div>
+        <table>
+            <th>Teacher Id</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Username</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Teaching subject</th>
+            <th>Work at School</th>
+            <th>Class</th>
+            <th>Position</th>
+            <th>Feature</th>
+            <tr th:each="teacher : ${teacherList}">
+                <td th:text="${teacher.id}"></td>
+                <td th:text="${teacher.firstName != null ? teacher.firstName : 'null'}"></td>
+                <td th:text="${teacher.lastName != null ? teacher.lastName : 'null'}"></td>
+                <td th:text="${teacher.username != null ? teacher.username : 'null'}"></td>
+                <td th:text="${teacher.address != null ? teacher.address : 'null'}"></td>
+                <td th:text="${teacher.phoneNumber != null ? teacher.phoneNumber : 'null'}"></td>
+                <td>
+                    <span th:if="${teacher.subject != null}"
+                          th:utext="${teacher.subject.nameSubject} +' ('+ ${teacher.subject.id}+')'"></span>
+                    <span th:if="${teacher.subject == null}">--null--</span>
+                </td>
+                <!--            cach 1:-->
+                <td th:text="${teacher.school.name} + ' (' +${teacher.school.id}+ ')'"></td>
+                <!--            cach 2:-->
+                <!--            <td>-->
+                <!--                <span th:text="'Name: '+${teacher.school.name}"></span>-->
+                <!--                <br/>-->
+                <!--                <span th:text="'Id: ' + ${teacher.school.id}"></span>-->
+                <!--            </td>-->
+                <td th:text="${teacher.classesList != null ? teacher.classesList : 'null'}"></td>
+                <td th:text="${teacher.position != null ? teacher.position : 'null'}"></td>
+                <td>
+                    <a th:href="@{/m-teacher/showModifyFormTeacher(id=${teacher.id})}"
+                       class="btn btn-success">Modify</a>
+                    <a th:href="@{/m-teacher/modify-delete(id=${teacher.id})}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div th:if="${success}">
+        <span th:text="${success}" class="alert alert-danger"></span>
+    </div>
+    <div>
         <div>
-            <div>
-                <a class="btn btn-primary" th:href="@{/m-teacher/showFormAddTeacher}">Add Teacher</a>
-                <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
-            </div>
+            <a class="btn btn-primary" th:href="@{/m-teacher/showFormAddTeacher}">Add Teacher</a>
+            <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
         </div>
     </div>
+</div>
 </body>
 <script src="/resources/static/JavaScript/function.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
