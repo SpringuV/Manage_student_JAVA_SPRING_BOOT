@@ -35,10 +35,6 @@ public class Student extends User{
             joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "transcript_id"))
     private Set<Transcript> transcriptSet;
 
-    // mỗi học sinh có 1 thẻ học sinh
-    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
-    private StudentCard studentCard;
-
     // một học sinh có nhiều phiếu điểm
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH})
     private Set<ScoreCard> scoreCardList;
@@ -63,14 +59,13 @@ public class Student extends User{
         super(firstName, lastName, address, phoneNumber, identity, username, password, enabled, email, position, avatar, authority);
     }
 
-    public Student(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Teacher teacher, Classes classes, Parent parent, Set<Subject> subjectList, Set<Transcript> transcriptSet, StudentCard studentCard, Set<ScoreCard> scoreCardList, List<StudyRecord> studyRecordList, School school) {
+    public Student(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Teacher teacher, Classes classes, Parent parent, Set<Subject> subjectList, Set<Transcript> transcriptSet, Set<ScoreCard> scoreCardList, List<StudyRecord> studyRecordList, School school) {
         super(avatar, position, email, enabled, password, username, identity, phoneNumber, address, lastName, firstName);
         this.teacher = teacher;
         this.classes = classes;
         this.parent = parent;
         this.subjectList = subjectList;
         this.transcriptSet = transcriptSet;
-        this.studentCard = studentCard;
         this.scoreCardList = scoreCardList;
         this.studyRecordList = studyRecordList;
         this.school = school;
@@ -116,14 +111,6 @@ public class Student extends User{
         this.transcriptSet = transcriptSet;
     }
 
-    public StudentCard getStudentCard() {
-        return studentCard;
-    }
-
-    public void setStudentCard(StudentCard studentCard) {
-        this.studentCard = studentCard;
-    }
-
     public Set<ScoreCard> getScoreCardList() {
         return scoreCardList;
     }
@@ -146,16 +133,5 @@ public class Student extends User{
 
     public void setSchool(School school) {
         this.school = school;
-    }
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "teacher=" + teacher.getFirstName() +
-                ", classes=" + classes.getName() +
-                ", parent=" + parent.getFirstName() +
-                ", studentCard=" + studentCard.getId() +
-                ", school=" + school.getName() +
-                '}';
     }
 }

@@ -11,9 +11,12 @@
 <body>
 <h1>Modify School</h1>
 <div>
-    <form th:action="@{/api-school/modify-process}" th:object="${school}" method="post">
+    <form th:action="@{/m-school/modify-process}" th:object="${school}" method="post">
         <div th:if="${Error}" class="alert alert-danger">
             <span th:text="${Error}"></span>
+        </div>
+        <div th:if="${success}">
+            <h3>You updated a school "<span th:text="${success}"></span> ",</h3>
         </div>
         <div>
             <label th:field="*{id}">School Id: </label>
@@ -56,8 +59,12 @@
         </div>
         <div>
             <label>School Level: </label>
-            <input type="tel" th:field="*{level}" placeholder="Input level school"
-                   name="schoolLevel">
+            <select th:field="*{level}">
+                <option th:value="None">--Select Level--</option>
+                <option th:value="Primary_School">Primary School</option>
+                <option th:value="Junior_High_School">Junior High School</option>
+                <option th:value="High_School">High School</option>
+            </select>
             <div th:if="${#fields.hasErrors('level')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('level')}" th:text="${error}"></li>
@@ -68,13 +75,10 @@
             <button class="btn btn-primary" type="submit">Modify</button>
         </div>
     </form>
-    <div th:if="${success}">
-        <h3>You updated a school "<span th:text="${success}"></span> ",</h3>
-    </div>
 </div>
 <div>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-    <a class="btn btn-primary" th:href="@{/api-school/showManageSchool}">School List Manage</a>
+    <a class="btn btn-primary" th:href="@{/m-school/showManageSchool}">School List Manage</a>
 </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

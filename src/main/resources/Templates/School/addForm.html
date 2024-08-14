@@ -11,45 +11,53 @@
 <body>
     <h1>Add new School</h1>
     <div>
-        <form th:action="@{/api-school/add-process}" th:object="${addSchool}" method="post">
+        <form th:action="@{/m-school/add-process}" th:object="${school}" method="post">
             <div id="autoHide">
-                <div  th:if="${myError}" class="alert alert-danger">
-                    <span th:text="${myError}"></span>
+                <div  th:if="${Error}" class="alert alert-danger">
+                    <span th:text="${Error}"></span>
+                </div>
+                <div  th:if="${success}" class="alert alert-danger">
+                    <span th:text="${success}"></span>
                 </div>
             </div>
             <div>
                 <label>School Name: </label>
-                <input type="text" th:field="*{schoolName}" placeholder="Input name school" name="schoolname">
-                <div th:if="${#fields.hasErrors('schoolName')}">
+                <input type="text" th:field="*{name}" placeholder="Input name school" name="schoolname">
+                <div th:if="${#fields.hasErrors('name')}">
                     <ul>
-                        <li th:each="e: ${#fields.hasErrors('schoolName')}" th:text="${e}"></li>
+                        <li th:each="error: ${#fields.hasErrors('name')}" th:text="${error}"></li>
                     </ul>
                 </div>
             </div>
             <div>
                 <label>School Address: </label>
-                <input type="text" th:field="*{schoolAddress}" placeholder="Input address school" name="schooladdress">
-                <div th:if="${#fields.hasErrors('schoolAddress')}">
+                <input type="text" th:field="*{address}" placeholder="Input address school" name="schooladdress">
+                <div th:if="${#fields.hasErrors('address')}">
                     <ul>
-                        <li th:each="e: ${#fields.hasErrors('schoolAddress')}" th:text="${e}"></li>
+                        <li th:each="error: ${#fields.hasErrors('address')}" th:text="${error}"></li>
                     </ul>
                 </div>
             </div>
             <div>
                 <label>School Phone: </label>
-                <input type="tel" th:field="*{schoolPhone}" placeholder="Input phone school" name="schoolphone">
-                <div th:if="${#fields.hasErrors('schoolPhone')}">
+                <input type="tel" th:field="*{phone}" placeholder="Input phone school" name="schoolphone">
+                <div th:if="${#fields.hasErrors('phone')}">
                     <ul>
-                        <li th:each="e: ${#fields.hasErrors('schoolPhone')}" th:text="${e}"></li>
+                        <li th:each="error: ${#fields.hasErrors('phone')}" th:text="${error}"></li>
                     </ul>
                 </div>
             </div>
             <div>
                 <label>School Level: </label>
-                <input type="tel" th:field="*{schoolLevel}" placeholder="Input level school" name="schoolLevel">
-                <div th:if="${#fields.hasErrors('schoolLevel')}">
+                <select th:field="*{level}">
+                    <option th:value="None">--Select Level--</option>
+                    <option th:value="Primary_School">Primary School</option>
+                    <option th:value="Junior_High_School">Junior High School</option>
+                    <option th:value="High_School">High School</option>
+                </select>
+                <div th:if="${#fields.hasErrors('level')}">
                     <ul>
-                        <li th:each="e: ${#fields.hasErrors('schoolLevel')}" th:text="${e}"></li>
+                        <li th:each="error: ${#fields.hasErrors('level')}" th:text="${error}"></li>
                     </ul>
                 </div>
             </div>
@@ -57,13 +65,10 @@
                 <button class="btn btn-primary" type="submit">Add</button>
             </div>
         </form>
-        <div th:if="${mySchool}">
-            <h3>You created a new school "<span th:text="${mySchool.getName()}"></span>"</h3>
-        </div>
     </div>
     <div>
         <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-        <a class="btn btn-primary" th:href="@{/api-school/showManageSchool}">School List Manage</a>
+        <a class="btn btn-primary" th:href="@{/m-school/showManageSchool}">School List Manage</a>
     </div>
 </body>
 </html>

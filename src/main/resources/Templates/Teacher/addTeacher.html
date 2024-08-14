@@ -17,7 +17,7 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <form th:action="@{/m-teacher/add-process}" th:object="${teacher}" method="post">
                 <div th:if="${Error}" class="alert alert-danger">
                     <span th:text="${Error}"></span>
@@ -107,23 +107,25 @@
                     </div>
                 </div>
 
-                <div class="form-floating mb-1">
+                <div class="mb-1">
                     <label class="form-label">Work at school: </label>
-                    <select th:field="*{school}" required>
+                    <select id="school_select" th:field="*{school}" required>
                         <option value="">--Select School--</option>
                         <option th:each="school : ${schoolList}" th:value="${school.id}" th:text="${school.name}"></option>
                     </select>
                     <div th:if="${#fields.hasErrors('school')}">
                         <ul>
-                            <li th:each="e: ${#fields.hasErrors('school')}" th:text="${e}"></li>
+                            <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="form-floating mb-1">
-                    <input type="text" th:field="*{subject}" name="subject" placeholder="Input subject id"
-                           id="subject" class="form-control" required/>
-                    <label class="form-label" for="subject">Subject id: </label>
+                    <label class="form-label" for="subject_select">Subject id: </label>
+                    <select name="subject" id="subject_select" th:field="*{subject}" required>
+                        <option value="#">--Select Subject--</option>
+                    </select>
+
                     <div th:if="${#fields.hasErrors('school')}">
                         <ul>
                             <li th:each="error: ${#fields.hasErrors('subject')}" th:text="${error}"></li>
@@ -155,29 +157,13 @@
                 <button class="btn btn-primary py-2" type="submit">Add</button>
             </form>
         </div>
-        <div class="col-lg-6">
-            <h3>List School</h3>
-            <table>
-                <th>Id School</th>
-                <th>School Name</th>
-                <th>School Address</th>
-                <th>School Level</th>
-                <th>School Phone</th>
-                <tr th:each="school : ${schoolList}">
-                    <td th:text="${school.getId()}"></td>
-                    <td th:text="${school.getName()}"></td>
-                    <td th:text="${school.getAddress()}"></td>
-                    <td th:text="${school.getLevel()}"></td>
-                    <td th:text="${school.getPhone()}"></td>
-                </tr>
-            </table>
-        </div>
     </div>
     <div>
         <a class="btn btn-primary" th:href="@{/m-teacher/showManageTeacher}">Return ListTeacher</a>
     </div>
     <p class="mt-5 mb-3 text-body-secondary">© 2017–2024</p>
 </div>
+<script></script>
 <script src="/resources/static/JavaScript/function.js"></script>
 <script src="/docs/5.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
 import vutran.my_first_project_spring_boot.management_student.Dao.UserRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.*;
-import vutran.my_first_project_spring_boot.management_student.Entity.Web.RegisterUser;
 import vutran.my_first_project_spring_boot.management_student.Service.ParentService;
 import vutran.my_first_project_spring_boot.management_student.Service.StudentService;
 import vutran.my_first_project_spring_boot.management_student.Service.TeacherService;

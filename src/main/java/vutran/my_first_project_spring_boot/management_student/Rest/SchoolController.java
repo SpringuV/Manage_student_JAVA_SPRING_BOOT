@@ -13,14 +13,13 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Entity.School;
-import vutran.my_first_project_spring_boot.management_student.Entity.Web.AddSchool;
 import vutran.my_first_project_spring_boot.management_student.Service.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api-school")
+@RequestMapping("/m-school")
 public class SchoolController {
     private SchoolService schoolService;
 
@@ -35,7 +34,7 @@ public class SchoolController {
         List<School> schoolList = schoolService.getAllSchools();
         // check size
         if (schoolList.isEmpty()){
-            model.addAttribute("errorSchoolList", "List School empty");
+            model.addAttribute("Error", "List School empty");
             model.addAttribute("schoolList", new ArrayList<>());
             return "School/indexSchool";
         }
@@ -47,8 +46,8 @@ public class SchoolController {
 
     @GetMapping("/showFormAddSchool")
     public String showFormAddSchool(Model model){
-        AddSchool addSchool = new AddSchool();
-        model.addAttribute("addSchool", addSchool);
+        School addSchool = new School();
+        model.addAttribute("school", addSchool);
         return "School/addForm";
     }
 
@@ -60,40 +59,40 @@ public class SchoolController {
 
     // add new school
     @PostMapping("/add-process")
-    public String processAddSchool(@Valid @ModelAttribute AddSchool addSchool, BindingResult bindingResult, Model model, HttpSession httpSession){
-        String schoolName = addSchool.getSchoolName();
+    public String processAddSchool(@Valid @ModelAttribute School addSchool, BindingResult bindingResult, Model model, HttpSession httpSession){
+        String schoolName = addSchool.getName();
 
         // form validation
         if(bindingResult.hasErrors()){
-            model.addAttribute("myError", "Error");
+            model.addAttribute("Error", "Error");
             return "School/addForm";
         }
 
         // check schoolExisted
         School schoolExisted = schoolService.findBySchoolName(schoolName);
         if(schoolExisted != null){
-            model.addAttribute("addSchool", new AddSchool());
-            model.addAttribute("myError", "School Existed");
+            model.addAttribute("school", new School());
+            model.addAttribute("Error", "School Existed");
             return "School/addForm";
         }
 
         // school doesn't exist
         School school = new School();
-        school.setName(addSchool.getSchoolName());
-        school.setAddress(addSchool.getSchoolAddress());
-        school.setPhone(addSchool.getSchoolPhone());
-        school.setLevel(addSchool.getSchoolLevel());
+        school.setName(addSchool.getName());
+        school.setAddress(addSchool.getAddress());
+        school.setPhone(addSchool.getPhone());
+        school.setLevel(addSchool.getLevel());
         schoolService.addSchool(school);
 
         // notify success
-        model.addAttribute("mySchool", school);
+        model.addAttribute("success","You created new School has School Name: "+ school.getName());
+        model.addAttribute("school", school);
         return "School/addForm";
     }
 
     // modify school
     @GetMapping("/showModifyForm")
     public String showModifyForm(@Valid @ModelAttribute School school, Model model){
-
         School existSchool = schoolService.getSchoolById(school.getId());
         if(existSchool == null){
             model.addAttribute("school", new School());
@@ -142,6 +141,5 @@ public class SchoolController {
             redirectAttributes.addAttribute("Error","Error process delete School, null !!");
             return "redirect:/api-school/showManageSchool";
         }
-
     }
 }

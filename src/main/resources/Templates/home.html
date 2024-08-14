@@ -93,7 +93,7 @@
             <button sec:authorize="hasAnyRole('ADMIN')" class="btn btn-success">Xóa</button>
         </div>
         <div class="mt-1">
-            <a sec:authorize="hasRole('ADMIN')" class="btn btn-primary" th:href="@{/api-school/showManageSchool}">School Manage</a>
+            <a sec:authorize="hasRole('ADMIN')" class="btn btn-primary" th:href="@{/m-school/showManageSchool}">School Manage</a>
         </div>
         <div class="mt-1">
             <a sec:authorize="hasAnyRole('MANAGER','ADMIN')" class="btn btn-primary" th:href="@{/m-teacher/showManageTeacher}">Teacher Manage</a>

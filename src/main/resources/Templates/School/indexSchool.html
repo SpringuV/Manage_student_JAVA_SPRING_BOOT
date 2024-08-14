@@ -19,9 +19,6 @@
     <div><h1>School Manage</h1></div>
     <div>
         <div id="autoHide">
-            <div th:if="${errorSchoolList}">
-                <span th:text="${errorSchoolList}" class="alert alert-danger"></span>
-            </div>
             <div th:if="${Error}">
                 <span th:text="${Error}" class="alert alert-danger"></span>
             </div>
@@ -43,8 +40,8 @@
                 <td th:text="${school.phone}"></td>
                 <td th:text="${school.level}"></td>
                 <td>
-                    <a th:href="@{/api-school/showModifyForm(id=${school.id})}" class="btn btn-success">Modify</a>
-                    <a th:href="@{/api-school/modify-delete(id=${school.id})}" class="btn btn-danger">Delete</a>
+                    <a th:href="@{/m-school/showModifyForm(id=${school.id})}" class="btn btn-success">Modify</a>
+                    <a th:href="@{/m-school/modify-delete(id=${school.id})}" class="btn btn-danger">Delete</a>
                     <!--                    <form th:action="@{/api-school/modify-delete}" th:object="${school}" method="post">-->
                     <!--                        <input type="hidden" th:value="${school.id}">-->
                     <!--                        <button type="submit" class="btn btn-danger">Delete</button>-->
@@ -57,7 +54,7 @@
         <span th:text="${success}" class="alert alert-danger"></span>
     </div>
     <div>
-        <a class="btn btn-primary" th:href="@{/api-school/showFormAddSchool}">Add school</a>
+        <a class="btn btn-primary" th:href="@{/m-school/showFormAddSchool}">Add school</a>
         <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
     </div>
 </body>

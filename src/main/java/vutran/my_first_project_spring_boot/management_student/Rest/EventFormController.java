@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Authority;
 import vutran.my_first_project_spring_boot.management_student.Entity.User;
-import vutran.my_first_project_spring_boot.management_student.Entity.Web.RegisterUser;
 import vutran.my_first_project_spring_boot.management_student.Service.UserService;
 
 import javax.management.relation.Role;
@@ -44,7 +43,7 @@ public class EventFormController {
         // Có thể kiểm tra xem tham số expired có tồn tại hay không
 //        if (expired != null) {
 //            // Xử lý logic nếu cần khi tham số expired tồn tại
-//        }z``
+//        }
         return "login";
     }
 
@@ -57,7 +56,7 @@ public class EventFormController {
     // register
     @GetMapping("/register/showRegisterForm")
     public String showRegister(Model model){
-        RegisterUser registerUser = new RegisterUser();
+        User registerUser = new User();
         model.addAttribute("registerUser", registerUser);
         return "Register/formRegister";
     }
@@ -69,10 +68,10 @@ public class EventFormController {
     }
 
     @PostMapping("/register/process")
-    public String process(@Valid @ModelAttribute RegisterUser registerUser, BindingResult bindingResult, Model model, HttpSession httpSession){
+    public String process(@ModelAttribute User user, BindingResult bindingResult, Model model, HttpSession httpSession){
     //@Valid: check chuan 100%, binding result trả về kết quả - thông báo, session lưu lại thông tin khi nhap sai...
         // validation user ?
-        String username = registerUser.getUsername();
+        String username = user.getUsername();
         // có lỗi thì redirect to register/form
         if(bindingResult.hasErrors()){
             return "Register/formRegister";
@@ -80,7 +79,7 @@ public class EventFormController {
         // check user existed
         User userCheck = userService.findUserByName(username);
         if(userCheck != null) {
-            model.addAttribute("registerUser", new RegisterUser());
+            model.addAttribute("registerUser", new User());
             model.addAttribute("myError", "Account existed");
             return "Register/formRegister";
         }
@@ -89,14 +88,17 @@ public class EventFormController {
         // encode password by bcrypt
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         User userNew = new User();
-        userNew.setUsername(registerUser.getUsername());
-        userNew.setPassword(bCryptPasswordEncoder.encode(registerUser.getPassword()));
+        userNew.setUsername(user.getUsername());
+        userNew.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userNew.setEnabled(true);
-        userNew.setIdentity(registerUser.getIdentity());
-        userNew.setLastName(registerUser.getLastName());
-        userNew.setFirstName(registerUser.getFirstName());
-        userNew.setEmail(registerUser.getEmail());
-        userNew.setPosition(registerUser.getPosition());
+        userNew.setIdentity(user.getIdentity());
+        userNew.setLastName(user.getLastName());
+        userNew.setFirstName(user.getFirstName());
+        userNew.setEmail(user.getEmail());
+        userNew.setPosition(user.getPosition());
+        userNew.setAvatar(user.getAvatar());
+        userNew.setAddress(user.getAddress());
+        userNew.setPhoneNumber(user.getPhoneNumber());
 
         // create authority
         Authority defaultRole = new Authority();
