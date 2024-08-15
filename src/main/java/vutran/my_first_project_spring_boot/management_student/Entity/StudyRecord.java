@@ -1,6 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -15,10 +16,12 @@ public class StudyRecord {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.PERSIST})
     @JoinColumn(name = "sr_student_id")
+    @JsonManagedReference
     private Student student;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "school_id")
+    @JsonManagedReference
     private School school;
 
     @Column(name = "school_year")
@@ -34,6 +37,7 @@ public class StudyRecord {
     private String resultConduct;
     @Column(name = "sr_comment_teacher")
     private String commentOfTeacher;
+
     public StudyRecord() {
     }
 

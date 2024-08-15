@@ -1,6 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class School {
     private String level;
 
     @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
+    @JsonBackReference
     private Set<NoteBook> noteBookSet;
 
     // một trường có nhiều lớp
@@ -35,12 +37,12 @@ public class School {
     private List<Classes> classesList;
 
     // một trường làm việc với nhiều giáo viên
-    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JsonBackReference
     private List<Teacher> teacherList;
 
     // một trường có nhiều học sinh, nhiều học sinh học ở 1 trường
-    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JsonBackReference
     private List<Student> studentList;
 
@@ -51,18 +53,25 @@ public class School {
     private List<Subject> subjectList;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "school")
+    @JsonBackReference
     private List<Transcript> transcriptList;
 
     @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<StudyRecord> studyRecordList;
 
     @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<ScoreCard> scoreCardList;
+
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<Parent> parentList;
 
     public School() {
     }
 
-    public School(String name, String address, String phone, String level, List<Classes> classesList, List<Teacher> teacherList, List<Student> studentList, List<Subject> subjectList, List<Transcript> transcriptList, List<StudyRecord> studyRecordList, List<ScoreCard> scoreCardList) {
+    public School(String name, String address, String phone, String level, List<Classes> classesList, List<Teacher> teacherList, List<Student> studentList, List<Subject> subjectList, List<Transcript> transcriptList, List<StudyRecord> studyRecordList, List<ScoreCard> scoreCardList, List<Parent> parentList) {
         this.name = name;
         this.address = address;
         this.phone = phone;
@@ -74,6 +83,7 @@ public class School {
         this.transcriptList = transcriptList;
         this.studyRecordList = studyRecordList;
         this.scoreCardList = scoreCardList;
+        this.parentList = parentList;
     }
 
     public School(String name, String address, String phone, String level) {
@@ -141,6 +151,14 @@ public class School {
 
     public String getAddress() {
         return address;
+    }
+
+    public List<Parent> getParentList() {
+        return parentList;
+    }
+
+    public void setParentList(List<Parent> parentList) {
+        this.parentList = parentList;
     }
 
     public void setAddress(String address) {

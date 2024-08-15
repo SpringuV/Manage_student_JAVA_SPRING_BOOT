@@ -47,17 +47,6 @@
             </div>
         </div>
         <div>
-            <label>Select Teacher: </label>
-            <select th:field="*{teacher}" id="teacher_select">
-                <option th:value="0">--Select Teacher--</option>
-            </select>
-            <div th:if="${#fields.hasErrors('teacher')}">
-                <ul>
-                    <li th:each="error: ${#fields.hasErrors('teacher')}" th:text="${error}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
             <label>Classs Grade: </label>
             <input type="tel" th:field="*{grade}" placeholder="Input grade class"
                    name="grade">

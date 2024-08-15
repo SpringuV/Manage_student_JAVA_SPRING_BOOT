@@ -1,5 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -12,11 +14,13 @@ public class NoteBook {
     @Column(name = "note_id")
     private int id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "school_id")
+    @JsonManagedReference
     private School school;
 
     @OneToMany(mappedBy = "noteBook", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<NoteBookDetail> noteBookDetailList;
 
     // một sổ đầu bài tương ứng 1 lớp

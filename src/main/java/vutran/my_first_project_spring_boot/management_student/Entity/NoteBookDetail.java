@@ -1,5 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.sql.Date;
@@ -13,10 +15,12 @@ public class NoteBookDetail {
     private int id;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JsonManagedReference
     @JoinColumn( name = "notebook_id")
     private NoteBook noteBook;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JsonManagedReference
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
@@ -31,6 +35,7 @@ public class NoteBookDetail {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "subject_id")
+    @JsonManagedReference
     private Subject subject;
 
     @Column(name = "note_teachcomment")

@@ -45,12 +45,6 @@ public class ClassController {
         }
     }
 
-    @GetMapping("/getListTeacherBySchool/{schoolId}")
-    @ResponseBody
-    public List<Teacher> getListTeacher(@RequestParam("schoolId") int school_id){
-        return teacherService.getListTeacherByIdSchool(school_id);
-    }
-
     @GetMapping("/showFormAddClass")
     public String addClass(Model model){
         model.addAttribute("classes", new Classes());
@@ -63,7 +57,7 @@ public class ClassController {
     public String addClass(@ModelAttribute Classes classes, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             model.addAttribute("classes", new Classes());
-            model.addAttribute("Error", "Error, bindingResult");
+            model.addAttribute("Error", "Error, bindingResult add process "+bindingResult.getFieldError().toString());
             return "School/Classes/addFormClass";
         }
         // check class
@@ -123,6 +117,7 @@ public class ClassController {
         if (classExist == null) {
             redirectAttributes.addFlashAttribute("Error", "Error, Not found Class !!!");
         } else {
+            classService.deleteClassById(classExist.getId());
             redirectAttributes.addFlashAttribute("success", "You deleted success classes has id: "+classExist.getId() + "belong school "+ classExist.getSchool().getName());
         }
         return "redirect:/m-class/showManageClass";

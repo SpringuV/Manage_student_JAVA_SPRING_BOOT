@@ -93,7 +93,7 @@ public class SecurityConfiguration  {
                         .requestMatchers(HttpMethod.POST, "/api-score-card/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api-score-card/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api-score-card/**").hasRole("ADMIN")
-                        // studentcard
+                        // student card
                         .requestMatchers(HttpMethod.GET, "/api-student-card/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api-student-card/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api-student-card/**").hasRole("ADMIN")

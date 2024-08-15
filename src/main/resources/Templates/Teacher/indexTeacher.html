@@ -62,7 +62,10 @@
                 <!--                <br/>-->
                 <!--                <span th:text="'Id: ' + ${teacher.school.id}"></span>-->
                 <!--            </td>-->
-                <td th:text="${teacher.classesList != null ? teacher.classesList : 'null'}"></td>
+                <td>
+                    <span th:if="${teacher.classes != null}" th:text="${teacher.classes.name}"></span>
+                    <span th:if="${teacher.classes == null}">--null--</span>
+                </td>
                 <td th:text="${teacher.position != null ? teacher.position : 'null'}"></td>
                 <td>
                     <a th:href="@{/m-teacher/showModifyFormTeacher(id=${teacher.id})}"

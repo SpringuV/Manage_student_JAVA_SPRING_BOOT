@@ -16,7 +16,7 @@
             <span th:text="${Error}"></span>
         </div>
         <div>
-            <label th:field="*{id}">Teacher Id: </label>
+            <label>Teacher Id: <span th:text="*{id}"></span></label>
             <input type="hidden" th:field="*{id}" name="teacherid">
             <div th:if="${#fields.hasErrors('id')}">
                 <ul>
@@ -80,6 +80,7 @@
                 <option th:value="0">--Select School--</option>
                 <option th:each="school : ${schoolList}" th:value="${school.id}" th:text="${school.name}"></option>
             </select>
+            (<label th:text="*{school.name}"></label>)
             <div th:if="${#fields.hasErrors('school')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error"></li>
@@ -87,13 +88,26 @@
             </div>
         </div>
         <div class="mb-1">
-            <label class="form-label" for="subject_select">Subject id: </label>
-            <select th:field="*{subject}" id="subject_select">
-                <option th:value="0">--Select Subject</option>
+            <label class="form-label" for="subject_select">Subject Select: </label>
+            <select name="subject" id="subject_select" th:field="*{subject}" required>
+                <option th:value="0">--Select Subject--</option>
             </select>
-            <div th:if="${#fields.hasErrors('school')}">
+            (<label th:text="*{subject.nameSubject}"></label>)
+            <div th:if="${#fields.hasErrors('subject')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('subject')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="mb-1">
+            <label class="form-label" for="class_select">Select Class: </label>
+            <select name="classes" id="class_select" th:field="*{classes}" required>
+                <option th:value="0">--Select Class--</option>
+            </select>
+            (<label th:text="*{classes.name}"></label>)
+            <div th:if="${#fields.hasErrors('classes')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('classes')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>
@@ -112,32 +126,63 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function(){
-        const selectSchool = document.getElementById('school_select');
-        const selectSubject = document.getElementById('subject_select');
-        selectSchool.addEventListener('change', function(){
-            const schoolId = selectSchool.value;
+        const schoolSelect = document.getElementById('school_select');
+        const subjectSelect = document.getElementById('subject_select');
+        const classSelect = document.getElementById('class_select');
+
+        function loadSubjectAndClass(schoolId){
             if(schoolId){
                 fetch(`/m-teacher/getSubjectBySchool/${schoolId}`)
                 .then(response => response.json())
-                // take subject
-                .then(subjects =>{
-                    // clear previous subject
-                    selectSubject.innerHTML = '<option th:value="0">--Select Subject--</option>';
+                .then(subjects => {
+                    // clear previous subjects
+                    subjectSelect.innerHTML = '<option value="0">--Select Subject--</option>';
 
-                    // populate new subjects
-                    subjects.array.forEach(subject => {
+                    // Populate new subjects
+                    subjects.forEach(subject => {
                         const option = document.createElement('option');
                         option.value = subject.id;
                         option.textContent = subject.nameSubject;
-                        selectSubject.appendChild(option);
+                        subjectSelect.appendChild(option);
                     });
                 })
-                .catch(error => console.error('Error fetching subjects', error));
+                .catch(error => console.error('Error fetching Subject:', error));
+
+                // fetch class
+                fetch(`/m-teacher/getClassBySchoolId/${schoolId}`)
+                .then(response => response.json())
+                .then(classes => {
+                    // clear previous class
+                    classSelect.innerHTML = '<option value="0">--Select Class--</option>';
+
+                    // Populate new subjects
+                    classes.forEach(classItem => {
+                        const option = document.createElement('option');
+                        option.value = classItem.id;
+                        option.textContent = classItem.name;
+                        classSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching Class:', error));
             } else {
-                // clear subject if no school selected
-                selectSubject.innerHTML = '<option th:value="0">--Select Subject--</option>';
+                // Clear subjects if no school is selected
+                subjectSelect.innerHTML = '<option value="0">--Select Subject--</option>';
+                // Clear subjects if no school is selected
+                classSelect.innerHTML = '<option value="0">--Select Class--</option>';
             }
+        }
+
+        // event listener for school selection change
+        schoolSelect.addEventListener('change', function(){
+            const schoolId = schoolSelect.value;
+            loadSubjectAndClass(schoolId);
         });
+
+        // automatically load subject and classes if school is already selected
+        const initialSchoolId = schoolSelect.value;
+        if(initialSchoolId){
+            loadSubjectAndClass(initialSchoolId);
+        }
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

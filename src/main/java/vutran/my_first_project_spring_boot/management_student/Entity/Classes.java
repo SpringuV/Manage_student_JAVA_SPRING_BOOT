@@ -1,6 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -20,19 +21,20 @@ public class Classes {
     @Column(name = "class_grade")
     private String grade;
 
-    @OneToOne
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+    @OneToMany(mappedBy = "classes", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JsonBackReference
+    private List<Teacher> teacherList;
 
-    @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonBackReference
     private List<Student> studentList;
 
     @OneToOne(mappedBy = "classes", cascade = CascadeType.ALL)
+    @JsonIgnore
     private NoteBook noteBook;
 
     // nhiều lớp chỉ được một trường quản lý
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "school_id")
     @JsonManagedReference
     private School school;
@@ -40,11 +42,12 @@ public class Classes {
     public Classes() {
     }
 
-    public Classes(String name, String grade, NoteBook noteBook, School school) {
+    public Classes(String name, String grade, NoteBook noteBook, School school, List<Teacher> teacherList) {
         this.name = name;
         this.grade = grade;
         this.noteBook = noteBook;
         this.school = school;
+        this.teacherList =teacherList;
     }
 
     public int getId() {
@@ -95,22 +98,11 @@ public class Classes {
         this.school = school;
     }
 
-    @Override
-    public String toString() {
-        return "Classes{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", grade='" + grade + '\'' +
-                ", noteBook=" + (noteBook != null ? noteBook.toString() : "null" )+
-                ", school=" + (school != null ? school.toString() : "null") +
-                '}';
+    public List<Teacher> getTeacherList() {
+        return teacherList;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setTeacherList(List<Teacher> teacherList) {
+        this.teacherList = teacherList;
     }
 }

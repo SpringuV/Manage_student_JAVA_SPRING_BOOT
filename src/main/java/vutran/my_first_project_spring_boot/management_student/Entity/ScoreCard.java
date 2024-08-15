@@ -1,5 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.sql.Date;
@@ -17,10 +19,12 @@ public class ScoreCard {
     // một học sinh có nhiều phiếu điểm
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "student_id")
+    @JsonManagedReference
     private Student student;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "sc_school_id")
+    @JsonManagedReference
     private School school;
 
     @Column(name = "cscore_dexam")
@@ -31,6 +35,7 @@ public class ScoreCard {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
     @JoinColumn(name = "cs_subject_id")
+    @JsonManagedReference
     private Subject subject;
 
     @Column(name = "cs_school_year")

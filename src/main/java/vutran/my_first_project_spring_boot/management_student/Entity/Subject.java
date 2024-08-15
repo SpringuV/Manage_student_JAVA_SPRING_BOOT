@@ -1,6 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -21,6 +22,7 @@ public class Subject {
     private Set<School> schoolList;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonManagedReference
     @JoinTable(name = "subject_transcript",
             joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "transcript_id")
     )
@@ -33,12 +35,16 @@ public class Subject {
     private Set<Student> studentList;
 
     @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
+    @JsonBackReference
     private Set<ScoreCard> scoreCard;
 
     // một môn có nhiều tiết dạy trong notebook
-    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "subject", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JsonBackReference
     private Set<NoteBookDetail> noteBookDetailList;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "subject")
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, mappedBy = "subject")
+    @JsonBackReference
     private Set<Teacher> teacherSet;
     
     public Subject() {

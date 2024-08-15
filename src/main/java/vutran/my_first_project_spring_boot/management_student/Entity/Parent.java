@@ -1,5 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.sql.Blob;
@@ -8,11 +10,12 @@ import java.util.Collection;
 @Entity
 public class Parent extends User{
 
-    @OneToOne(mappedBy = "parent", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "parent", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST})
     private Student student;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH})
     @JoinColumn(name = "p_school_id")
+    @JsonManagedReference
     private School school;
     public Parent() {
     }

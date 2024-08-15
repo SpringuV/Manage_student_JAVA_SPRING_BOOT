@@ -11,10 +11,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
-import vutran.my_first_project_spring_boot.management_student.Entity.Authority;
-import vutran.my_first_project_spring_boot.management_student.Entity.School;
-import vutran.my_first_project_spring_boot.management_student.Entity.Subject;
-import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
+import vutran.my_first_project_spring_boot.management_student.Entity.*;
+import vutran.my_first_project_spring_boot.management_student.Service.ClassService;
 import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
 import vutran.my_first_project_spring_boot.management_student.Service.SubjectService;
 import vutran.my_first_project_spring_boot.management_student.Service.TeacherService;
@@ -29,13 +27,15 @@ public class TeacherController {
     private SchoolService schoolService;
     private AuthorityRepository authorityRepository;
     private SubjectService subjectService;
+    private ClassService classService;
 
     @Autowired
-    public TeacherController(TeacherService teacherService, SchoolService schoolService, AuthorityRepository authorityRepository, SubjectService subjectService) {
+    public TeacherController(TeacherService teacherService, SchoolService schoolService, AuthorityRepository authorityRepository, SubjectService subjectService, ClassService classService) {
         this.teacherService = teacherService;
         this.schoolService = schoolService;
         this.authorityRepository = authorityRepository;
         this.subjectService = subjectService;
+        this.classService = classService;
     }
 
     @GetMapping("/getSubjectBySchool/{schoolId}")
@@ -44,17 +44,25 @@ public class TeacherController {
         return subjectService.getListSubjectOfSchoolId(schoolId);
     }
 
+    @GetMapping("/getClassBySchoolId/{schoolId}")
+    @ResponseBody
+    public List<Classes> returnListClass(@PathVariable int schoolId){
+        return classService.getListClassByIdSchool(schoolId);
+    }
+
     @GetMapping("/showManageTeacher")
     public String showTeacherList(Model model){
         // get list teacher from database
         Set<Teacher> teacherList = teacherService.getListTeacherByPosition();
 
         if(teacherList.isEmpty()){
+            model.addAttribute("schoolList", schoolService.getAllSchools());
             model.addAttribute("errorTeacherList", "Not found teacher !!");
             model.addAttribute("teacherList", new HashSet<>());
             return "Teacher/indexTeacher";
         }
         // forward to teacher form
+        model.addAttribute("schoolList", schoolService.getAllSchools());
         model.addAttribute("teacherList", teacherList);
         return "Teacher/indexTeacher";
     }
@@ -65,10 +73,11 @@ public class TeacherController {
 
         if(teacherExist == null){
             model.addAttribute("teacher", new Teacher());
+            model.addAttribute("schoolList", schoolService.getAllSchools());
             model.addAttribute("Error", "Not found Teacher have id: "+teacher.getId());
             return "Teacher/modifyFormTeacher";
         }
-
+        model.addAttribute("schoolList", schoolService.getAllSchools());
         model.addAttribute("teacher", teacherExist);
         return "Teacher/modifyFormTeacher";
     }
@@ -90,6 +99,7 @@ public class TeacherController {
         Teacher existTeacher = teacherService.getTeacherById(teacher.getId());
         if(existTeacher != null){
             existTeacher.setEmail(teacher.getEmail());
+            existTeacher.setClasses(teacher.getClasses());
             existTeacher.setSchool(teacher.getSchool());
             existTeacher.setAddress(teacher.getAddress());
             existTeacher.setLastName(teacher.getLastName());
@@ -106,14 +116,7 @@ public class TeacherController {
             return "Teacher/modifyFormTeacher";
         }
     }
-
-    // New method to get school name by id
-    @GetMapping("/getSchoolName/{id}")
-    @ResponseBody
-    public School getSchoolName(@PathVariable("id") int id) {
-        return schoolService.getSchoolById(id);
-    }
-
+    
     // show form add teacher
     @GetMapping("showFormAddTeacher")
     public  String showForm(Model model){
@@ -152,10 +155,12 @@ public class TeacherController {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         newTeacher.setPassword(bCryptPasswordEncoder.encode(teacher.getPassword()));
         newTeacher.setEnabled(true);
+        newTeacher.setClasses(teacher.getClasses());
         newTeacher.setFirstName(teacher.getFirstName());
         newTeacher.setLastName(teacher.getLastName());
         newTeacher.setIdentity(teacher.getIdentity());
         newTeacher.setEmail(teacher.getEmail());
+        newTeacher.setAvatar(teacher.getAvatar());
         newTeacher.setPosition("Teacher");
         newTeacher.setSchool(teacher.getSchool());
         newTeacher.setPhoneNumber(teacher.getPhoneNumber());

@@ -112,14 +112,27 @@
                 </div>
 
                 <div class="mb-1">
-                    <label class="form-label" for="subject_select">Subject id: </label>
+                    <label class="form-label" for="subject_select">Subject Select: </label>
                     <select name="subject" id="subject_select" th:field="*{subject}" required>
                         <option th:value="0">--Select Subject--</option>
                     </select>
 
-                    <div th:if="${#fields.hasErrors('school')}">
+                    <div th:if="${#fields.hasErrors('subject')}">
                         <ul>
                             <li th:each="error: ${#fields.hasErrors('subject')}" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mb-1">
+                    <label class="form-label" for="class_select">Class Select: </label>
+                    <select name="classes" id="class_select" th:field="*{classes}" required>
+                        <option th:value="0">--Select Class--</option>
+                    </select>
+
+                    <div th:if="${#fields.hasErrors('classes')}">
+                        <ul>
+                            <li th:each="error: ${#fields.hasErrors('classes')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -158,14 +171,15 @@
     document.addEventListener('DOMContentLoaded', function(){
         const schoolSelect = document.getElementById('school_select');
         const subjectSelect = document.getElementById('subject_select');
-        schoolSelect.addEventListener('change', function(){
-            const schoolId = schoolSelect.value;
+        const classSelect = document.getElementById('class_select');
+
+        function loadSubjectAndClass(schoolId){
             if(schoolId){
                 fetch(`/m-teacher/getSubjectBySchool/${schoolId}`)
                 .then(response => response.json())
                 .then(subjects => {
                     // clear previous subjects
-                    subjectSelect.innerHTML = '<option th:value="0">--Select Subject--</option>';
+                    subjectSelect.innerHTML = '<option value="0">--Select Subject--</option>';
 
                     // Populate new subjects
                     subjects.forEach(subject => {
@@ -176,11 +190,42 @@
                     });
                 })
                 .catch(error => console.error('Error fetching Subject:', error));
+
+                // fetch class
+                fetch(`/m-teacher/getClassBySchoolId/${schoolId}`)
+                .then(response => response.json())
+                .then(classes => {
+                    // clear previous class
+                    classSelect.innerHTML = '<option value="0">--Select Class--</option>';
+
+                    // Populate new subjects
+                    classes.forEach(classItem => {
+                        const option = document.createElement('option');
+                        option.value = classItem.id;
+                        option.textContent = classItem.name;
+                        classSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching Class:', error));
             } else {
                 // Clear subjects if no school is selected
-                subjectSelect.innerHTML = '<option value="#">--Select Subject--</option>';
+                subjectSelect.innerHTML = '<option value="0">--Select Subject--</option>';
+                // Clear subjects if no school is selected
+                classSelect.innerHTML = '<option value="0">--Select Class--</option>';
             }
+        }
+
+        // event listener for school selection change
+        schoolSelect.addEventListener('change', function(){
+            const schoolId = schoolSelect.value;
+            loadSubjectAndClass(schoolId);
         });
+
+        // automatically load subject and classes if school is already selected
+        const initialSchoolId = schoolSelect.value;
+        if(initialSchoolId){
+            loadSubjectAndClass(initialSchoolId);
+        }
     });
 </script>
 <script src="/resources/static/JavaScript/function.js"></script>

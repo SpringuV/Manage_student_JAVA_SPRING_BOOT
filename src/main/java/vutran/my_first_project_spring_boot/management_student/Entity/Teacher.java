@@ -15,10 +15,13 @@ public class Teacher extends User{
     @JsonBackReference // đảm bảo không có chu kỳ lặp giữa các đối tượng
     private Set<Student> studentList;
 
-    @OneToOne(mappedBy = "teacher")
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JsonManagedReference
+    @JoinColumn(name = "class_id")
     private Classes classes;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
+    @JsonManagedReference
     @JoinColumn(name = "subject_id")
     private Subject subject;
 
@@ -28,7 +31,8 @@ public class Teacher extends User{
     @JsonManagedReference
     private School school;
 
-    @OneToMany (mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany (mappedBy = "teacher", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<NoteBookDetail> noteBookDetailList;
 
     public Teacher() {
