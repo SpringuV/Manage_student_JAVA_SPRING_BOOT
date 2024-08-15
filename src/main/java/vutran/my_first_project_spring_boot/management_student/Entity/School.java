@@ -27,45 +27,47 @@ public class School {
     @Column(name = "school_level")
     private String level;
 
-    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @OneToMany(fetch =FetchType.LAZY,mappedBy = "school", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<NoteBook> noteBookSet;
 
     // một trường có nhiều lớp
-    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonBackReference // đảm bảo không có chu kì lặp giữa các đối tượng
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference // đảm bảo không có chu kì lặp giữa các đối tượng
     private List<Classes> classesList;
 
     // một trường làm việc với nhiều giáo viên
-    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JsonBackReference
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Teacher> teacherList;
 
+    // không sử dụng orphanremoval =true đối với entity là con người. Ví dụ: xóa trường thì người vẫn còn
+
     // một trường có nhiều học sinh, nhiều học sinh học ở 1 trường
-    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JsonBackReference
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Student> studentList;
 
     // một trường dạy nhiều môn học, nhiều môn học cũng được dạy nhiều ở nhiều trường
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(name = "school_subject", joinColumns = @JoinColumn(name ="school_id"), inverseJoinColumns = @JoinColumn(name ="subject_id"))
     @JsonBackReference
     private List<Subject> subjectList;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "school")
-    @JsonBackReference
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "school", orphanRemoval = true)
+    @JsonManagedReference
     private List<Transcript> transcriptList;
 
-    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "school", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<StudyRecord> studyRecordList;
 
-    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "school", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<ScoreCard> scoreCardList;
 
-    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "school", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Parent> parentList;
 
     public School() {

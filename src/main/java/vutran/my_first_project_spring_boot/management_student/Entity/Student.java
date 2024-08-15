@@ -14,45 +14,45 @@ public class Student extends User{
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "teacher_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Teacher teacher;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "class_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Classes classes;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "parent_id")
     private Parent parent;
 
     // Một học sinh học nhiều môn học, một môn học được học bởi nhiều học sinh
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "student_subject",
             joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
     @JsonManagedReference
     private Set<Subject> subjectList;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "transcript_student",
             joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "transcript_id"))
     @JsonManagedReference
     private Set<Transcript> transcriptSet;
 
     // một học sinh có nhiều phiếu điểm
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    @JsonBackReference
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<ScoreCard> scoreCardList;
 
     // một học sinh có 1 học bạ
-    @OneToMany (mappedBy = "student", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @OneToMany (fetch = FetchType.LAZY,mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<StudyRecord> studyRecordList;
 
     // Nhiều học sinh chỉ học ở một trường
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "school_id")
-    @JsonManagedReference
+    @JsonBackReference
     private School school;
 
     public Student() {

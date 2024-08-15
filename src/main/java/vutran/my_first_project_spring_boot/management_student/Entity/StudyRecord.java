@@ -16,19 +16,19 @@ public class StudyRecord {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.PERSIST})
     @JoinColumn(name = "sr_student_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Student student;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "school_id")
-    @JsonManagedReference
+    @JsonBackReference
     private School school;
 
     @Column(name = "school_year")
     private String schoolYear;
 
     // một học bạ có nhiều bảng điểm;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(name = "transcript_records", joinColumns = @JoinColumn(name = "study_record_id"), inverseJoinColumns = @JoinColumn(name = "transcript_id"))
     @JsonBackReference
     private List<Transcript> transcriptList;

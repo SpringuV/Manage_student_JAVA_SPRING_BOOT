@@ -125,63 +125,62 @@
 </div>
 </body>
 <script>
-    document.addEventListener('DOMContentLoaded', function(){
+    document.addEventListener('DOMContentLoaded', function() {
         const schoolSelect = document.getElementById('school_select');
         const subjectSelect = document.getElementById('subject_select');
         const classSelect = document.getElementById('class_select');
 
-        function loadSubjectAndClass(schoolId){
-            if(schoolId){
+        function loadSubjectsAndClasses(schoolId) {
+            if (schoolId) {
                 fetch(`/m-teacher/getSubjectBySchool/${schoolId}`)
-                .then(response => response.json())
-                .then(subjects => {
-                    // clear previous subjects
-                    subjectSelect.innerHTML = '<option value="0">--Select Subject--</option>';
+                    .then(response => response.json())
+                    .then(subjects => {
+                        // clear previous subjects
+                        subjectSelect.innerHTML = '<option value="0">--Select Subject--</option>';
 
-                    // Populate new subjects
-                    subjects.forEach(subject => {
-                        const option = document.createElement('option');
-                        option.value = subject.id;
-                        option.textContent = subject.nameSubject;
-                        subjectSelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error fetching Subject:', error));
+                        // Populate new subjects
+                        subjects.forEach(subject => {
+                            const option = document.createElement('option');
+                            option.value = subject.id;
+                            option.textContent = subject.nameSubject;
+                            subjectSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching Subject:', error));
 
-                // fetch class
+                // fetch classes
                 fetch(`/m-teacher/getClassBySchoolId/${schoolId}`)
-                .then(response => response.json())
-                .then(classes => {
-                    // clear previous class
-                    classSelect.innerHTML = '<option value="0">--Select Class--</option>';
+                    .then(response => response.json())
+                    .then(classes => {
+                        // clear previous classes
+                        classSelect.innerHTML = '<option value="0">--Select Class--</option>';
 
-                    // Populate new subjects
-                    classes.forEach(classItem => {
-                        const option = document.createElement('option');
-                        option.value = classItem.id;
-                        option.textContent = classItem.name;
-                        classSelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error fetching Class:', error));
+                        // Populate new class
+                        classes.forEach(classItem => {
+                            const option = document.createElement('option');
+                            option.value = classItem.id;
+                            option.textContent = classItem.name;
+                            classSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching Class:', error));
             } else {
-                // Clear subjects if no school is selected
+                // Clear subjects and classes if no school is selected
                 subjectSelect.innerHTML = '<option value="0">--Select Subject--</option>';
-                // Clear subjects if no school is selected
                 classSelect.innerHTML = '<option value="0">--Select Class--</option>';
             }
         }
 
-        // event listener for school selection change
-        schoolSelect.addEventListener('change', function(){
+        // Event listener for school selection change
+        schoolSelect.addEventListener('change', function() {
             const schoolId = schoolSelect.value;
-            loadSubjectAndClass(schoolId);
+            loadSubjectsAndClasses(schoolId);
         });
 
-        // automatically load subject and classes if school is already selected
+        // Automatically load subjects and classes if school is already selected
         const initialSchoolId = schoolSelect.value;
-        if(initialSchoolId){
-            loadSubjectAndClass(initialSchoolId);
+        if (initialSchoolId) {
+            loadSubjectsAndClasses(initialSchoolId);
         }
     });
 </script>

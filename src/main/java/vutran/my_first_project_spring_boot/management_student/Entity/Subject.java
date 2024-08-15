@@ -16,43 +16,47 @@ public class Subject {
     @Column(name = "subject_name")
     private String nameSubject;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "school_subject", joinColumns = @JoinColumn(name ="subject_id"), inverseJoinColumns = @JoinColumn(name ="school_id"))
     @JsonBackReference
     private Set<School> schoolList;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     @JoinTable(name = "subject_transcript",
             joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "transcript_id")
     )
     private Set<Transcript> transcriptList;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "student_subject",
             joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
     @JsonBackReference
     private Set<Student> studentList;
 
-    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
-    @JsonBackReference
+    @OneToMany(orphanRemoval = true,mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<ScoreCard> scoreCard;
 
     // một môn có nhiều tiết dạy trong notebook
-    @OneToMany(mappedBy = "subject", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JsonBackReference
+    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY,mappedBy = "subject", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<NoteBookDetail> noteBookDetailList;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, mappedBy = "subject")
-    @JsonBackReference
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "subject")
+    @JsonManagedReference
     private Set<Teacher> teacherSet;
     
     public Subject() {
     }
 
-    public Subject(String nameSubject, Set<School> schoolList, Set<Teacher> teacherSet) {
+    public Subject(String nameSubject, Set<School> schoolList, Set<Transcript> transcriptList, Set<Student> studentList, Set<ScoreCard> scoreCard, Set<NoteBookDetail> noteBookDetailList, Set<Teacher> teacherSet) {
         this.nameSubject = nameSubject;
         this.schoolList = schoolList;
+        this.transcriptList = transcriptList;
+        this.studentList = studentList;
+        this.scoreCard = scoreCard;
+        this.noteBookDetailList = noteBookDetailList;
         this.teacherSet = teacherSet;
     }
 
@@ -86,5 +90,37 @@ public class Subject {
 
     public void setNameSubject(String nameSubject) {
         this.nameSubject = nameSubject;
+    }
+
+    public Set<Transcript> getTranscriptList() {
+        return transcriptList;
+    }
+
+    public void setTranscriptList(Set<Transcript> transcriptList) {
+        this.transcriptList = transcriptList;
+    }
+
+    public Set<Student> getStudentList() {
+        return studentList;
+    }
+
+    public void setStudentList(Set<Student> studentList) {
+        this.studentList = studentList;
+    }
+
+    public Set<ScoreCard> getScoreCard() {
+        return scoreCard;
+    }
+
+    public void setScoreCard(Set<ScoreCard> scoreCard) {
+        this.scoreCard = scoreCard;
+    }
+
+    public Set<NoteBookDetail> getNoteBookDetailList() {
+        return noteBookDetailList;
+    }
+
+    public void setNoteBookDetailList(Set<NoteBookDetail> noteBookDetailList) {
+        this.noteBookDetailList = noteBookDetailList;
     }
 }

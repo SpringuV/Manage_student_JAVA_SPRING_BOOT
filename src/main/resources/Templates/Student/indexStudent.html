@@ -49,14 +49,17 @@
                 <td th:text="${student.address != null ? student.address : '--null--'}"></td>
                 <td th:text="${student.phoneNumber != null ? student.phoneNumber : '--null--'}"></td>
                 <td th:text="${student.email != null ? student.email : '--null--'}"></td>
-                <td th:text="${student.classes != null ? student.classes : '--null--'}"></td>
+                <td>
+                    <span th:if="${student.classes != null}" th:text="${student.classes.name}"></span>
+                    <span th:if="${student.classes == null}">--null--</span>
+                </td>
                 <!--                cach 2:
                                     <td> <span th:unless="${student.teacher}" th:text="'null'"></span>
                                     <span th:if="${student.teacher}" th:text="${student.teacher}"></span></td>-->
                 <td>
                     <span th:if="${student.teacher != null}"
                           th:text="${student.teacher.username} +' ('+ ${student.teacher.id}+')'"></span>
-                    <span th:unless="${student.teacher == null}">--null--</span>
+                    <span th:if="${student.teacher == null}">--null--</span>
                 </td>
                 <!--            cach 1:-->
                 <td th:text="${student.school.name != null ? student.school.name : '--null--'}"></td>

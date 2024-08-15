@@ -172,8 +172,8 @@
         const schoolSelect = document.getElementById('school_select');
         const subjectSelect = document.getElementById('subject_select');
         const classSelect = document.getElementById('class_select');
-
-        function loadSubjectAndClass(schoolId){
+        schoolSelect.addEventListener('change', function(){
+            const schoolId = schoolSelect.value;
             if(schoolId){
                 fetch(`/m-teacher/getSubjectBySchool/${schoolId}`)
                 .then(response => response.json())
@@ -213,19 +213,75 @@
                 // Clear subjects if no school is selected
                 classSelect.innerHTML = '<option value="0">--Select Class--</option>';
             }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function(){
+        const schoolSelect = document.getElementById('school_select');
+        const teacherSelect = document.getElementById('teacher_select');
+        const classSelect = document.getElementById('class_select');
+
+        function getClassBySchoolId(schoolId){
+            if(schoolId){
+                // fetch class
+                fetch(`/m-student/getClassBySchoolId/${schoolId}`)
+                .then(response => response.json())
+                .then(classes =>{
+                    // clear previous classes
+                    classSelect.innerHTML = '<option value="0">--Select Class--</option>';
+
+                    // populate new class
+                    classes.forEach(classItem =>{
+                        const option = document.createElement('option');
+                        option.value = classItem.id;
+                        option.textContent = classItem.name;
+                        classes.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching Class:', error));
+            } else {
+                // if no school selected
+                classSelect.innerHTML = '<option value="0">--Select Class--</option>';
+            }
+        }
+
+        function getTeacherBySchoolIdAndClassId(schoolId, classId){
+            if(schoolId && classId){
+                // fetch teacher
+                fetch(`/m-student/getTeacherBySchoolIdAndClassId/${schoolId}&${classId}`)
+                .then(response => response.json())
+                .then(teachers => {
+                    // clear teacher previous
+                    teacherSelect.innerHTML= '<option>--Select Teacher--</option>';
+                
+                    // populate new teacher
+                    teachers.forEach(teacherItem =>{
+                        const option = document.createElement('option');
+                        option.value = teacherItem.id;
+                        option.textContent = `${teacherItem.lastName} ${teacherItem.firstName}`;
+                        teachers.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching Teacher:', error));
+            } else {
+                // if no class or school selected
+                teacherSelect.innerHTML= '<option>--Select Teacher--</option>';
+            }
         }
 
         // event listener for school selection change
         schoolSelect.addEventListener('change', function(){
             const schoolId = schoolSelect.value;
-            loadSubjectAndClass(schoolId);
+            getClassBySchoolId(schoolId);
         });
 
-        // automatically load subject and classes if school is already selected
-        const initialSchoolId = schoolSelect.value;
-        if(initialSchoolId){
-            loadSubjectAndClass(initialSchoolId);
-        }
+        // event listener for the school and the class selection change
+        classSelect.addEventListener('change', function(){
+            const schoolId = schoolSelect.value;
+            const classId = classSelect.value;
+            getTeacherBySchoolIdAndClassId(schoolId, classId);
+        });
+
     });
 </script>
 <script src="/resources/static/JavaScript/function.js"></script>

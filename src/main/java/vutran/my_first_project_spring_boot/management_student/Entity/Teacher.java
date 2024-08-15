@@ -11,28 +11,28 @@ import java.util.Set;
 @Entity
 public class Teacher extends User{
 
-    @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonBackReference // đảm bảo không có chu kỳ lặp giữa các đối tượng
+    @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference // đảm bảo không có chu kỳ lặp giữa các đối tượng
     private Set<Student> studentList;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JsonManagedReference
+    @JsonBackReference
     @JoinColumn(name = "class_id")
     private Classes classes;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
-    @JsonManagedReference
+    @JsonBackReference
     @JoinColumn(name = "subject_id")
     private Subject subject;
 
     // Một giáo viên có thể làm việc ở một trường
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
     @JoinColumn(name = "school_id")
-    @JsonManagedReference
+    @JsonBackReference
     private School school;
 
-    @OneToMany (mappedBy = "teacher", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)
-    @JsonBackReference
+    @OneToMany (orphanRemoval = true, mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<NoteBookDetail> noteBookDetailList;
 
     public Teacher() {

@@ -21,8 +21,11 @@ public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
             "JOIN teacher as t " +
             "ON t.id = u.id " +
             "WHERE u.position LIKE 'Teacher'", nativeQuery = true)
-    public Set<Teacher> getAllTeacher();
+    Set<Teacher> getAllTeacher();
 
     @Query(value = "SELECT * FROM teacher WHERE teacher.school_id=:school_id", nativeQuery = true)
     List<Teacher> getListTeacherByIdSchool(@Param("school_id") int school_id);
+
+    @Query(value = "SELECT t.class_id,t.school_id,u.first_name, u.last_name, t.id, u.address, u.avatar, u.email, u.enabled, u.identity, u.password, u.phone_number, u.position, u.username, t.subject_id FROM teacher AS t RIGHT JOIN users AS u ON t.id = u.id WHERE t.school_id=:school_id AND t.class_id=:class_id", nativeQuery = true)
+    List<Teacher> getListTeacherBySchoolIdAndClassID(@Param("school_id") int school_id, @Param("class_id") int class_id);
 }

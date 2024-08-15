@@ -10,13 +10,14 @@ import java.util.Collection;
 @Entity
 public class Parent extends User{
 
-    @OneToOne(mappedBy = "parent", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST})
+    @OneToOne(mappedBy = "parent", cascade = CascadeType.ALL)
     private Student student;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH})
     @JoinColumn(name = "p_school_id")
-    @JsonManagedReference
+    @JsonBackReference
     private School school;
+
     public Parent() {
     }
 

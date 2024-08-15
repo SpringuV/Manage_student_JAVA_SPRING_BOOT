@@ -14,7 +14,7 @@ public class Authority {
     @Column(name = "id")
     private int id;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_authority", joinColumns = @JoinColumn(name = "authority_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
@@ -23,6 +23,7 @@ public class Authority {
 
     @Column(name = "name")
     private String name;
+
     public Authority() {
     }
 

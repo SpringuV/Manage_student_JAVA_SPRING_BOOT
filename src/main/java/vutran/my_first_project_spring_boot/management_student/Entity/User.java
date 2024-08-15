@@ -38,10 +38,9 @@ public class User {
     @Column(name = "avatar")
     private Blob avatar;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_authority", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "authority_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "authority_id"))
     @JsonManagedReference
     private Collection<Authority> authority;
 

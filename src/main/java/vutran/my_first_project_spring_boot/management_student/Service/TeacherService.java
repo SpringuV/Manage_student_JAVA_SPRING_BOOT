@@ -17,4 +17,5 @@ public interface TeacherService {
     public Set<Teacher> getListTeacherByPosition();
     public Optional<Teacher> findById(int id);
     public List<Teacher> getListTeacherByIdSchool(int school_id);
+    public List<Teacher> getListTeacherBySchoolIdAndClassID(int school_id, int class_id);
 }

@@ -74,25 +74,41 @@
                 </ul>
             </div>
         </div>
-        <div class="form-floating mb-1">
+        <div class="mb-1">
             <label class="form-label">Study at school: </label>
-            <select th:field="*{school}" required>
+            <select th:field="*{school}" id="school_select" required>
                 <option value="">--Select School--</option>
-                <option th:each="school : ${schoolList}" th:value="${school.id}" th:text="${school.name}"></option>
+                <option th:each="school : ${schoolList}" th:value="${school.id}"
+                        th:text="${school.name}"></option>
             </select>
             <div th:if="${#fields.hasErrors('school')}">
                 <ul>
-                    <li th:each="e: ${#fields.hasErrors('school')}" th:text="${e}"></li>
+                    <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>
-        <div>
-            <label>Homeroom Teacher id: </label>
-            <input type="text" th:field="*{teacher}" placeholder="Input teacher id"
-                   name="teacherid" id="teacherid">
+        <!-- Because relation between the entity class and the entity teacher is one to many, a class has many teacher, and opposite
+        so that the class must to selected before the teacher
+        -->
+        <div class="mb-1">
+            <label class="form-label" for="class_select">Select Class: </label>
+            <select th:field="*{classes}" id="class_select">
+                <option value="0">--Select Class--</option>
+            </select>
+            <div th:if="${#fields.hasErrors('classes')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('classes')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="mb-1">
+            <label class="form-label" for="teacher_select">Select Teacher: </label>
+            <select th:field="*{teacher}" id="teacher_select">
+                <option value="0">--Select Teacher--</option>
+            </select>
             <div th:if="${#fields.hasErrors('teacher')}">
                 <ul>
-                    <li th:each="error: ${#fields.hasErrors('teacher')}" th:text="${Error}"></li>
+                    <li th:each="error: ${#fields.hasErrors('teacher')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>
@@ -110,21 +126,84 @@
 </div>
 </body>
 <script>
-    function fetchSchoolName() {
-        const schoolId = document.getElementById('schoolid').value;
-        if (schoolId) {
-            fetch(`/m-teacher/getSchoolName/${schoolId}`)
+    document.addEventListener('DOMContentLoaded', function(){
+        const schoolSelect = document.getElementById('school_select');
+        const teacherSelect = document.getElementById('teacher_select');
+        const classSelect = document.getElementById('class_select');
+
+        function getClassBySchoolId(schoolId){
+            if(schoolId){
+                // fetch class
+                fetch(`/m-student/getClassBySchool/${schoolId}`)
                 .then(response => response.json())
-                .then(data => {
-                    document.getElementById('schoolName').innerText = data.name || 'Not found';
+                .then(classes =>{
+                    // clear previous classes
+                    classSelect.innerHTML = '<option value="0">--Select Class--</option>';
+
+                    // populate new class
+                    classes.forEach(classItem =>{
+                        const option = document.createElement('option');
+                        option.value = classItem.id;
+                        option.textContent = classItem.name;
+                        classSelect.appendChild(option);
+                    });
                 })
-                .catch(error => {
-                    document.getElementById('schoolName').innerText = 'Error fetching school name';
-                });
-        } else {
-            document.getElementById('schoolName').innerText = 'Error';
+                .catch(error => console.error('Error fetching Class:', error));
+            } else {
+                // if no school selected
+                classSelect.innerHTML = '<option value="0">--Select Class--</option>';
+            }
         }
-    }
+
+        function getTeacherBySchoolIdAndClassId(schoolId, classId){
+            if(schoolId && classId){
+                // fetch teacher
+                fetch(`/m-student/getTeacherBySchoolAndClass/${schoolId}/${classId}`)
+                .then(response => response.json())
+                .then(teachers => {
+                    // clear teacher previous
+                    teacherSelect.innerHTML= '<option>--Select Teacher--</option>';
+
+                    // populate new teacher
+                    teachers.forEach(teacherItem =>{
+                        const option = document.createElement('option');
+                        option.value = teacherItem.id;
+                        option.textContent = `${teacherItem.lastName} ${teacherItem.firstName}`;
+                        teacherSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching Teacher:', error));
+            } else {
+                // if no class or school selected
+                teacherSelect.innerHTML= '<option>--Select Teacher--</option>';
+            }
+        }
+
+        // event listener for school selection change
+        schoolSelect.addEventListener('change', function(){
+            const schoolId = schoolSelect.value;
+            getClassBySchoolId(schoolId);
+        });
+
+        // event listener for the school and the class selection change
+        classSelect.addEventListener('change', function(){
+            const schoolId = schoolSelect.value;
+            const classId = classSelect.value;
+            getTeacherBySchoolIdAndClassId(schoolId, classId);
+        });
+
+        // automatically load class if the school is already selected
+        const initialSchoolId = schoolSelect.value;
+        if(initialSchoolId){
+            getClassBySchoolId(initialSchoolId);
+        }
+
+        // automatically load the teacher if the school and the class are already selected
+        const initialClassId = classSelect.value;
+        if(initialSchoolId && initialClassId){
+            getTeacherBySchoolIdAndClassId(initialSchoolId, initialClassId);
+        }
+    });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"

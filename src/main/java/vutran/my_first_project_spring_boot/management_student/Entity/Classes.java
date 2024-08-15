@@ -21,22 +21,22 @@ public class Classes {
     @Column(name = "class_grade")
     private String grade;
 
-    @OneToMany(mappedBy = "classes", cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST})
-    @JsonBackReference
+    @OneToMany(mappedBy = "classes",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Teacher> teacherList;
 
-    @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JsonBackReference
+    @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Student> studentList;
 
     @OneToOne(mappedBy = "classes", cascade = CascadeType.ALL)
-    @JsonIgnore
+//    @JsonIgnore
     private NoteBook noteBook;
 
     // nhiều lớp chỉ được một trường quản lý
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "school_id")
-    @JsonManagedReference
+    @JsonBackReference
     private School school;
 
     public Classes() {

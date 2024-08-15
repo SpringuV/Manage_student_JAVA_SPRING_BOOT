@@ -15,12 +15,12 @@ public class NoteBookDetail {
     private int id;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JsonManagedReference
+    @JsonBackReference
     @JoinColumn( name = "notebook_id")
     private NoteBook noteBook;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JsonManagedReference
+    @JsonBackReference
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
@@ -35,7 +35,7 @@ public class NoteBookDetail {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "subject_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Subject subject;
 
     @Column(name = "note_teachcomment")

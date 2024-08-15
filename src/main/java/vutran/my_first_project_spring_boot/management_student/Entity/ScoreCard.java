@@ -19,12 +19,12 @@ public class ScoreCard {
     // một học sinh có nhiều phiếu điểm
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "student_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Student student;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "sc_school_id")
-    @JsonManagedReference
+    @JsonBackReference
     private School school;
 
     @Column(name = "cscore_dexam")
@@ -35,7 +35,7 @@ public class ScoreCard {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
     @JoinColumn(name = "cs_subject_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Subject subject;
 
     @Column(name = "cs_school_year")

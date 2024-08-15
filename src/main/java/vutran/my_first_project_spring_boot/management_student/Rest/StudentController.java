@@ -8,10 +8,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
-import vutran.my_first_project_spring_boot.management_student.Entity.Authority;
-import vutran.my_first_project_spring_boot.management_student.Entity.Student;
+import vutran.my_first_project_spring_boot.management_student.Entity.*;
+import vutran.my_first_project_spring_boot.management_student.Service.ClassService;
 import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
 import vutran.my_first_project_spring_boot.management_student.Service.StudentService;
+import vutran.my_first_project_spring_boot.management_student.Service.TeacherService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,12 +25,16 @@ public class StudentController {
     private StudentService studentService;
     private AuthorityRepository authorityRepository;
     private SchoolService schoolService;
+    private TeacherService teacherService;
+    private ClassService classService;
 
     @Autowired
-    public StudentController(StudentService studentService, AuthorityRepository authorityRepository, SchoolService schoolService) {
+    public StudentController(StudentService studentService, AuthorityRepository authorityRepository, SchoolService schoolService, TeacherService teacherService, ClassService classService) {
         this.authorityRepository = authorityRepository;
         this.studentService = studentService;
+        this.teacherService = teacherService;
         this.schoolService = schoolService;
+        this.classService = classService;
     }
 
     @GetMapping("/showManageStudent")
@@ -44,6 +49,18 @@ public class StudentController {
         // else
         model.addAttribute("studentList", studentList);
         return "Student/indexStudent";
+    }
+
+    @GetMapping("/getClassBySchool/{schoolId}")
+    @ResponseBody
+    public List<Classes> returnListClass(@PathVariable int schoolId){
+        return classService.getListClassByIdSchool(schoolId);
+    }
+
+    @GetMapping("/getTeacherBySchoolAndClass/{schoolId}/{classId}")
+    @ResponseBody
+    public List<Teacher> returnListTeacher(@PathVariable int schoolId, @PathVariable int classId){
+        return teacherService.getListTeacherBySchoolIdAndClassID(schoolId, classId);
     }
 
     @GetMapping("/showFormAddStudent")
