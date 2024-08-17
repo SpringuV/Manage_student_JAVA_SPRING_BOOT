@@ -28,7 +28,7 @@ public class StudyRecord {
     private String schoolYear;
 
     // một học bạ có nhiều bảng điểm;
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "transcript_records", joinColumns = @JoinColumn(name = "study_record_id"), inverseJoinColumns = @JoinColumn(name = "transcript_id"))
     @JsonBackReference
     private List<Transcript> transcriptList;
@@ -111,5 +111,18 @@ public class StudyRecord {
 
     public void setSchoolYear(String schoolYear) {
         this.schoolYear = schoolYear;
+    }
+
+    @Override
+    public String toString() {
+        return "StudyRecord{" +
+                "id=" + id +
+                ", student=" + student.getFirstName() +
+                ", school=" + school.getName() +
+                ", schoolYear='" + schoolYear + '\'' +
+                ", transcriptList=" + transcriptList.size() +
+                ", resultConduct='" + resultConduct + '\'' +
+                ", commentOfTeacher='" + commentOfTeacher + '\'' +
+                '}';
     }
 }

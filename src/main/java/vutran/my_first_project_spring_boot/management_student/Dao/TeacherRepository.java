@@ -13,15 +13,18 @@ import java.util.Set;
 public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
 
 //     native query
-    @Query(value = "SELECT * FROM users JOIN teacher ON teacher.id = users.id WHERE users.username = :username", nativeQuery = true)
-    public Teacher findTeacherByUserName(@Param("username") String username);
+    @Query(value = "SELECT * FROM users JOIN teacher ON teacher.id = users.id WHERE users.username = :username AND users.position LIKE 'Teacher' AND users.id=:user_id", nativeQuery = true)
+    Teacher findTeacherByUserNameAndId(@Param("username") String username, @Param("user_id") int id);
+
+    @Query(value = "SELECT * FROM users JOIN teacher ON teacher.id = users.id WHERE users.username = :username AND users.position LIKE 'Teacher'", nativeQuery = true)
+    Teacher findTeacherByUserName(@Param("username") String username);
 
     @Query(value = "SELECT u.id, t.school_id, u.address, u.phone_number, u.username, u.position, u.email, u.first_name, u.last_name,u.avatar,  u.enabled, u.password, u.identity, t.subject_id, t.class_id " +
             "FROM users as u " +
             "JOIN teacher as t " +
             "ON t.id = u.id " +
             "WHERE u.position LIKE 'Teacher'", nativeQuery = true)
-    Set<Teacher> getAllTeacher();
+    List<Teacher> getAllTeacher();
 
     @Query(value = "SELECT * FROM teacher WHERE teacher.school_id=:school_id", nativeQuery = true)
     List<Teacher> getListTeacherByIdSchool(@Param("school_id") int school_id);

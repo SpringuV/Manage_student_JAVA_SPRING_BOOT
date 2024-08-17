@@ -50,4 +50,12 @@ public class Parent extends User{
     public void setStudent(Student student) {
         this.student = student;
     }
+
+    @Override
+    public String toString() {
+        return "Parent{" +
+                "student=" + student.getId() +
+                ", school=" + school.getName() +
+                '}';
+    }
 }

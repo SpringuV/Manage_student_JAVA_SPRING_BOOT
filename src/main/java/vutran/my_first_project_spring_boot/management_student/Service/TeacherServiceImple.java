@@ -2,6 +2,7 @@ package vutran.my_first_project_spring_boot.management_student.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vutran.my_first_project_spring_boot.management_student.Dao.TeacherRepository;
 import vutran.my_first_project_spring_boot.management_student.Dao.UserRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
@@ -23,22 +24,21 @@ public class TeacherServiceImple implements TeacherService{
     }
 
     @Override
-    public Set<Teacher> getAllTeacher() {
+    public List<Teacher> getAllTeacher() {
         return teacherRepository.getAllTeacher();
     }
 
     @Override
     public Teacher getTeacherById(int id) {
-        return teacherRepository.findById(id).get();
+        return teacherRepository.findById(id).orElseThrow(() -> new RuntimeException("Teacher not found with id: " + id));
     }
-
-
 
     @Override
     public Teacher addTeacher(Teacher teacher) {
         return teacherRepository.save(teacher);
     }
 
+    @Transactional
     @Override
     public void deleteTeacherById(int id) {
         teacherRepository.deleteById(id);
@@ -50,12 +50,12 @@ public class TeacherServiceImple implements TeacherService{
     }
 
     @Override
-    public Teacher fineTeacherByUserName(String username) {
-        return teacherRepository.findTeacherByUserName(username);
+    public Teacher getTeacherByUserNameAndId(String username, int user_id) {
+        return teacherRepository.findTeacherByUserNameAndId(username, user_id);
     }
 
     @Override
-    public Set<Teacher> getListTeacherByPosition() {
+    public List<Teacher> getListTeacherByPosition() {
         return teacherRepository.getAllTeacher();
     }
 
@@ -72,5 +72,10 @@ public class TeacherServiceImple implements TeacherService{
     @Override
     public List<Teacher> getListTeacherBySchoolIdAndClassID(int school_id, int class_id) {
         return teacherRepository.getListTeacherBySchoolIdAndClassID(school_id, class_id);
+    }
+
+    @Override
+    public Teacher getTeacherByUserName(String username) {
+        return teacherRepository.findTeacherByUserName(username);
     }
 }

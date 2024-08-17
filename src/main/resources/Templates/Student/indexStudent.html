@@ -53,23 +53,21 @@
                     <span th:if="${student.classes != null}" th:text="${student.classes.name}"></span>
                     <span th:if="${student.classes == null}">--null--</span>
                 </td>
-                <!--                cach 2:
-                                    <td> <span th:unless="${student.teacher}" th:text="'null'"></span>
-                                    <span th:if="${student.teacher}" th:text="${student.teacher}"></span></td>-->
                 <td>
                     <span th:if="${student.teacher != null}"
                           th:text="${student.teacher.username} +' ('+ ${student.teacher.id}+')'"></span>
                     <span th:if="${student.teacher == null}">--null--</span>
                 </td>
-                <!--            cach 1:-->
-                <td th:text="${student.school.name != null ? student.school.name : '--null--'}"></td>
-                <!--            cach 2:-->
-                <!--            <td>-->
-                <!--                <span th:text="'Name: '+${teacher.school.name}"></span>-->
-                <!--                <br/>-->
-                <!--                <span th:text="'Id: ' + ${teacher.school.id}"></span>-->
-                <!--            </td>-->
-                <td th:text="${student.parent != null ? student.parent : '--null--'}"></td>
+                <td>
+                    <span th:if="${student.school != null}"
+                          th:utext="${student.school.name} + ' (' +${student.school.id}+ ')'"></span>
+                    <span th:if="${student.school == null}">--null--</span>
+                </td>
+                <td>
+                    <span th:if="${student.parent != null}"
+                          th:utext="${student.parent.lastName}+ ' '+${student.parent.firstName} + ' (' +${student.parent.id}+ ')'"></span>
+                    <span th:if="${student.parent == null}">--null--</span>
+                </td>
                 <td th:text="${student.position}"></td>
                 <td>
                     <div>

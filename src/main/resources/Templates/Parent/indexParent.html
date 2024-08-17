@@ -13,6 +13,8 @@
             border: 1px solid black;
             margin: 3px 3px 3px 3px;
         }
+        .even-row { background-color: #f0f0f0; }
+        .odd-row { background-color: #ffffff; }
     </style>
 </head>
 
@@ -32,27 +34,31 @@
             </div>
         </div>
         <table>
-            <th>Parent Id</th>
-            <th>FirstName</th>
-            <th>LastName</th>
-            <th>Username</th>
-            <th>Address</th>
-            <th>Phone</th>
-            <th>Position</th>
-            <th>Feature</th>
-            <tr th:each="parent : ${parentList}">
-                <td th:text="${parent.id}"></td>
-                <td th:text="${parent.firstName}"></td>
-                <td th:text="${parent.lastName}"></td>
-                <td th:text="${parent.username}"></td>
-                <td th:text="${parent.address}"></td>
-                <td th:text="${parent.phoneNumber}"></td>
-                <td th:text="${parent.position}"></td>
-                <td>
-                    <a th:href="@{/m-parent/showModifyFormParent(id=${parent.id})}" class="btn btn-success">Modify</a>
-                    <a th:href="@{/m-parent/modify-delete(id=${parent.id})}" class="btn btn-danger">Delete</a>
-                </td>
-            </tr>
+            <thead>
+                <th>Parent Id</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Username</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Position</th>
+                <th>Feature</th>
+            </thead>
+            <tbody>
+                <tr th:each="parent, iterStat : ${parentList}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'odd-row'}">
+                    <td th:text="${parent.id}"></td>
+                    <td th:text="${parent.firstName}"></td>
+                    <td th:text="${parent.lastName}"></td>
+                    <td th:text="${parent.username}"></td>
+                    <td th:text="${parent.address}"></td>
+                    <td th:text="${parent.phoneNumber}"></td>
+                    <td th:text="${parent.position}"></td>
+                    <td>
+                        <a th:href="@{/m-parent/showModifyFormParent(id=${parent.id})}" class="btn btn-success">Modify</a>
+                        <a th:href="@{/m-parent/modify-delete(id=${parent.id})}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
     <div th:if="${success}">

@@ -14,7 +14,10 @@ public interface ParentRepository extends JpaRepository<Parent, Integer> {
     @Query(value = "SELECT * FROM users as u JOIN parent as p ON p.id = u.id WHERE u.position = 'Parent'",nativeQuery = true)
     public List<Parent> findParentByPosition();
 
-    @Query(value = "SELECT * FROM users as u JOIN parent as p ON p.id = u.id WHERE u.username =:username",nativeQuery = true)
+    @Query(value = "SELECT * FROM users as u JOIN parent as p ON p.id = u.id WHERE u.username =:username AND u.position LIKE 'Parent' AND u.id=:user_id",nativeQuery = true)
+    public Parent findParentByUserNameAndId(@Param("username") String username, @Param("user_id") int id);
+
+    @Query(value = "SELECT * FROM users as u JOIN parent as p ON p.id = u.id WHERE u.username =:username AND u.position LIKE 'Parent'",nativeQuery = true)
     public Parent findParentByUserName(@Param("username") String username);
 
     @Query(value = "SELECT * FROM users as u JOIN parent as p ON p.id = u.id WHERE u.identity =:identity",nativeQuery = true)

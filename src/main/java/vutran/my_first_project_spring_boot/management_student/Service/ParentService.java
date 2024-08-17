@@ -11,6 +11,7 @@ public interface ParentService {
     public void deleteParentById(int id);
     public Parent updateParent(Parent parent);
     public List<Parent> findALlParentByPosition();
-    public Parent getParentByUsername(String username);
+    public Parent getParentByUserNameAndId(String username, int id);
     public Parent getParentByIdentity(String identity);
+    public Parent getParentByUserName(String username);
 }

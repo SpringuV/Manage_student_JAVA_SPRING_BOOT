@@ -23,14 +23,14 @@ public class Transcript {
     @JsonBackReference
     private School school;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonBackReference
     @JoinTable(name = "subject_transcript",
             joinColumns = @JoinColumn(name = "transcript_id"), inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
     private Set<Subject> subjectSet;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "transcript_student",
             joinColumns = @JoinColumn(name = "transcript_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
     @JsonBackReference
@@ -44,7 +44,7 @@ public class Transcript {
     @Column(name = "school_year")
     private String schoolYear;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "transcript_records", joinColumns = @JoinColumn(name = "transcript_id"), inverseJoinColumns = @JoinColumn(name = "study_record_id"))
     @JsonManagedReference
     private List<StudyRecord> studyRecordList;
@@ -133,5 +133,20 @@ public class Transcript {
 
     public void setSchool(School school) {
         this.school = school;
+    }
+
+    @Override
+    public String toString() {
+        return "Transcript{" +
+                "id=" + id +
+                ", nameTranscript='" + nameTranscript + '\'' +
+                ", school=" + school.getName() +
+                ", subjectSet=" + subjectSet.size() +
+                ", studentSet=" + studentSet.size() +
+                ", score=" + score +
+                ", semester=" + semester +
+                ", schoolYear='" + schoolYear + '\'' +
+                ", studyRecordList=" + studyRecordList.size() +
+                '}';
     }
 }

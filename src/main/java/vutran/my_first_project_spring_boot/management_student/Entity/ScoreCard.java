@@ -122,8 +122,8 @@ public class ScoreCard {
         return "ScoreCard{" +
                 "id=" + id +
                 ", nameExam='" + nameExam + '\'' +
-                ", student=" + student +
-                ", school=" + school +
+                ", student=" + student.getId() +
+                ", school=" + school.getName() +
                 ", dayExam=" + dayExam +
                 ", score=" + score +
                 ", subject=" + subject +

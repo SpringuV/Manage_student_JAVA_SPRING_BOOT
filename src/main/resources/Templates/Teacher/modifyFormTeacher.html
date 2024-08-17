@@ -80,7 +80,7 @@
                 <option th:value="0">--Select School--</option>
                 <option th:each="school : ${schoolList}" th:value="${school.id}" th:text="${school.name}"></option>
             </select>
-            (<label th:text="*{school.name}"></label>)
+            <label th:if="*{school != null}" th:text="*{school.name}"></label>
             <div th:if="${#fields.hasErrors('school')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error"></li>
@@ -92,7 +92,7 @@
             <select name="subject" id="subject_select" th:field="*{subject}" required>
                 <option th:value="0">--Select Subject--</option>
             </select>
-            (<label th:text="*{subject.nameSubject}"></label>)
+            <label th:if="*{subject != null}" th:text="*{subject.nameSubject}"></label>
             <div th:if="${#fields.hasErrors('subject')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('subject')}" th:text="${error}"></li>
@@ -104,7 +104,7 @@
             <select name="classes" id="class_select" th:field="*{classes}" required>
                 <option th:value="0">--Select Class--</option>
             </select>
-            (<label th:text="*{classes.name}"></label>)
+            <label th:if="*{classes != null}" th:text="*{classes.name}"></label>
             <div th:if="${#fields.hasErrors('classes')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('classes')}" th:text="${error}"></li>

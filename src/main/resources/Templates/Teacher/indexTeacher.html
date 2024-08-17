@@ -12,6 +12,8 @@
             border: 1px solid black;
             margin: 3px 3px 3px 3px;
         }
+        .even-row { background-color: #f0f0f0; }
+        .odd-row { background-color: #ffffff; }
     </style>
 </head>
 
@@ -31,48 +33,49 @@
             </div>
         </div>
         <table>
-            <th>Teacher Id</th>
-            <th>FirstName</th>
-            <th>LastName</th>
-            <th>Username</th>
-            <th>Address</th>
-            <th>Phone</th>
-            <th>Teaching subject</th>
-            <th>Work at School</th>
-            <th>Class</th>
-            <th>Position</th>
-            <th>Feature</th>
-            <tr th:each="teacher : ${teacherList}">
-                <td th:text="${teacher.id}"></td>
-                <td th:text="${teacher.firstName != null ? teacher.firstName : 'null'}"></td>
-                <td th:text="${teacher.lastName != null ? teacher.lastName : 'null'}"></td>
-                <td th:text="${teacher.username != null ? teacher.username : 'null'}"></td>
-                <td th:text="${teacher.address != null ? teacher.address : 'null'}"></td>
-                <td th:text="${teacher.phoneNumber != null ? teacher.phoneNumber : 'null'}"></td>
-                <td>
-                    <span th:if="${teacher.subject != null}"
-                          th:utext="${teacher.subject.nameSubject} +' ('+ ${teacher.subject.id}+')'"></span>
-                    <span th:if="${teacher.subject == null}">--null--</span>
-                </td>
-                <!--            cach 1:-->
-                <td th:text="${teacher.school.name} + ' (' +${teacher.school.id}+ ')'"></td>
-                <!--            cach 2:-->
-                <!--            <td>-->
-                <!--                <span th:text="'Name: '+${teacher.school.name}"></span>-->
-                <!--                <br/>-->
-                <!--                <span th:text="'Id: ' + ${teacher.school.id}"></span>-->
-                <!--            </td>-->
-                <td>
-                    <span th:if="${teacher.classes != null}" th:text="${teacher.classes.name}"></span>
-                    <span th:if="${teacher.classes == null}">--null--</span>
-                </td>
-                <td th:text="${teacher.position != null ? teacher.position : 'null'}"></td>
-                <td>
-                    <a th:href="@{/m-teacher/showModifyFormTeacher(id=${teacher.id})}"
-                       class="btn btn-success">Modify</a>
-                    <a th:href="@{/m-teacher/modify-delete(id=${teacher.id})}" class="btn btn-danger">Delete</a>
-                </td>
-            </tr>
+            <thead>
+                <th>Teacher Id</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Username</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Teaching subject</th>
+                <th>Work at School</th>
+                <th>Class</th>
+                <th>Position</th>
+                <th>Feature</th>
+            </thead>
+            <tbody>
+                <tr th:each="teacher,iterStat : ${teacherList}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'odd-row'}">
+                    <td th:text="${teacher.id}"></td>
+                    <td th:text="${teacher.firstName != null ? teacher.firstName : 'null'}"></td>
+                    <td th:text="${teacher.lastName != null ? teacher.lastName : 'null'}"></td>
+                    <td th:text="${teacher.username != null ? teacher.username : 'null'}"></td>
+                    <td th:text="${teacher.address != null ? teacher.address : 'null'}"></td>
+                    <td th:text="${teacher.phoneNumber != null ? teacher.phoneNumber : 'null'}"></td>
+                    <td>
+                        <span th:if="${teacher.subject != null}"
+                              th:utext="${teacher.subject.nameSubject} +' ('+ ${teacher.subject.id}+')'"></span>
+                        <span th:if="${teacher.subject == null}">--null--</span>
+                    </td>
+                    <td>
+                        <span th:if="${teacher.school != null}"
+                              th:utext="${teacher.school.name} + ' (' +${teacher.school.id}+ ')'"></span>
+                        <span th:if="${teacher.school == null}">--null--</span>
+                    </td>
+                    <td>
+                        <span th:if="${teacher.classes != null}" th:text="${teacher.classes.name}"></span>
+                        <span th:if="${teacher.classes == null}">--null--</span>
+                    </td>
+                    <td th:text="${teacher.position != null ? teacher.position : 'null'}"></td>
+                    <td>
+                        <a th:href="@{/m-teacher/showModifyFormTeacher(id=${teacher.id})}"
+                           class="btn btn-success">Modify</a>
+                        <a th:href="@{/m-teacher/modify-delete(id=${teacher.id})}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
     <div th:if="${success}">

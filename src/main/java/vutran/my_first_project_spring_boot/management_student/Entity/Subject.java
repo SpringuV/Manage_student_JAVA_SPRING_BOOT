@@ -34,16 +34,16 @@ public class Subject {
     @JsonBackReference
     private Set<Student> studentList;
 
-    @OneToMany(orphanRemoval = true,mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<ScoreCard> scoreCard;
 
     // một môn có nhiều tiết dạy trong notebook
-    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY,mappedBy = "subject", cascade = CascadeType.ALL)
+    @OneToMany( fetch = FetchType.LAZY,mappedBy = "subject", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<NoteBookDetail> noteBookDetailList;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "subject")
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "subject")
     @JsonManagedReference
     private Set<Teacher> teacherSet;
     
@@ -122,5 +122,19 @@ public class Subject {
 
     public void setNoteBookDetailList(Set<NoteBookDetail> noteBookDetailList) {
         this.noteBookDetailList = noteBookDetailList;
+    }
+
+    @Override
+    public String toString() {
+        return "Subject{" +
+                "id=" + id +
+                ", nameSubject='" + nameSubject + '\'' +
+                ", schoolList=" + schoolList.size() +
+                ", transcriptList=" + transcriptList.size() +
+                ", studentList=" + studentList.size() +
+                ", scoreCard=" + scoreCard.size() +
+                ", noteBookDetailList=" + noteBookDetailList.size() +
+                ", teacherSet=" + teacherSet.size() +
+                '}';
     }
 }

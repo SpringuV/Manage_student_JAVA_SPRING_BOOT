@@ -79,7 +79,7 @@ public class StudentController {
         }
         // check student exist
         Student studentExistIdentity = studentService.getStudentByIdentity(student.getIdentity());
-        Student studentExistUserName = studentService.getStudentByUsername(student.getUsername());
+        Student studentExistUserName = studentService.getStudentByUserName(student.getUsername());
         if(studentExistIdentity != null){
             model.addAttribute("Error", "Error, Student existed !!");
             model.addAttribute("student", new Student());
@@ -172,6 +172,18 @@ public class StudentController {
             redirectAttributes.addFlashAttribute("Error", "Error, Student doesn't exist!!");
             return "redirect:/m-student/showManageStudent";
         } else {
+            studentExist.setParent(null);
+            studentExist.setClasses(null);
+            studentExist.setSchool(null);
+            studentExist.setTeacher(null);
+            studentExist.getScoreCardList().clear();
+            studentExist.getSubjectList().clear();
+            studentExist.getTranscriptSet().clear();
+            studentExist.getCollectionAuthority().clear();
+            studentExist.getStudyRecordList().clear();
+            // save then delete
+            studentService.updateStudent(studentExist);
+            // delete
             studentService.deleteStudentById(studentExist.getId());
             redirectAttributes.addFlashAttribute("success", "You deleted student have id: "+studentExist.getId()+" Name: "+studentExist.getFirstName());
             return "redirect:/m-student/showManageStudent";

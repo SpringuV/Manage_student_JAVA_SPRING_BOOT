@@ -13,7 +13,10 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @Query(value = "SELECT * FROM users as u JOIN student as s ON u.id = s.id WHERE u.position = 'Student'", nativeQuery = true)
     List<Student> findListStudentByPosition();
 
-    @Query(value = "SELECT * FROM users as u JOIN student as s ON u.id = s.id WHERE u.username =:username",nativeQuery = true)
+    @Query(value = "SELECT * FROM users as u JOIN student as s ON u.id = s.id WHERE u.username =:username AND u.position LIKE 'Student' AND u.id =:user_id",nativeQuery = true)
+    Student getStudentByUserNameAndId(@Param("username") String username, @Param("user_id") int id);
+
+    @Query(value = "SELECT * FROM users as u JOIN student as s ON u.id = s.id WHERE u.username =:username AND u.position LIKE 'Student'",nativeQuery = true)
     Student getStudentByUserName(@Param("username") String username);
 
     @Query(value = "SELECT * FROM users as u JOIN student as s ON u.id = s.id WHERE u.identity =:identity",nativeQuery = true)

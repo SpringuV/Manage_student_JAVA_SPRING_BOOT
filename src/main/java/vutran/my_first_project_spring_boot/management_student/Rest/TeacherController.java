@@ -53,7 +53,7 @@ public class TeacherController {
     @GetMapping("/showManageTeacher")
     public String showTeacherList(Model model){
         // get list teacher from database
-        Set<Teacher> teacherList = teacherService.getListTeacherByPosition();
+        List<Teacher> teacherList = teacherService.getListTeacherByPosition();
 
         if(teacherList.isEmpty()){
             model.addAttribute("schoolList", schoolService.getAllSchools());
@@ -140,7 +140,7 @@ public class TeacherController {
             return "Teacher/addTeacher";
         }
         // check teacher existed
-        Teacher teacherExist = teacherService.fineTeacherByUserName(teacher.getUsername());
+        Teacher teacherExist = teacherService.getTeacherByUserName(teacher.getUsername());
 
         // if teacher existed
         if(teacherExist != null){
@@ -184,14 +184,20 @@ public class TeacherController {
     public String deleteTeacher(@ModelAttribute Teacher teacher, RedirectAttributes redirectAttributes){
         Teacher teacherExist = teacherService.getTeacherById(teacher.getId());
         if(teacherExist != null){
+            teacherExist.getNoteBookDetailList().clear();
+            teacherExist.getStudentList().clear();
+            teacherExist.getCollectionAuthority().clear();
+            // save then delete
+            teacherService.updateTeacher(teacherExist);
+            // delete
             teacherService.deleteTeacherById(teacherExist.getId());
-            redirectAttributes.addFlashAttribute("success", "You have deleted teacher have id: "+ teacherExist.getId());
-            Set<Teacher> teacherList = teacherService.getListTeacherByPosition();
+            redirectAttributes.addFlashAttribute("success", "You have deleted teacher have id: "+ teacher.getId());
+            List<Teacher> teacherList = teacherService.getListTeacherByPosition();
             redirectAttributes.addFlashAttribute("teacherList", teacherList);
             return "redirect:/m-teacher/showManageTeacher";
         } else {
             redirectAttributes.addFlashAttribute("Error", "Error process delete teacher, null !!");
-            Set<Teacher> teacherList = teacherService.getListTeacherByPosition();
+            List<Teacher> teacherList = teacherService.getListTeacherByPosition();
             redirectAttributes.addFlashAttribute("teacherList", teacherList);
             return "redirect:/m-teacher/showManageTeacher";
         }

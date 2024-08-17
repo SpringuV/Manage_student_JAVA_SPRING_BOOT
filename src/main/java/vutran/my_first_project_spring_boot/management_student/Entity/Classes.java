@@ -21,11 +21,11 @@ public class Classes {
     @Column(name = "class_grade")
     private String grade;
 
-    @OneToMany(mappedBy = "classes",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "classes",fetch = FetchType.LAZY,cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonManagedReference
     private List<Teacher> teacherList;
 
-    @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonManagedReference
     private List<Student> studentList;
 
@@ -104,5 +104,18 @@ public class Classes {
 
     public void setTeacherList(List<Teacher> teacherList) {
         this.teacherList = teacherList;
+    }
+
+    @Override
+    public String toString() {
+        return "Classes{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", grade='" + grade + '\'' +
+                ", teacherList=" + teacherList.size() +
+                ", studentList=" + studentList.size() +
+                ", noteBook=" + noteBook +
+                ", school=" + school +
+                '}';
     }
 }

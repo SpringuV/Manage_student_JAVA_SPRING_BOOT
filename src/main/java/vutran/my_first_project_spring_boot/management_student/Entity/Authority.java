@@ -14,10 +14,9 @@ public class Authority {
     @Column(name = "id")
     private int id;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "users_authority", joinColumns = @JoinColumn(name = "authority_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     @JsonBackReference
     private List<User> userList;
 
@@ -54,4 +53,6 @@ public class Authority {
     public void setUserList(List<User> userList) {
         this.userList = userList;
     }
+
+
 }

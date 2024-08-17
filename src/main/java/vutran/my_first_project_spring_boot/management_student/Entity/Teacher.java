@@ -11,7 +11,7 @@ import java.util.Set;
 @Entity
 public class Teacher extends User{
 
-    @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY, cascade ={CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonManagedReference // đảm bảo không có chu kỳ lặp giữa các đối tượng
     private Set<Student> studentList;
 
@@ -20,7 +20,7 @@ public class Teacher extends User{
     @JoinColumn(name = "class_id")
     private Classes classes;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
     @JsonBackReference
     @JoinColumn(name = "subject_id")
     private Subject subject;
@@ -31,7 +31,7 @@ public class Teacher extends User{
     @JsonBackReference
     private School school;
 
-    @OneToMany (orphanRemoval = true, mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany (mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<NoteBookDetail> noteBookDetailList;
 
@@ -89,5 +89,16 @@ public class Teacher extends User{
 
     public void setClasses(Classes classes) {
         this.classes = classes;
+    }
+
+    @Override
+    public String toString() {
+        return "Teacher{" +
+                "studentList=" + studentList.size() +
+                ", classes=" + classes.getName() +
+                ", subject=" + subject.getNameSubject() +
+                ", school=" + school.getName() +
+                ", noteBookDetailList=" + noteBookDetailList.size() +
+                '}';
     }
 }

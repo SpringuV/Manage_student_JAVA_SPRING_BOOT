@@ -1,7 +1,10 @@
 package vutran.my_first_project_spring_boot.management_student.Service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vutran.my_first_project_spring_boot.management_student.Dao.ParentRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Parent;
 
@@ -27,6 +30,7 @@ public class ParentServiceImple implements ParentService{
         return parentRepository.save(parent);
     }
 
+    @Transactional
     @Override
     public void deleteParentById(int id) {
         parentRepository.deleteById(id);
@@ -43,12 +47,17 @@ public class ParentServiceImple implements ParentService{
     }
 
     @Override
-    public Parent getParentByUsername(String username) {
-        return parentRepository.findParentByUserName(username);
+    public Parent getParentByUserNameAndId(String username, int id) {
+        return parentRepository.findParentByUserNameAndId(username, id);
     }
 
     @Override
     public Parent getParentByIdentity(String identity) {
         return parentRepository.findParentByIdentity(identity);
+    }
+
+    @Override
+    public Parent getParentByUserName(String username) {
+        return parentRepository.findParentByUserName(username);
     }
 }

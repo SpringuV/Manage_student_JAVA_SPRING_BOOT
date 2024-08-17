@@ -22,30 +22,30 @@ public class Student extends User{
     @JsonBackReference
     private Classes classes;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "parent_id")
     private Parent parent;
 
     // Một học sinh học nhiều môn học, một môn học được học bởi nhiều học sinh
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "student_subject",
             joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
     @JsonManagedReference
     private Set<Subject> subjectList;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "transcript_student",
             joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "transcript_id"))
     @JsonManagedReference
     private Set<Transcript> transcriptSet;
 
     // một học sinh có nhiều phiếu điểm
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonManagedReference
     private Set<ScoreCard> scoreCardList;
 
     // một học sinh có 1 học bạ
-    @OneToMany (fetch = FetchType.LAZY,mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany (fetch = FetchType.LAZY,mappedBy = "student", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<StudyRecord> studyRecordList;
 
@@ -140,5 +140,19 @@ public class Student extends User{
 
     public void setSchool(School school) {
         this.school = school;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "teacher=" + teacher.getId() +
+                ", classes=" + classes.getName() +
+                ", parent=" + parent.getId() +
+                ", subjectList=" + subjectList.size() +
+                ", transcriptSet=" + transcriptSet.size() +
+                ", scoreCardList=" + scoreCardList.size() +
+                ", studyRecordList=" + studyRecordList.size() +
+                ", school=" + school.getName() +
+                '}';
     }
 }

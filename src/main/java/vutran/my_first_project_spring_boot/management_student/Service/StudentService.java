@@ -10,7 +10,8 @@ public interface StudentService {
     public void deleteStudentById(int id);
     public Student updateStudent(Student student);
     public List<Student> findALlStudentByPosition();
-    public Student getStudentByUsername(String username);
+    public Student getStudentByUsernameAndId(String username, int id);
     public Student getStudentByIdentity(String identity);
     public List<Student> getListStudentBySchoolId(int school_id);
+    Student getStudentByUserName(String username);
 }

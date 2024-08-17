@@ -117,4 +117,18 @@ public class NoteBookDetail {
     public void setTeacherComment(String teacherComment) {
         this.teacherComment = teacherComment;
     }
+
+    @Override
+    public String toString() {
+        return "NoteBookDetail{" +
+                "id=" + id +
+                ", noteBook=" + noteBook.getId() +
+                ", teacher=" + teacher +
+                ", contentLecture='" + contentLecture + '\'' +
+                ", teachingDay=" + teachingDay +
+                ", time='" + time + '\'' +
+                ", subject=" + subject.getNameSubject() +
+                ", teacherComment='" + teacherComment + '\'' +
+                '}';
+    }
 }

@@ -8,14 +8,15 @@ import java.util.Set;
 
 
 public interface TeacherService {
-    public Set<Teacher> getAllTeacher();
-    public Teacher getTeacherById(int id);
-    public Teacher addTeacher(Teacher teacher);
-    public void deleteTeacherById(int id);
-    public Teacher updateTeacher(Teacher teacher);
-    public Teacher fineTeacherByUserName(String username);
-    public Set<Teacher> getListTeacherByPosition();
-    public Optional<Teacher> findById(int id);
-    public List<Teacher> getListTeacherByIdSchool(int school_id);
-    public List<Teacher> getListTeacherBySchoolIdAndClassID(int school_id, int class_id);
+    List<Teacher> getAllTeacher();
+    Teacher getTeacherById(int id);
+    Teacher addTeacher(Teacher teacher);
+    void deleteTeacherById(int id);
+    Teacher updateTeacher(Teacher teacher);
+    Teacher getTeacherByUserNameAndId(String username, int user_id);
+    List<Teacher> getListTeacherByPosition();
+    Optional<Teacher> findById(int id);
+    List<Teacher> getListTeacherByIdSchool(int school_id);
+    List<Teacher> getListTeacherBySchoolIdAndClassID(int school_id, int class_id);
+    Teacher getTeacherByUserName(String username);
 }

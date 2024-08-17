@@ -11,6 +11,8 @@
             border: 1px solid black;
             margin: 3px 3px 3px 3px;
         }
+        .even-row { background-color: #f0f0f0; }
+        .odd-row { background-color: #ffffff; }
     </style>
 </head>
 <body>
@@ -34,19 +36,21 @@
             <th>Phone</th>
             <th>Position</th>
             <th>Feature</th>
-            <tr th:each="user : ${userList}">
-                <td th:text="${user.id}"></td>
-                <td th:text="${user.firstName}"></td>
-                <td th:text="${user.lastName}"></td>
-                <td th:text="${user.username}"></td>
-                <td th:text="${user.address}"></td>
-                <td th:text="${user.phoneNumber}"></td>
-                <td th:text="${user.position}"></td>
-                <td>
-                    <a th:href="@{/m-user/showModifyFormUser(id=${user.id})}" class="btn btn-success">Modify</a>
-                    <a th:href="@{/m-user/modify-delete(id=${user.id})}" class="btn btn-danger">Delete</a>
-                </td>
-            </tr>
+            <tbody>
+                <tr th:each="user,iterStat : ${userList}" th:classappend="${iterStat.index % 2 == 0} ? 'even-row' : 'old-row'">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.firstName}"></td>
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.address}"></td>
+                    <td th:text="${user.phoneNumber}"></td>
+                    <td th:text="${user.position}"></td>
+                    <td>
+                        <a th:href="@{/m-user/showModifyFormUser(id=${user.id})}" class="btn btn-success">Modify</a>
+                        <a th:href="@{/m-user/modify-delete(id=${user.id})}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
     <div th:if="${success}">

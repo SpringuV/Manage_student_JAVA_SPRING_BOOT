@@ -19,12 +19,12 @@ public class NoteBook {
     @JsonBackReference
     private School school;
 
-    @OneToMany(mappedBy = "noteBook", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "noteBook", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<NoteBookDetail> noteBookDetailList;
 
     // một sổ đầu bài tương ứng 1 lớp
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "note_class_id")
     private Classes classes;
 
@@ -67,5 +67,15 @@ public class NoteBook {
 
     public void setNoteBookDetail(List<NoteBookDetail> noteBookDetail) {
         this.noteBookDetailList = noteBookDetail;
+    }
+
+    @Override
+    public String toString() {
+        return "NoteBook{" +
+                "id=" + id +
+                ", school=" + school.getName() +
+                ", noteBookDetailList=" + noteBookDetailList.size() +
+                ", classes=" + classes.getId() +
+                '}';
     }
 }

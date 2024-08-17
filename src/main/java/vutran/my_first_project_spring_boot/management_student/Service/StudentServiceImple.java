@@ -2,6 +2,7 @@ package vutran.my_first_project_spring_boot.management_student.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vutran.my_first_project_spring_boot.management_student.Dao.StudentRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Student;
 
@@ -28,6 +29,7 @@ public class StudentServiceImple implements StudentService{
     }
 
     @Override
+    @Transactional
     public void deleteStudentById(int id) {
         studentRepository.deleteById(id);
     }
@@ -43,8 +45,8 @@ public class StudentServiceImple implements StudentService{
     }
 
     @Override
-    public Student getStudentByUsername(String username) {
-        return studentRepository.getStudentByUserName(username);
+    public Student getStudentByUsernameAndId(String username, int id) {
+        return studentRepository.getStudentByUserNameAndId(username, id);
     }
 
     @Override
@@ -55,5 +57,10 @@ public class StudentServiceImple implements StudentService{
     @Override
     public List<Student> getListStudentBySchoolId(int school_id) {
         return studentRepository.getListStudentBySchoolId(school_id);
+    }
+
+    @Override
+    public Student getStudentByUserName(String username) {
+        return studentRepository.getStudentByUserName(username);
     }
 }

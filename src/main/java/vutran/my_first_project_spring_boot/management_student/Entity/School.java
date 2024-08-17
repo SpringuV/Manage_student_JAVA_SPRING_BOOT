@@ -27,46 +27,46 @@ public class School {
     @Column(name = "school_level")
     private String level;
 
-    @OneToMany(fetch =FetchType.LAZY,mappedBy = "school", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch =FetchType.LAZY,mappedBy = "school", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<NoteBook> noteBookSet;
 
     // một trường có nhiều lớp
-    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference // đảm bảo không có chu kì lặp giữa các đối tượng
     private List<Classes> classesList;
 
     // một trường làm việc với nhiều giáo viên
-    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonManagedReference
     private List<Teacher> teacherList;
 
     // không sử dụng orphanremoval =true đối với entity là con người. Ví dụ: xóa trường thì người vẫn còn
 
     // một trường có nhiều học sinh, nhiều học sinh học ở 1 trường
-    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonManagedReference
     private List<Student> studentList;
 
     // một trường dạy nhiều môn học, nhiều môn học cũng được dạy nhiều ở nhiều trường
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "school_subject", joinColumns = @JoinColumn(name ="school_id"), inverseJoinColumns = @JoinColumn(name ="subject_id"))
-    @JsonBackReference
+    @JsonManagedReference
     private List<Subject> subjectList;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "school", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "school")
     @JsonManagedReference
     private List<Transcript> transcriptList;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "school", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "school", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<StudyRecord> studyRecordList;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "school", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "school", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<ScoreCard> scoreCardList;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "school", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "school", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonManagedReference
     private List<Parent> parentList;
 
@@ -205,5 +205,25 @@ public class School {
 
     public void setTranscriptList(List<Transcript> transcriptList) {
         this.transcriptList = transcriptList;
+    }
+
+    @Override
+    public String toString() {
+        return "School{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                ", level='" + level + '\'' +
+                ", noteBookSet=" + noteBookSet.size() +
+                ", classesList=" + classesList.size() +
+                ", teacherList=" + teacherList.size() +
+                ", studentList=" + studentList.size() +
+                ", subjectList=" + subjectList.size() +
+                ", transcriptList=" + transcriptList.size() +
+                ", studyRecordList=" + studyRecordList.size() +
+                ", scoreCardList=" + scoreCardList.size() +
+                ", parentList=" + parentList.size() +
+                '}';
     }
 }

@@ -73,7 +73,7 @@ public class ParentController {
     @PostMapping("/add-process")
     public String addProcess(@ModelAttribute Parent parent, Model model){
         // check parent
-        Parent parentExistUserName = parentService.getParentByUsername(parent.getUsername());
+        Parent parentExistUserName = parentService.getParentByUserName(parent.getUsername());
         Parent parentExistIdentity = parentService.getParentByIdentity(parent.getIdentity());
 
         if(parentExistIdentity != null || parentExistUserName != null){
@@ -154,6 +154,10 @@ public class ParentController {
     public String deleteTeacher(@ModelAttribute Parent parent, RedirectAttributes redirectAttributes){
         Parent parentExist = parentService.getParentById(parent.getId());
         if(parentExist != null){
+            parentExist.getCollectionAuthority().clear();
+            // save then delete
+            parentService.updateParent(parentExist);
+            // delete
             parentService.deleteParentById(parentExist.getId());
             redirectAttributes.addFlashAttribute("success", "You have deleted parent have id: "+ parentExist.getId());
             List<Parent> parentList = parentService.findALlParentByPosition();
