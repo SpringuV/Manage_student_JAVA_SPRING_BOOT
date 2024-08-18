@@ -63,4 +63,9 @@ public class StudentServiceImple implements StudentService{
     public Student getStudentByUserName(String username) {
         return studentRepository.getStudentByUserName(username);
     }
+
+    @Override
+    public List<Student> getListStudentByClassAndSchool(int class_id, int school_id) {
+        return studentRepository.getListStudentByClassAndSchool(class_id, school_id);
+    }
 }

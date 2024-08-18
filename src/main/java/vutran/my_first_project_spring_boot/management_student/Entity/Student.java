@@ -44,7 +44,7 @@ public class Student extends User{
     @JsonManagedReference
     private Set<ScoreCard> scoreCardList;
 
-    // một học sinh có 1 học bạ
+    // một học sinh có nhiều học bạ qua từng năm
     @OneToMany (fetch = FetchType.LAZY,mappedBy = "student", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<StudyRecord> studyRecordList;

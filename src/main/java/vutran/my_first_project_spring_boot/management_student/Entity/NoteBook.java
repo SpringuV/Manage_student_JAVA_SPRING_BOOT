@@ -19,7 +19,7 @@ public class NoteBook {
     @JsonBackReference
     private School school;
 
-    @OneToMany(mappedBy = "noteBook", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "noteBook", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference
     private List<NoteBookDetail> noteBookDetailList;
 

@@ -100,6 +100,11 @@ public class NotebookController {
         NoteBook noteBookExistWithId = notebookService.getNoteBookById(noteBook.getId());
         //exist
         if(noteBookExistWithId != null){
+            noteBookExistWithId.getNoteBookDetail().clear();
+            noteBookExistWithId.setClasses(null);
+            // update and delete
+            notebookService.updateNoteBook(noteBookExistWithId);
+            // delete
             notebookService.deleteNoteBookById(noteBookExistWithId.getId());
             redirectAttributes.addFlashAttribute("success", "You deleted NoteBook have id: "+ noteBookExistWithId.getId());
             return "redirect:/m-note/showManageNotebook";

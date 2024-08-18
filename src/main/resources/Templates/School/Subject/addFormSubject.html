@@ -118,7 +118,7 @@
             </select>
             <div th:if="${#fields.hasErrors('nameSubject')}">
                 <ul>
-                    <li th:each="e: ${#fields.hasErrors('nameSubject')}" th:text="${e}"></li>
+                    <li th:each="error: ${#fields.hasErrors('nameSubject')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>
@@ -127,11 +127,11 @@
             <label>List School: </label>
             <div th:each="school : ${schools}">
                 <input type="checkbox" th:value="${school.id}" th:field="*{schoolList}" name="schoolId">
-                <span th:text="${school.name} +' ('+ ${school.id}+')'"></span>
+                <span th:text="${school.name} +' ('+ ${school.id}+') ('+${school.level}+')'"></span>
             </div>
             <div th:if="${#fields.hasErrors('schoolList')}">
                 <ul>
-                    <li th:each="e: ${#fields.hasErrors('schoolList')}" th:text="${e}"></li>
+                    <li th:each="error: ${#fields.hasErrors('schoolList')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>

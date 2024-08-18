@@ -64,16 +64,46 @@
                 </ul>
             </div>
         </div>
-        <div>
-            <label for="studentid">Student Id: </label>
-            <input type="tel" th:field="*{student}" placeholder="Input student id"
-                   name="studentid" id="studentid">
-            <div th:if="${#fields.hasErrors('student')}">
+
+        <div class="mb-1">
+            <label class="form-label">School: </label>
+            <form action="#" method="get" th:action="@{/m-parent/add-process}">
+                <select th:field="*{school}" required onchange="this.form.submit()">
+                    <option value="">--Select School--</option>
+                    <option th:each="school : ${schoolList}" th:value="${school.id}"
+                            th:text="${school.name} +' ('+${school.level}+')'"></option>
+                </select>
+            </form>
+            <div th:if="${#fields.hasErrors('school')}">
                 <ul>
-                    <li th:each="error: ${#fields.hasErrors('student')}" th:text="${Error}"></li>
+                    <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>
+
+        <div class="mb-1">
+            <label class="form-label">Class: </label>
+            <select id="class_select" required>
+                <option value="">--Select Class--</option>
+                <option th:each="class : ${classList}"
+                        th:text="${class.name}"></option>
+            </select>
+        </div>
+
+        <div class="mb-1">
+            <label class="form-label">Student: </label>
+            <select th:field="*{student}" required>
+                <option value="">--Select Student--</option>
+                <option th:each="student : ${studentList}" th:value="${student.id}"
+                        th:text="${student.name}"></option>
+            </select>
+            <div th:if="${#fields.hasErrors('school')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+
         <div>
             <label for="teacherEmail">Parent Mail: </label>
             <input type="email" th:field="*{email}" placeholder="Input email student"

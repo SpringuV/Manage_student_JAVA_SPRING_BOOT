@@ -2,6 +2,7 @@ package vutran.my_first_project_spring_boot.management_student.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vutran.my_first_project_spring_boot.management_student.Dao.NotebookRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.NoteBook;
 
@@ -32,11 +33,13 @@ public class NotebookServiceImple implements NotebookService{
         return this.notebookRepository.save(noteBook);
     }
 
+    @Transactional // đảm bảo 'delete' nằm trong 1 session
     @Override
     public void deleteNoteBookById(int id) {
-        this.notebookRepository.deleteById(id);
+        notebookRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
     public NoteBook updateNoteBook(NoteBook noteBook) {
         return this.notebookRepository.saveAndFlush(noteBook);

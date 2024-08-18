@@ -23,7 +23,10 @@
         </div>
         <div>
             <label>Subject: </label>
-            <input type="text" th:field="*{subject}" placeholder="Input Subject" name="subject">
+            <select th:field="*{subject}" id="subject_select">
+                <option value="0">--Select Subject--</option>
+                <option th:each="subject : ${subjectList}" th:value="${subject.id}" th:text="${subject.nameSubject}"></option>
+            </select>
             <div th:if="${#fields.hasErrors('subject')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('subject')}" th:text="${error}"></li>
@@ -32,7 +35,10 @@
         </div>
         <div>
             <label>Teacher: </label>
-            <input type="text" th:field="*{teacher}" placeholder="Input teacher id" name="teacherId">
+            <select th:field="*{teacher}" id="teacher_select">
+                <option value="0">--Select Teacher--</option>
+                <option th:each="teacher : ${teacherList}" th:value="${teacher.id}" th:text="${teacher.lastName} +' '+ ${teacher.firstName}"></option>
+            </select>
             <div th:if="${#fields.hasErrors('teacher')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('teacher')}" th:text="${error}"></li>
@@ -86,7 +92,7 @@
 </div>
 <div>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-    <a class="btn btn-primary" th:href="@{/m-note-detail/showManageDetailNote}">NoteDetail List Manage</a>
+    <a class="btn btn-primary" th:href="@{/m-note-detail/showManageDetailNote(id=${noteBook_id})}">NoteDetail List Manage</a>
 </div>
 </body>
 </html>

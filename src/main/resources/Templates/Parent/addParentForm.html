@@ -87,7 +87,7 @@
                         <select th:field="*{school}" required onchange="this.form.submit()">
                             <option value="">--Select School--</option>
                             <option th:each="school : ${schoolList}" th:value="${school.id}"
-                                    th:text="${school.name}"></option>
+                                    th:text="${school.name} +' ('+${school.level}+')'"></option>
                         </select>
                     </form>
                     <div th:if="${#fields.hasErrors('school')}">
@@ -95,6 +95,15 @@
                             <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
                         </ul>
                     </div>
+                </div>
+
+                <div class="mb-1">
+                    <label class="form-label">Class: </label>
+                    <select id="class_select" required>
+                        <option value="">--Select Class--</option>
+                        <option th:each="class : ${classList}"
+                                th:text="${class.name}"></option>
+                    </select>
                 </div>
 
                 <div class="mb-1">
@@ -121,7 +130,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="form-floating mb-4">
+                <div class="form-floating mb-1">
                     <input type="text" th:field="*{identity}" name="identity" placeholder="Input Parent identity"
                            id="identity" class="form-control" required/>
                     <label class="form-label" for="identity">Identity: </label>

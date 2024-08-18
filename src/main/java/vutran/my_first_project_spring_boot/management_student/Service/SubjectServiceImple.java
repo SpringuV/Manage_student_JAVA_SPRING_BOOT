@@ -28,8 +28,8 @@ public class SubjectServiceImple implements SubjectService{
     }
 
     @Override
-    public Subject addSubject(Subject subject) {
-        return this.subjectRepository.save(subject);
+    public void addSubject(Subject subject) {
+        this.subjectRepository.save(subject);
     }
 
     @Override
@@ -38,8 +38,8 @@ public class SubjectServiceImple implements SubjectService{
     }
 
     @Override
-    public Subject updateSubject(Subject subject) {
-        return this.subjectRepository.saveAndFlush(subject);
+    public void updateSubject(Subject subject) {
+        this.subjectRepository.saveAndFlush(subject);
     }
 
     @Override

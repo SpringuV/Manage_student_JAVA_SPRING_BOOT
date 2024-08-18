@@ -7,10 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
-import vutran.my_first_project_spring_boot.management_student.Entity.Authority;
-import vutran.my_first_project_spring_boot.management_student.Entity.Parent;
-import vutran.my_first_project_spring_boot.management_student.Entity.School;
-import vutran.my_first_project_spring_boot.management_student.Entity.Student;
+import vutran.my_first_project_spring_boot.management_student.Entity.*;
+import vutran.my_first_project_spring_boot.management_student.Service.ClassService;
 import vutran.my_first_project_spring_boot.management_student.Service.ParentService;
 import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
 import vutran.my_first_project_spring_boot.management_student.Service.StudentService;
@@ -27,13 +25,15 @@ public class ParentController {
     private AuthorityRepository authorityRepository;
     private SchoolService schoolService;
     private StudentService studentService;
+    private ClassService classService;
 
     @Autowired
-    public ParentController(ParentService parentService, AuthorityRepository authorityRepository, SchoolService schoolService, StudentService studentService) {
+    public ParentController(ParentService parentService, AuthorityRepository authorityRepository, SchoolService schoolService, StudentService studentService, ClassService classService) {
         this.parentService = parentService;
         this.authorityRepository = authorityRepository;
         this.schoolService = schoolService;
         this.studentService = studentService;
+        this.classService = classService;
     }
 
     @GetMapping("/showManageParent")
@@ -49,6 +49,18 @@ public class ParentController {
             model.addAttribute("parentList", parentList);
             return "Parent/indexParent";
         }
+    }
+
+    @GetMapping("/getClassBySchoolId/{schoolId}")
+    @ResponseBody
+    public List<Classes> returnListClass(@RequestParam("schoolId") int school_id){
+        return classService.getListClassByIdSchool(school_id);
+    }
+
+    @GetMapping("/getStudentByClassAndSchool/{classId}/{schoolId}")
+    @ResponseBody
+    public List<Student> returnListStudent(@RequestParam("classId") int class_id, @RequestParam("schoolId") int school_id){
+        return studentService.getListStudentByClassAndSchool(class_id, school_id);
     }
 
     @GetMapping("showFormAddParent")

@@ -18,11 +18,28 @@
             </div>
         </div>
         <div>
-            <label>Class: </label>
-            <input type="text" th:field="*{classes}" placeholder="Input class" name="noteClass">
+            <label>Select School: </label>
+                <select th:field="*{school}" id="school_select" required>
+                    <option value="">--Select School--</option>
+                    <option th:each="school : ${schoolList}" th:value="${school.id}"
+                            th:text="${school.name}"></option>
+                </select>
+            <div th:if="${#fields.hasErrors('school')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <label>Select Class: </label>
+                <select th:field="*{classes}" id="class_select" required>
+                    <option value="">--Select Class--</option>
+                    <option th:each="class : ${classList}" th:value="${class.id}"
+                            th:text="${class.name}"></option>
+                </select>
             <div th:if="${#fields.hasErrors('classes')}">
                 <ul>
-                    <li th:each="e: ${#fields.hasErrors('classes')}" th:text="${e}"></li>
+                    <li th:each="error: ${#fields.hasErrors('classes')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>

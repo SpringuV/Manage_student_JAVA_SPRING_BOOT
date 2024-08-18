@@ -14,4 +14,5 @@ public interface StudentService {
     public Student getStudentByIdentity(String identity);
     public List<Student> getListStudentBySchoolId(int school_id);
     Student getStudentByUserName(String username);
+    List<Student> getListStudentByClassAndSchool(int class_id, int school_id);
 }

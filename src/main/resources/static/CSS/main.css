@@ -4,8 +4,9 @@
     flex-direction: column;
 }
 
-table, th, td{
-            border: 1px solid black;
-            margin: 3px 3px 3px 3px;
+table, th, td {
+    border: 1px solid black;
+    margin: 3px 3px 3px 3px;
 }
-
+.even-row { background-color: #f0f0f0; }
+.odd-row { background-color: #ffffff; }

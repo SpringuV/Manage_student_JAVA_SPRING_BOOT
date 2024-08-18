@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Entity.NoteBook;
 import vutran.my_first_project_spring_boot.management_student.Entity.NoteBookDetail;
+import vutran.my_first_project_spring_boot.management_student.Entity.Subject;
+import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
 import vutran.my_first_project_spring_boot.management_student.Service.DetailNoteService;
 import vutran.my_first_project_spring_boot.management_student.Service.NotebookService;
 
@@ -57,6 +59,10 @@ public class DetailNoteBookController {
     @GetMapping("/showFormAddNoteDetail")
     public String showFormAdd(NoteBook noteBook, Model model){
         model.addAttribute("noteDetail", new NoteBookDetail());
+        List<Teacher> teacherList = noteBook.getClasses().getTeacherList();
+        List<Subject> subjectList = noteBook.getSchool().getSubjectList();
+        model.addAttribute("teacherList", teacherList);
+        model.addAttribute("subjectList", subjectList);
         model.addAttribute("noteBook_id", noteBook.getId());
         return "School/NoteBook/DetailNoteBook/addFormDetailNote";
     }

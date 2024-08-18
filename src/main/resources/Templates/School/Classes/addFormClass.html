@@ -33,7 +33,7 @@
             <label>Select School: </label>
             <select id="school_select" th:field="*{school}">
                 <option value="" disabled>--Select School--</option>
-                <option th:each="school : ${schoolList}" th:value="${school.id}" th:text="${school.name}"></option>
+                <option th:each="school : ${schoolList}" th:value="${school.id}" th:text="${school.name} +' ('+ ${school.level}+')'"></option>
             </select>
             <div th:if="${#fields.hasErrors('school')}">
                 <ul>
@@ -43,7 +43,21 @@
         </div>
         <div>
             <label>Grade Class: </label>
-            <input type="number" th:field="*{grade}" min="1" max="12" placeholder="Input grade class" name="gradeClass">
+            <select id="class_grade_select" th:field="*{grade}">
+                <option th:value="0" selected>--Select Grade--</option>
+                <option th:value="1">1</option>
+                <option th:value="2">2</option>
+                <option th:value="3">3</option>
+                <option th:value="4">4</option>
+                <option th:value="5">5</option>
+                <option th:value="6">6</option>
+                <option th:value="7">7</option>
+                <option th:value="8">8</option>
+                <option th:value="9">9</option>
+                <option th:value="10">10</option>
+                <option th:value="11">11</option>
+                <option th:value="12">12</option>
+            </select>
             <div th:if="${#fields.hasErrors('grade')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('grade')}" th:text="${error}"></li>
@@ -64,6 +78,9 @@
     <a class="btn btn-primary" th:href="@{/m-class/showManageClass}">ClassList Manage</a>
 </div>
 </body>
+<script>
+    const selectGradeClass = document.getElementById('class_grade_select');
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>

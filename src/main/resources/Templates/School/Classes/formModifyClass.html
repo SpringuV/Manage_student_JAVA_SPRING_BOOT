@@ -47,9 +47,22 @@
             </div>
         </div>
         <div>
-            <label>Classs Grade: </label>
-            <input type="tel" th:field="*{grade}" placeholder="Input grade class"
-                   name="grade">
+            <label>Grade Class: </label>
+            <select th:field="*{grade}">
+                <option th:value="0">--Select Grade--</option>
+                <option th:value="1">1</option>
+                <option th:value="2">2</option>
+                <option th:value="3">3</option>
+                <option th:value="4">4</option>
+                <option th:value="5">5</option>
+                <option th:value="6">6</option>
+                <option th:value="7">7</option>
+                <option th:value="8">8</option>
+                <option th:value="9">9</option>
+                <option th:value="10">10</option>
+                <option th:value="11">11</option>
+                <option th:value="12">12</option>
+            </select>
             <div th:if="${#fields.hasErrors('grade')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('grade')}" th:text="${error}"></li>
