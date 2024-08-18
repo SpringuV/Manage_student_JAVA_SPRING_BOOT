@@ -24,20 +24,25 @@
             </div>
         </div>
         <div>
-            <label>Class: </label>
-            <input type="text" th:field="*{classes.id}" placeholder="Input class" name="noteClass">
-            <div th:if="${#fields.hasErrors('classes.id')}">
+            <label>Select School: </label>
+            <select th:field="*{school}" id="school_select" required>
+                <option value="">--Select School--</option>
+                <option th:each="school : ${schoolList}" th:value="${school.id}" th:text="${school.name}"></option>
+            </select>
+            <div th:if="${#fields.hasErrors('school')}">
                 <ul>
-                    <li th:each="error: ${#fields.hasErrors('classes.id')}" th:text="${error}"></li>
+                    <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>
         <div>
-            <label>School: </label>
-            <input type="text" th:field="*{school}" placeholder="Input school" name="noteSchool">
-            <div th:if="${#fields.hasErrors('school')}">
+            <label>Select Class: </label>
+            <select th:field="*{classes}" id="class_select" required>
+                <option value="0">--Select Class--</option>
+            </select>
+            <div th:if="${#fields.hasErrors('classes')}">
                 <ul>
-                    <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
+                    <li th:each="error: ${#fields.hasErrors('classes')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>
@@ -54,6 +59,42 @@
     <a class="btn btn-primary" th:href="@{/m-note/showManageNotebook}">NoteBook List Manage</a>
 </div>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const schoolSelect = document.getElementById('school_select');
+        const classSelect = document.getElementById('class_select');
+
+        function getClassBySchool(schoolId) {
+            if (schoolId) {
+                fetch(`/m-note/getClassBySchool/${schoolId}`)
+                    .then(response => response.json())
+                    .then(classes => {
+                        // clear previous class
+                        classSelect.innerHTML = '<option value="0">--Select Class--</option>';
+
+                        // populate new class
+                        classes.forEach(classItem => {
+                            const option = document.createElement('optiion');
+                            option.value = classItem.id;
+                            option.textContent = classItem.name;
+                            classSelect.appendChild(option);
+                        });
+                    })
+            }
+        }
+
+        schoolSelect.addEventListener('change', function () {
+            const schoolId = schoolSelect.value;
+            getClassBySchool(schoolId);
+        });
+
+        // if school is selected
+        const schoolId = schoolSelect.value;
+        if (schoolId) {
+            getClassBySchool(schoolId);
+        }
+    });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>

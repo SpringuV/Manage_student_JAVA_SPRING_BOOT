@@ -79,7 +79,54 @@
 </div>
 </body>
 <script>
-    const selectGradeClass = document.getElementById('class_grade_select');
+    // if school selected, check level school to input class grade
+    document.addEventListener('DOMContentLoaded', function() {
+    const schoolSelect = document.getElementById('school_select');
+    const gradeSelect = document.getElementById('class_grade_select');
+
+    schoolSelect.addEventListener('change', function() {
+        const schoolId = schoolSelect.value;
+
+        if (schoolId) {
+            fetch(`/m-class/getSchoolById/${schoolId}`)
+                .then(response => response.json())
+                .then(school => {
+                    const grade = school.level;
+
+                    // Xóa tất cả các option hiện tại trong gradeSelect
+                    gradeSelect.innerHTML = '';
+
+                    // Tạo lại các option dựa trên level của school
+                    let options = [];
+                    if (grade === 'Primary School') {
+                        options = [1, 2, 3, 4, 5];
+                    } else if (grade === 'Junior High School') {
+                        options = [6, 7, 8, 9];
+                    } else if (grade === 'High School'){
+                        options = [10, 11, 12];
+                    }
+
+                    // Thêm các option mới vào gradeSelect
+                    options.forEach(function(opt) {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = opt;
+                        optionElement.textContent = opt;
+                        gradeSelect.appendChild(optionElement);
+                    });
+
+                    // Tùy chọn "Select Grade"
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = "0";
+                    defaultOption.textContent = "--Select Grade--";
+                    defaultOption.selected = true;
+                    gradeSelect.prepend(defaultOption);
+                })
+                .catch(error => {
+                    console.error('Error fetching school data:', error);
+                });
+        }
+    });
+});
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
