@@ -12,7 +12,7 @@ import java.util.List;
 public class Classes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "class_id")
+    @Column(name = "c_id")
     private int id;
 
     @Column(name = "class_name")
@@ -35,7 +35,7 @@ public class Classes {
 
     // nhiều lớp chỉ được một trường quản lý
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "school_id")
+    @JoinColumn(name = "c_school_id")
     @JsonBackReference
     private School school;
 

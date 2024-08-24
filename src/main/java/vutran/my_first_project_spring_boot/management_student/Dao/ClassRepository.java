@@ -11,9 +11,12 @@ import java.util.List;
 @Repository
 public interface ClassRepository extends JpaRepository<Classes, Integer> {
 
-    @Query(value = "SELECT * FROM class WHERE class.class_name =:name AND class.school_id = :id", nativeQuery = true)
-    public Classes findClassByNameAndSchoolId(@Param("name") String name, @Param("id") int id);
+    @Query(value = "SELECT * FROM class WHERE class.class_name =:name AND class.c_school_id = :id", nativeQuery = true)
+    Classes findClassByNameAndSchoolId(@Param("name") String name, @Param("id") int id);
 
-    @Query(value = "SELECT * FROM class WHERE class.school_id=:school_id", nativeQuery = true)
-    public List<Classes> getListClassByIdSchool(@Param("school_id") int id_school);
+    @Query(value = "SELECT * FROM class WHERE class.c_school_id=:school_id", nativeQuery = true)
+    List<Classes> getListClassByIdSchool(@Param("school_id") int id_school);
+
+    @Query(value = "SELECT * FROM class AS c JOIN student AS s ON c.c_id = s.class_id WHERE s.id=:stu_id AND c.c_school_id=:school_id", nativeQuery = true)
+    Classes getClassByStudentAndSchool(@Param("stu_id") int student_id, @Param("school_id") int school_id);
 }

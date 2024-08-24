@@ -19,4 +19,5 @@ public interface TeacherService {
     List<Teacher> getListTeacherByIdSchool(int school_id);
     List<Teacher> getListTeacherBySchoolIdAndClassID(int school_id, int class_id);
     Teacher getTeacherByUserName(String username);
+    void updateTeachersBySubjectId(int subject_id);
 }

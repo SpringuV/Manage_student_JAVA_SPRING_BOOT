@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Entity.StudyRecord;
 import vutran.my_first_project_spring_boot.management_student.Entity.Transcript;
+import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
 import vutran.my_first_project_spring_boot.management_student.Service.StudyrecordService;
 import vutran.my_first_project_spring_boot.management_student.Service.TranscriptService;
 
@@ -18,11 +19,13 @@ import java.util.List;
 public class StudyrecordController {
     private StudyrecordService studyrecordService;
     private TranscriptService transcriptService;
+    private SchoolService schoolService;
 
     @Autowired
-    public StudyrecordController(StudyrecordService studyrecordService, TranscriptService transcriptService) {
+    public StudyrecordController(StudyrecordService studyrecordService, TranscriptService transcriptService, SchoolService schoolService) {
         this.studyrecordService = studyrecordService;
         this.transcriptService = transcriptService;
+        this.schoolService = schoolService;
     }
 
     @GetMapping("/showManageStudyRecord")
@@ -45,21 +48,16 @@ public class StudyrecordController {
         List<Transcript> transcriptList = transcriptService.getAllTranscripts();
         if(transcriptList.isEmpty()){
             model.addAttribute("transcripts", new ArrayList<>());
+            model.addAttribute("schoolList", schoolService.getAllSchools());
         } else {
             model.addAttribute("transcripts", transcriptList);
+            model.addAttribute("schoolList", schoolService.getAllSchools());
         }
         return "School/StudyRecord/addFormStudyRecord";
     }
 
     @PostMapping("/add-process")
     public String processAdd(@ModelAttribute StudyRecord studyRecord, Model model){
-        // get list transcript
-        List<Transcript> transcriptList = transcriptService.getAllTranscripts();
-        if(transcriptList.isEmpty()){
-            model.addAttribute("transcripts", new ArrayList<>());
-        } else {
-            model.addAttribute("transcripts", transcriptList);
-        }
         // check study exist
         StudyRecord studyRecordExist = studyrecordService.getStudyRecordByStudentAndSchoolAndSchoolYear(studyRecord.getStudent().getId(), studyRecord.getSchoolYear());
         if(studyRecordExist != null){
@@ -68,9 +66,13 @@ public class StudyrecordController {
         } else {
             StudyRecord newStudy = new StudyRecord();
             newStudy.setResultConduct(studyRecord.getResultConduct());
-            newStudy.setSchool(studyRecord.getSchool());
+            if(studyRecord.getSchool().getId() != 0){
+                newStudy.setSchool(studyRecord.getSchool());
+            }
             newStudy.setSchoolYear(studyRecord.getSchoolYear());
-            newStudy.setStudent(studyRecord.getStudent());
+            if(studyRecord.getStudent().getId()!= 0){
+                newStudy.setStudent(studyRecord.getStudent());
+            }
             newStudy.setTranscriptList(studyRecord.getTranscriptList());
             newStudy.setCommentOfTeacher(studyRecord.getCommentOfTeacher());
             studyrecordService.addStudyRecord(newStudy);

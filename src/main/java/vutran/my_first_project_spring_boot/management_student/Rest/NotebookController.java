@@ -48,7 +48,7 @@ public class NotebookController {
 
     @GetMapping("/getClassBySchool/{schoolId}")
     @ResponseBody
-    public List<Classes> returnListClass(@RequestParam("schoolId") int id_school) {
+    public List<Classes> returnListClass(@PathVariable("schoolId") int id_school) {
         return classService.getListClassByIdSchool(id_school);
     }
 
@@ -83,10 +83,12 @@ public class NotebookController {
         if (noteBookExist == null) {
             // notify error
             model.addAttribute("Error", "Not found NoteBook have id: " + noteBook.getId());
+            model.addAttribute("schoolList", schoolService.getAllSchools());
             model.addAttribute("NoteBook", new NoteBook());
             return "School/NoteBook/modifyFormNotebook";
         }
         model.addAttribute("NoteBook", noteBookExist);
+        model.addAttribute("schoolList", schoolService.getAllSchools());
         return "School/NoteBook/modifyFormNotebook";
     }
 

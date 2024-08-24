@@ -31,8 +31,19 @@ public class StudentServiceImple implements StudentService{
     @Override
     @Transactional
     public void deleteStudentById(int id) {
-        studentRepository.deleteById(id);
+        Student student = studentRepository.getReferenceById(id);
+        student.setClasses(null);
+        student.setSchool(null);
+        student.setTeacher(null);
+        student.setParent(null);
+        student.getTranscriptSet().clear();
+        student.getStudyRecordList().clear();
+        student.getSubjectList().clear();
+        student.getScoreCardList().clear();
+        studentRepository.saveAndFlush(student);
+        studentRepository.deleteById(student.getId());
     }
+
 
     @Override
     public Student updateStudent(Student student) {
@@ -67,5 +78,10 @@ public class StudentServiceImple implements StudentService{
     @Override
     public List<Student> getListStudentByClassAndSchool(int class_id, int school_id) {
         return studentRepository.getListStudentByClassAndSchool(class_id, school_id);
+    }
+
+    @Override
+    public List<Student> getListByClassId(int class_id) {
+        return studentRepository.getListByClassId(class_id);
     }
 }

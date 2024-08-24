@@ -46,33 +46,11 @@ public class ScorecardController {
          return "School/Subject/ScoreCard/indexScoreCard";
     }
 
-    @GetMapping("/selectSchool")
-    public String selectSchool(Model model){
-        List<School> schoolList = schoolService.getAllSchools();
-        model.addAttribute("school", new School());
-        model.addAttribute("schoolList", schoolList);
-        return "School/Subject/ScoreCard/selectSchool";
-    }
 
     @GetMapping("/showFormAddScoreCard")
     public String showAdd(@ModelAttribute ScoreCard scoreCard, Model model){
         model.addAttribute("scoreCard", scoreCard);
-        return "School/Subject/ScoreCard/addFormScoreCard";
-    }
-
-    // get param school id
-    @PostMapping("/showFormAddScoreCard")
-    public String showAdd(School school, Model model){
-        int school_id = school.getId();
-        School schoolGet = schoolService.getSchoolById(school_id);
-        // get List student
-        List<Student> studentList = studentService.getListStudentBySchoolId(school_id);
-        // get List subject
-        List<Subject> subjectList = subjectService.getListSubjectOfSchoolId(school_id);
-        model.addAttribute("schoolSelected", schoolGet);
-        model.addAttribute("studentList", studentList);
-        model.addAttribute("subjectList", subjectList);
-        model.addAttribute("scoreCard", new ScoreCard());
+        model.addAttribute("schoolList", schoolService.getAllSchools());
         return "School/Subject/ScoreCard/addFormScoreCard";
     }
 
@@ -99,7 +77,7 @@ public class ScorecardController {
             newScoreCard.setScore(scoreCard.getScore());
             newScoreCard.setSchoolYear(scoreCard.getSchoolYear());
             newScoreCard.setSubject(scoreCard.getSubject());
-            newScoreCard.setSchool(school);
+            newScoreCard.setSchool(scoreCard.getSchool());
             scoreCardService.addScoreCard(newScoreCard);
             model.addAttribute("success", "You created new Score Card has Student id: "+ newScoreCard.getStudent().getId());
             return "School/Subject/ScoreCard/notify";
@@ -110,6 +88,7 @@ public class ScorecardController {
     public String showFormModify(@ModelAttribute ScoreCard scoreCard, Model model, RedirectAttributes redirectAttributes){
         // check scoreCard exist
         ScoreCard scoreCardExist = scoreCardService.getScoreCardById(scoreCard.getId());
+
         if(scoreCardExist == null){
             redirectAttributes.addFlashAttribute("Error", "Error, ScoreCard Not Found !!!");
             return "redirect:/m-score-card/showManageScoreCard";

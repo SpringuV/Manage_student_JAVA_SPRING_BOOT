@@ -12,4 +12,5 @@ public interface SchoolService {
     public School updateSchool(School school);
     public List<School> findListSchoolByNamePattern(String name);
     public School findBySchoolName(String name);
+    List<School> getListSchoolByLevel(String level);
 }

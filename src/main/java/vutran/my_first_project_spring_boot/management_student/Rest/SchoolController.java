@@ -11,6 +11,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Entity.School;
+import vutran.my_first_project_spring_boot.management_student.Entity.Subject;
 import vutran.my_first_project_spring_boot.management_student.Service.*;
 
 import java.util.ArrayList;
@@ -20,10 +21,18 @@ import java.util.List;
 @RequestMapping("/m-school")
 public class SchoolController {
     private SchoolService schoolService;
+    private SubjectService subjectService;
 
     @Autowired
-    public SchoolController(SchoolService schoolService) {
+    public SchoolController(SchoolService schoolService, SubjectService subjectService) {
         this.schoolService = schoolService;
+        this.subjectService = subjectService;
+    }
+
+    @GetMapping("/getSchoolById/{schoolId}")
+    @ResponseBody
+    public School returnSchool(@PathVariable("schoolId") int id_school){
+        return  schoolService.getSchoolById(id_school);
     }
 
     @GetMapping("/showManageSchool")
@@ -79,6 +88,10 @@ public class SchoolController {
         school.setName(addSchool.getName());
         school.setAddress(addSchool.getAddress());
         school.setPhone(addSchool.getPhone());
+        // get subjectList
+        List<Subject> subjectList = subjectService.getListSubjectBySchoolLevel(addSchool.getLevel());
+        school.setSubjectList(subjectList);
+
         school.setLevel(addSchool.getLevel());
         schoolService.addSchool(school);
 
@@ -116,6 +129,10 @@ public class SchoolController {
             existSchool.setAddress(school.getAddress());
             existSchool.setPhone(school.getPhone());
             existSchool.setLevel(school.getLevel());
+            // update subject
+            List<Subject> subjectList = subjectService.getListSubjectBySchoolLevel(existSchool.getLevel());
+            existSchool.setSubjectList(subjectList);
+            // update school
             schoolService.updateSchool(existSchool);
         }
         model.addAttribute("success", "School updated successfully school with id " + existSchool.getId());
@@ -127,17 +144,28 @@ public class SchoolController {
     public String processDelete(@Valid @ModelAttribute School school , RedirectAttributes redirectAttributes){
         School existSchool = schoolService.getSchoolById(school.getId());
         if(existSchool != null){
+            existSchool.getSubjectList().clear();
+            existSchool.getClassesList().clear();
+            existSchool.getNoteBookSet().clear();
+            existSchool.getParentList().clear();
+            existSchool.getScoreCardList().clear();
+            existSchool.getStudentList().clear();
+            existSchool.getStudyRecordList().clear();
+            existSchool.getTeacherList().clear();
+            existSchool.getTranscriptList().clear();
+            // update and delete
+            schoolService.updateSchool(existSchool);
+            // delete
             schoolService.deleteSchoolById(existSchool.getId());
             List<School> schoolList = schoolService.getAllSchools();
             redirectAttributes.addAttribute("schoolList", schoolList);
             redirectAttributes.addAttribute("success","School deleted successfully school with id " + existSchool.getId());
-//        return "redirect:/api-school/showManageSchool";
-            return "redirect:/api-school/showManageSchool";
+            return "redirect:/m-school/showManageSchool";
         } else{
             List<School> schoolList = schoolService.getAllSchools();
             redirectAttributes.addAttribute("schoolList", schoolList);
             redirectAttributes.addAttribute("Error","Error process delete School, null !!");
-            return "redirect:/api-school/showManageSchool";
+            return "redirect:/m-school/showManageSchool";
         }
     }
 }

@@ -63,6 +63,12 @@ public class StudentController {
         return teacherService.getListTeacherBySchoolIdAndClassID(schoolId, classId);
     }
 
+    @GetMapping("/getStudentByClassAndSchool/{schoolId}/{classId}")
+    @ResponseBody
+    public List<Student> getListStudent(@PathVariable("schoolId") int school_id, @PathVariable("classId") int class_id){
+        return  studentService.getListStudentByClassAndSchool(class_id, school_id);
+    }
+
     @GetMapping("/showFormAddStudent")
     public String showFormAddStudent(Model model){
         model.addAttribute("student", new Student());
@@ -93,15 +99,21 @@ public class StudentController {
             newStudent.setPhoneNumber(student.getPhoneNumber());
             newStudent.setLastName(student.getLastName());
             newStudent.setFirstName(student.getFirstName());
-            newStudent.setTeacher(student.getTeacher());
+            if(student.getTeacher().getId() != 0){
+                newStudent.setTeacher(student.getTeacher());
+            }
             newStudent.setAvatar(student.getAvatar());
             newStudent.setIdentity(student.getIdentity());
-            newStudent.setSchool(student.getSchool());
+            if(student.getSchool().getId() != 0){
+                newStudent.setSchool(student.getSchool());
+            }
             newStudent.setAddress(student.getAddress());
             newStudent.setEmail(student.getEmail());
             newStudent.setEnabled(true);
             newStudent.setParent(student.getParent());
-            newStudent.setClasses(student.getClasses());
+            if(student.getClasses().getId() != 0){
+                newStudent.setClasses(student.getClasses());
+            }
             newStudent.setUsername(student.getUsername());
             // bcrypt
             newStudent.setPassword(new BCryptPasswordEncoder().encode(student.getPassword()));
@@ -145,12 +157,18 @@ public class StudentController {
             studentExist.setFirstName(student.getFirstName());
             studentExist.setLastName(student.getLastName());
             studentExist.setAddress(student.getAddress());
-            studentExist.setSchool(student.getSchool());
+            if(student.getSchool().getId() != 0 && student.getSchool() != null){
+                studentExist.setSchool(student.getSchool());
+            }
             studentExist.setEmail(student.getEmail());
             studentExist.setParent(student.getParent());
             studentExist.setPhoneNumber(student.getPhoneNumber());
-            studentExist.setTeacher(student.getTeacher());
-            studentExist.setClasses(student.getClasses());
+            if(student.getTeacher() != null && student.getTeacher().getId() != 0){
+                studentExist.setTeacher(student.getTeacher());
+            }
+            if(student.getClasses().getId() != 0 && student.getClasses() != null){
+                studentExist.setClasses(student.getClasses());
+            }
             studentService.updateStudent(studentExist);
             model.addAttribute("student", student);
             model.addAttribute("success", "You modified student have id: " + studentExist.getId());

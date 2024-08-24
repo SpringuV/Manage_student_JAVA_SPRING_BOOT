@@ -51,4 +51,9 @@ public class SchoolServiceImple implements SchoolService{
     public School findBySchoolName(String name) {
         return schoolRepository.findByNameSchool(name);
     }
+
+    @Override
+    public List<School> getListSchoolByLevel(String level) {
+        return schoolRepository.getListSchoolByLevel(level);
+    }
 }

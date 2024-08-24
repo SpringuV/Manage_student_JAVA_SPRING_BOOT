@@ -1,13 +1,15 @@
 package vutran.my_first_project_spring_boot.management_student.Entity;
 
+import java.util.Date;
+
 public class ErrorResponse {
     private String message;
-    private long timeStamp;
+    private Date timeStamp;
     private int status;
 
     public ErrorResponse(int status, String message ) {
         this.message = message;
-        this.timeStamp = System.currentTimeMillis();
+        this.timeStamp = new Date();
         this.status = status;
     }
 
@@ -19,11 +21,11 @@ public class ErrorResponse {
         this.message = message;
     }
 
-    public long getTimeStamp() {
+    public Date getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(long timeStamp) {
+    public void setTimeStamp(Date timeStamp) {
         this.timeStamp = timeStamp;
     }
 

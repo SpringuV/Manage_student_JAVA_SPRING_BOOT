@@ -41,7 +41,14 @@ public class TeacherServiceImple implements TeacherService{
     @Transactional
     @Override
     public void deleteTeacherById(int id) {
-        teacherRepository.deleteById(id);
+        Teacher teacher = teacherRepository.getReferenceById(id);
+        teacher.getStudentList().clear();
+        teacher.setClasses(null);
+        teacher.setSchool(null);
+        teacher.getNoteBookDetailList().clear();
+        teacher.getCollectionAuthority().clear();
+        teacherRepository.saveAndFlush(teacher);
+        teacherRepository.deleteById(teacher.getId());
     }
 
     @Override
@@ -77,5 +84,11 @@ public class TeacherServiceImple implements TeacherService{
     @Override
     public Teacher getTeacherByUserName(String username) {
         return teacherRepository.findTeacherByUserName(username);
+    }
+
+    @Transactional
+    @Override
+    public void updateTeachersBySubjectId(int subject_id) {
+        teacherRepository.updateTeachersBySubjectId(subject_id);
     }
 }

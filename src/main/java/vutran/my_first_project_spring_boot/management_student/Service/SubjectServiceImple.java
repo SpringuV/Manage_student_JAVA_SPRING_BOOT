@@ -2,6 +2,7 @@ package vutran.my_first_project_spring_boot.management_student.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vutran.my_first_project_spring_boot.management_student.Dao.SubjectRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Subject;
 
@@ -32,6 +33,7 @@ public class SubjectServiceImple implements SubjectService{
         this.subjectRepository.save(subject);
     }
 
+    @Transactional
     @Override
     public void deleteSubjectById(int id) {
         this.subjectRepository.deleteById(id);
@@ -50,5 +52,15 @@ public class SubjectServiceImple implements SubjectService{
     @Override
     public List<Subject> getListSubjectOfSchoolId(int idSchool) {
         return this.subjectRepository.getListSubjectOfSchoolId(idSchool);
+    }
+
+    @Override
+    public Subject getSubjectByName(String nameSubject) {
+        return subjectRepository.getSubjectByName(nameSubject);
+    }
+
+    @Override
+    public List<Subject> getListSubjectBySchoolLevel(String schoolLevel) {
+        return subjectRepository.getListSubjectBySchoolLevel(schoolLevel);
     }
 }

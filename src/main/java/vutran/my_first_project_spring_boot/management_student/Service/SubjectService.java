@@ -5,12 +5,21 @@ import vutran.my_first_project_spring_boot.management_student.Entity.Subject;
 import java.util.List;
 
 public interface SubjectService {
-    public List<Subject> getAllSubject();
-    public Subject getSubjectById(int id);
-    public void addSubject(Subject subject);
-    public void deleteSubjectById(int id);
-    public void updateSubject(Subject subject);
-    public Subject getSubjectBySchoolIdAndName(int idSchool, String nameSubject);
-    public List<Subject> getListSubjectOfSchoolId(int idSchool);
+    List<Subject> getAllSubject();
 
+    Subject getSubjectById(int id);
+
+    void addSubject(Subject subject);
+
+    void deleteSubjectById(int id);
+
+    void updateSubject(Subject subject);
+
+    Subject getSubjectBySchoolIdAndName(int idSchool, String nameSubject);
+
+    List<Subject> getListSubjectOfSchoolId(int idSchool);
+
+    Subject getSubjectByName(String nameSubject);
+
+    List<Subject> getListSubjectBySchoolLevel(String schoolLevel);
 }

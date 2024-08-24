@@ -37,7 +37,7 @@ public class School {
     private List<Classes> classesList;
 
     // một trường làm việc với nhiều giáo viên
-    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
     @JsonManagedReference
     private List<Teacher> teacherList;
 

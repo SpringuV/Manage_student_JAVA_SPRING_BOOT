@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Entity.Transcript;
+import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
 import vutran.my_first_project_spring_boot.management_student.Service.TranscriptService;
 
 import java.util.ArrayList;
@@ -15,10 +16,12 @@ import java.util.List;
 @RequestMapping("/m-transcript")
 public class TranscriptController {
     private TranscriptService transcriptService;
+    private SchoolService schoolService;
 
     @Autowired
-    public TranscriptController(TranscriptService transcriptService) {
+    public TranscriptController(TranscriptService transcriptService, SchoolService schoolService) {
         this.transcriptService = transcriptService;
+        this.schoolService = schoolService;
     }
 
     @GetMapping("/showManageTranscript")
@@ -37,6 +40,7 @@ public class TranscriptController {
     @GetMapping("/showFormAddTranscript")
     public String showForm(Model model) {
         model.addAttribute("transcript", new Transcript());
+        model.addAttribute("schoolList", schoolService.getAllSchools());
         return "School/Transcript/addFormTranscript";
     }
 
@@ -61,9 +65,11 @@ public class TranscriptController {
         Transcript transcriptExist = transcriptService.getTranscriptById(transcript.getId());
         if (transcriptExist != null) {
             model.addAttribute("transcript", transcriptExist);
+            model.addAttribute("schoolList", schoolService.getAllSchools());
         } else {
             model.addAttribute("Error", "Transcript has id: " + transcript.getId() + " not existed !!!");
             model.addAttribute("transcript", new Transcript());
+            model.addAttribute("schoolList", schoolService.getAllSchools());
         }
         return "School/Transcript/modifyFormTranscript";
     }
@@ -75,7 +81,9 @@ public class TranscriptController {
         if (transcriptExist != null) {
             transcriptExist.setNameTranscript(transcript.getNameTranscript());
             transcriptExist.setSemester(transcript.getSemester());
-            transcriptExist.setSchool(transcript.getSchool());
+            if(transcript.getSchool() != null){
+                transcriptExist.setSchool(transcript.getSchool());
+            }
             transcriptExist.setSchoolYear(transcript.getSchoolYear());
             transcriptService.updateTranscript(transcriptExist);
             model.addAttribute("success", "You modified transcript has id: " + transcriptExist.getId());

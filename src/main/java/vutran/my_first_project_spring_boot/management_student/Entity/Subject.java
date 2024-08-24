@@ -16,6 +16,9 @@ public class Subject {
     @Column(name = "subject_name")
     private String nameSubject;
 
+    @Column(name = "subject_level")
+    private String sub_level;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "school_subject", joinColumns = @JoinColumn(name ="subject_id"), inverseJoinColumns = @JoinColumn(name ="school_id"))
     @JsonBackReference
@@ -34,23 +37,23 @@ public class Subject {
     @JsonBackReference
     private Set<Student> studentList;
 
-    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonManagedReference
     private Set<ScoreCard> scoreCard;
 
     // một môn có nhiều tiết dạy trong notebook
-    @OneToMany( fetch = FetchType.LAZY,mappedBy = "subject", cascade = CascadeType.ALL)
+    @OneToMany( fetch = FetchType.LAZY,mappedBy = "subject", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonManagedReference
     private Set<NoteBookDetail> noteBookDetailList;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "subject")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "subject")
     @JsonManagedReference
     private Set<Teacher> teacherSet;
     
     public Subject() {
     }
 
-    public Subject(String nameSubject, Set<School> schoolList, Set<Transcript> transcriptList, Set<Student> studentList, Set<ScoreCard> scoreCard, Set<NoteBookDetail> noteBookDetailList, Set<Teacher> teacherSet) {
+    public Subject(String nameSubject, Set<School> schoolList, Set<Transcript> transcriptList, Set<Student> studentList, Set<ScoreCard> scoreCard, Set<NoteBookDetail> noteBookDetailList, Set<Teacher> teacherSet, String sub_level) {
         this.nameSubject = nameSubject;
         this.schoolList = schoolList;
         this.transcriptList = transcriptList;
@@ -58,6 +61,15 @@ public class Subject {
         this.scoreCard = scoreCard;
         this.noteBookDetailList = noteBookDetailList;
         this.teacherSet = teacherSet;
+        this.sub_level = sub_level;
+    }
+
+    public String getSub_level() {
+        return sub_level;
+    }
+
+    public void setSub_level(String sub_level) {
+        this.sub_level = sub_level;
     }
 
     public Set<School> getSchoolList() {
