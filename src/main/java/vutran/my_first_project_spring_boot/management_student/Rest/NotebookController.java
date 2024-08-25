@@ -1,11 +1,14 @@
 package vutran.my_first_project_spring_boot.management_student.Rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import vutran.my_first_project_spring_boot.management_student.Dao.NotebookRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Classes;
 import vutran.my_first_project_spring_boot.management_student.Entity.NoteBook;
 import vutran.my_first_project_spring_boot.management_student.Service.ClassService;
@@ -23,19 +26,22 @@ public class NotebookController {
     private TeacherService teacherService;
     private ClassService classService;
     private SchoolService schoolService;
+    private NotebookRepository notebookRepository;
 
     @Autowired
-    public NotebookController(NotebookService notebookService, TeacherService teacherService,
+    public NotebookController(NotebookRepository notebookRepository,NotebookService notebookService, TeacherService teacherService,
             ClassService classService, SchoolService schoolService) {
         this.notebookService = notebookService;
         this.teacherService = teacherService;
         this.classService = classService;
         this.schoolService = schoolService;
+        this.notebookRepository = notebookRepository;
     }
 
     @GetMapping("/showManageNotebook")
-    public String showListNote(Model model) {
-        List<NoteBook> noteBookList = notebookService.getAllNoteBooks();
+    public String showListNote(Model model, @RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "15") int size) {
+        Page<NoteBook> noteBookList = notebookRepository.findAll(PageRequest.of(page, size));
         if (noteBookList.isEmpty()) {
             model.addAttribute("Error", "Error, Notebook List Empty!!");
             model.addAttribute("notebookList", new ArrayList<>());

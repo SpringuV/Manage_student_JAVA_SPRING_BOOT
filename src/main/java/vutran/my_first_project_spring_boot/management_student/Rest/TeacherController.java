@@ -3,6 +3,8 @@ package vutran.my_first_project_spring_boot.management_student.Rest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
+import vutran.my_first_project_spring_boot.management_student.Dao.TeacherRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.*;
 import vutran.my_first_project_spring_boot.management_student.Service.ClassService;
 import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
@@ -28,14 +31,16 @@ public class TeacherController {
     private AuthorityRepository authorityRepository;
     private SubjectService subjectService;
     private ClassService classService;
+    private TeacherRepository teacherRepository;
 
     @Autowired
-    public TeacherController(TeacherService teacherService, SchoolService schoolService, AuthorityRepository authorityRepository, SubjectService subjectService, ClassService classService) {
+    public TeacherController(TeacherService teacherService, SchoolService schoolService, AuthorityRepository authorityRepository, SubjectService subjectService, ClassService classService, TeacherRepository teacherRepository) {
         this.teacherService = teacherService;
         this.schoolService = schoolService;
         this.authorityRepository = authorityRepository;
         this.subjectService = subjectService;
         this.classService = classService;
+        this.teacherRepository = teacherRepository;
     }
 
     @GetMapping("/getSubjectBySchool/{schoolId}")
@@ -51,9 +56,10 @@ public class TeacherController {
     }
 
     @GetMapping("/showManageTeacher")
-    public String showTeacherList(Model model){
+    public String showTeacherList(Model model, @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "15") int size){
         // get list teacher from database
-        List<Teacher> teacherList = teacherService.getListTeacherByPosition();
+        Page<Teacher> teacherList = teacherRepository.findAll(PageRequest.of(page, size));
 
         if(teacherList.isEmpty()){
             model.addAttribute("schoolList", schoolService.getAllSchools());

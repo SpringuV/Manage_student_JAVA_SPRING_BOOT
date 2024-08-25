@@ -1,10 +1,13 @@
 package vutran.my_first_project_spring_boot.management_student.Rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import vutran.my_first_project_spring_boot.management_student.Dao.DetailNoteRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.NoteBook;
 import vutran.my_first_project_spring_boot.management_student.Entity.NoteBookDetail;
 import vutran.my_first_project_spring_boot.management_student.Entity.Subject;
@@ -21,15 +24,18 @@ public class DetailNoteBookController {
 
     private DetailNoteService detailNoteService;
     private NotebookService notebookService;
+    private DetailNoteRepository detailNoteRepository;
 
     @Autowired
-    public DetailNoteBookController(DetailNoteService detailNoteService, NotebookService notebookService) {
+    public DetailNoteBookController(DetailNoteRepository detailNoteRepository, DetailNoteService detailNoteService, NotebookService notebookService) {
         this.detailNoteService = detailNoteService;
         this.notebookService = notebookService;
+        this.detailNoteRepository = detailNoteRepository;
     }
 
     @GetMapping("/showManageDetailNote")
-    public String showManage(@ModelAttribute NoteBook noteBook, Model model, RedirectAttributes redirectAttributes){
+    public String showManage(@ModelAttribute NoteBook noteBook, Model model, RedirectAttributes redirectAttributes, @RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "15") int size){
         // check note id is the valid
         if(noteBook.getId() < 0){
             redirectAttributes.addFlashAttribute("Error", "Invalid NoteBook ID!");
@@ -41,9 +47,9 @@ public class DetailNoteBookController {
             redirectAttributes.addFlashAttribute("Error", "Not found NoteBook, processing detail note book !!!");
             return "redirect:/m-note/showManageNotebook";
         }
-        List<NoteBookDetail> noteBookDetailList = detailNoteService.getDetailNoteByNoteBookId(noteBookExist.getId());
+        Page<NoteBookDetail> noteBookDetailPage = detailNoteRepository.findAllByNotebookId(noteBookExist.getId(), PageRequest.of(page, size));
         // check list is empty
-        if(noteBookDetailList.isEmpty()){
+        if(noteBookDetailPage.isEmpty()){
             model.addAttribute("detailNoteList", new ArrayList<>());
             // save idNoteBook
             model.addAttribute("noteBook_id", noteBookExist.getId());
@@ -52,7 +58,7 @@ public class DetailNoteBookController {
         }
         // save idNoteBook
         model.addAttribute("noteBook_id", noteBookExist.getId());
-        model.addAttribute("detailNoteList", noteBookDetailList);
+        model.addAttribute("detailNoteList", noteBookDetailPage);
         return "School/NoteBook/DetailNoteBook/indexDetailNote";
     }
 

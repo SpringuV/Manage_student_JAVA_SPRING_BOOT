@@ -1,10 +1,13 @@
 package vutran.my_first_project_spring_boot.management_student.Rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import vutran.my_first_project_spring_boot.management_student.Dao.StudyrecordRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.StudyRecord;
 import vutran.my_first_project_spring_boot.management_student.Entity.Transcript;
 import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
@@ -20,17 +23,20 @@ public class StudyrecordController {
     private StudyrecordService studyrecordService;
     private TranscriptService transcriptService;
     private SchoolService schoolService;
+    private StudyrecordRepository studyrecordRepository;
 
     @Autowired
-    public StudyrecordController(StudyrecordService studyrecordService, TranscriptService transcriptService, SchoolService schoolService) {
+    public StudyrecordController(StudyrecordRepository studyrecordRepository, StudyrecordService studyrecordService, TranscriptService transcriptService, SchoolService schoolService) {
         this.studyrecordService = studyrecordService;
         this.transcriptService = transcriptService;
         this.schoolService = schoolService;
+        this.studyrecordRepository = studyrecordRepository;
     }
 
     @GetMapping("/showManageStudyRecord")
-    public String showManage(Model model){
-        List<StudyRecord> studyRecordList = studyrecordService.getAllStudyRecords();
+    public String showManage(Model model, @RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "15") int size){
+        Page<StudyRecord> studyRecordList = studyrecordRepository.findAll(PageRequest.of(page, size));
         // check list empty
         if(studyRecordList.isEmpty()){
             model.addAttribute("Error", "Error, The List Empty!!!");
@@ -66,20 +72,22 @@ public class StudyrecordController {
         } else {
             StudyRecord newStudy = new StudyRecord();
             newStudy.setResultConduct(studyRecord.getResultConduct());
-            if(studyRecord.getSchool().getId() != 0){
+            if(studyRecord.getSchool().getId() != 0 && studyRecord.getSchool() != null){
                 newStudy.setSchool(studyRecord.getSchool());
             }
             newStudy.setSchoolYear(studyRecord.getSchoolYear());
-            if(studyRecord.getStudent().getId()!= 0){
+            if(studyRecord.getStudent().getId()!= 0 && studyRecord.getStudent() != null){
                 newStudy.setStudent(studyRecord.getStudent());
             }
             newStudy.setTranscriptList(studyRecord.getTranscriptList());
             newStudy.setCommentOfTeacher(studyRecord.getCommentOfTeacher());
+
             studyrecordService.addStudyRecord(newStudy);
+
             model.addAttribute("success", "You created new Study-record has id: "+ newStudy.getId());
             model.addAttribute("studyRecord", newStudy);
         }
-        return "School/StudyRecord/addFormStudyRecord";
+        return "School/StudyRecord/notifySuccess";
     }
 
     @GetMapping("/showModifyFormStudyRecord")

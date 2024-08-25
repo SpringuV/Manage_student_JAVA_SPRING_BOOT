@@ -1,7 +1,6 @@
 package vutran.my_first_project_spring_boot.management_student.Entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "transcript")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // muốn giữ lại cấu trúc tuần tự hóa nhưng tránh vòng lặp bằng cách sử dụng định danh
 public class Transcript {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -18,6 +19,7 @@ public class Authority {
     @JoinTable(name = "users_authority", joinColumns = @JoinColumn(name = "authority_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     @JsonBackReference
+    @JsonIgnore
     private List<User> userList;
 
     @Column(name = "name")

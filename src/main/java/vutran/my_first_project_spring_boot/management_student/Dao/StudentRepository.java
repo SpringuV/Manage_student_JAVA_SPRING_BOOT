@@ -1,5 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Dao;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,6 +12,9 @@ import java.util.List;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Integer> {
+
+    Page<Student> findAll(Pageable pageable);
+
     @Query(value = "SELECT * FROM users as u JOIN student as s ON u.id = s.id WHERE u.position = 'Student'", nativeQuery = true)
     List<Student> findListStudentByPosition();
 

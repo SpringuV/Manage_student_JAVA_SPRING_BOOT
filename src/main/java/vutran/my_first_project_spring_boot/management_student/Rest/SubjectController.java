@@ -1,10 +1,13 @@
 package vutran.my_first_project_spring_boot.management_student.Rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import vutran.my_first_project_spring_boot.management_student.Dao.SubjectRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.School;
 import vutran.my_first_project_spring_boot.management_student.Entity.Subject;
 import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
@@ -21,14 +24,16 @@ public class SubjectController {
     private StudentService studentService;
     private SchoolService schoolService;
     private TeacherService teacherService;
+    private SubjectRepository subjectRepository;
 
     @Autowired
-    public SubjectController(SubjectService subjectService, StudentService studentService,
+    public SubjectController(SubjectRepository subjectRepository,SubjectService subjectService, StudentService studentService,
             SchoolService schoolService, TeacherService teacherService) {
         this.subjectService = subjectService;
         this.studentService = studentService;
         this.schoolService = schoolService;
         this.teacherService = teacherService;
+        this.subjectRepository = subjectRepository;
     }
 
     @GetMapping("/getSubjectBySchool/{schoolId}")
@@ -38,8 +43,9 @@ public class SubjectController {
     }
 
     @GetMapping("/showManageSubject")
-    public String showManageSubject(Model model) {
-        List<Subject> subjectList = subjectService.getAllSubject();
+    public String showManageSubject(Model model, @RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "15") int size) {
+        Page<Subject> subjectList = subjectRepository.findAll(PageRequest.of(page, size));
         // check List empty
         if (subjectList.isEmpty()) {
             model.addAttribute("Error", "Error, List Subject Empty !!!");
@@ -63,12 +69,13 @@ public class SubjectController {
         if(subjectExist != null){
             model.addAttribute("Error", "Subject existed !!");
             model.addAttribute("subject", new Subject());
+            return "School/Subject/addFormSubject";
         } else {
             subjectService.addSubject(subject);
-            model.addAttribute("success", "You created new Subject has Name: " + subject.getNameSubject());
+            model.addAttribute("success", "You created new Subject has Name: " + subject.getNameSubject() + " id: "+subject.getId());
             model.addAttribute("subject", subject);
+            return "School/Subject/notifySuccess";
         }
-        return "School/Subject/addFormSubject";
     }
 
     @GetMapping("/showModifyFormSubject")

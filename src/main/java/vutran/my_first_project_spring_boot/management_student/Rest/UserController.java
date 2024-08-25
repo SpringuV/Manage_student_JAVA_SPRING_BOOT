@@ -1,6 +1,8 @@
 package vutran.my_first_project_spring_boot.management_student.Rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
+import vutran.my_first_project_spring_boot.management_student.Dao.UserRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.*;
 import vutran.my_first_project_spring_boot.management_student.Service.ParentService;
 import vutran.my_first_project_spring_boot.management_student.Service.StudentService;
@@ -28,27 +31,30 @@ public class UserController {
     private ParentService parentService;
     private TeacherService teacherService;
     private StudentService studentService;
+    private UserRepository userRepository;
 
     @Autowired
-    public UserController(UserService userService, AuthorityRepository authorityRepository, ParentService parentService, StudentService studentService, TeacherService teacherService) {
+    public UserController(UserService userService, AuthorityRepository authorityRepository, ParentService parentService, StudentService studentService, TeacherService teacherService, UserRepository userRepository) {
         this.userService = userService;
         this.authorityRepository = authorityRepository;
         this.parentService = parentService;
         this.teacherService = teacherService;
         this.studentService = studentService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/showManageUser")
-    public String showListUser(Model model){
-        List<User> userList = userService.getAllUser();
+    public String showListUser(Model model, @RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "15") int size){
+        Page<User> userPage = userRepository.findAll(PageRequest.of(page, size));
         // Necessary update if insert by mysql workbench
-//        updateRole();
+        //        updateRole();
         // check List
-        if(userList.isEmpty()){
+        if(userPage.isEmpty()){
             model.addAttribute("Error", "Error, List User Empty!!");
             model.addAttribute("userList", new ArrayList<>());
         }
-        model.addAttribute("userList", userList);
+        model.addAttribute("userList", userPage);
         return "User/indexUser";
     }
 

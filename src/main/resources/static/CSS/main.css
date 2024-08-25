@@ -9,4 +9,18 @@ table, th, td {
     margin: 3px 3px 3px 3px;
 }
 .even-row { background-color: #f0f0f0; }
-.odd-row { background-color: #ffffff; }
+.odd-row { background-color: #ffb3b3; }
+
+.disabled-link {
+    pointer-events: none; /* Vô hiệu hóa nhấn chuột */
+    color: grey; /* Màu chữ làm mờ */
+    cursor: not-allowed; /* Con trỏ chuột thể hiện không thể nhấn */
+    text-decoration: none; /* Bỏ gạch chân */
+}
+
+.active{
+    font-weight: bold; /* làm chữ đậm */
+    color: #007bff; /* Màu chữ nổi bật */
+    text-decoration: underline; /* Gạch chân */
+    pointer-events: none; /* Vô hiệu hóa nhấn vào liên kết */
+}

@@ -1,6 +1,8 @@
 package vutran.my_first_project_spring_boot.management_student.Rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
+import vutran.my_first_project_spring_boot.management_student.Dao.StudentRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.*;
 import vutran.my_first_project_spring_boot.management_student.Service.ClassService;
 import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
@@ -27,19 +30,22 @@ public class StudentController {
     private SchoolService schoolService;
     private TeacherService teacherService;
     private ClassService classService;
+    private StudentRepository studentRepository;
 
     @Autowired
-    public StudentController(StudentService studentService, AuthorityRepository authorityRepository, SchoolService schoolService, TeacherService teacherService, ClassService classService) {
+    public StudentController(StudentService studentService, AuthorityRepository authorityRepository, SchoolService schoolService, TeacherService teacherService, ClassService classService, StudentRepository studentRepository) {
         this.authorityRepository = authorityRepository;
         this.studentService = studentService;
         this.teacherService = teacherService;
         this.schoolService = schoolService;
         this.classService = classService;
+        this.studentRepository = studentRepository;
     }
 
     @GetMapping("/showManageStudent")
-    public String showListStudent(Model model){
-        List<Student> studentList = studentService.findALlStudentByPosition();
+    public String showListStudent(Model model, @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "15") int size){
+        Page<Student> studentList = studentRepository.findAll(PageRequest.of(page, size));
         //check List
         if(studentList.isEmpty()){
             model.addAttribute("studentList", new ArrayList<>());

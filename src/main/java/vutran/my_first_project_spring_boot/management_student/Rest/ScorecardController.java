@@ -1,10 +1,13 @@
 package vutran.my_first_project_spring_boot.management_student.Rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import vutran.my_first_project_spring_boot.management_student.Dao.ScorecardRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.School;
 import vutran.my_first_project_spring_boot.management_student.Entity.ScoreCard;
 import vutran.my_first_project_spring_boot.management_student.Entity.Student;
@@ -24,18 +27,21 @@ public class ScorecardController {
     private SubjectService subjectService;
     private SchoolService schoolService;
     private StudentService studentService;
+    private ScorecardRepository scorecardRepository;
 
     @Autowired
-    public ScorecardController(ScoreCardService scoreCardService, SubjectService subjectService, SchoolService schoolService, StudentService studentService) {
+    public ScorecardController(ScorecardRepository scorecardRepository, ScoreCardService scoreCardService, SubjectService subjectService, SchoolService schoolService, StudentService studentService) {
         this.scoreCardService = scoreCardService;
         this.subjectService = subjectService;
         this.schoolService = schoolService;
         this.studentService = studentService;
+        this.scorecardRepository = scorecardRepository;
     }
 
     @GetMapping("/showManageScoreCard")
-    public String showManage(Model model){
-        List<ScoreCard> scoreCardList = scoreCardService.getAllScoreCard();
+    public String showManage(Model model, @RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "15") int size){
+        Page<ScoreCard> scoreCardList = scorecardRepository.findAll(PageRequest.of(page, size));
         // check list empty
         if(scoreCardList.isEmpty()){
             model.addAttribute("Error", "Error, List ScoreCard Empty !!!");

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Notify</title>
+    <link href="/CSS/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/CSS/main.css" rel="stylesheet" type="text/css">
+    <script src="/JavaScript/function.js"></script>
+    <script src="/CSS/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<h1>Notify</h1>
+<div>
+    <div th:if="${Error}" class="alert alert-danger">
+        <span th:text="${Error}"></span>
+    </div>
+    <div th:if="${success}" class="alert alert-success">
+        <span th:text="${success}"></span>
+    </div>
+    <div>
+        <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
+        <a class="btn btn-primary" th:href="@{/m-subject/showFormAddSubject}">Add new Subject</a>
+        <a class="btn btn-primary" th:href="@{/m-subject/showManageSubject}">Subject List Manage</a>
+    </div>
+</div>
+</body>
+</html>

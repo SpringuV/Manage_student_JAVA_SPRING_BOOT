@@ -1,12 +1,15 @@
 package vutran.my_first_project_spring_boot.management_student.Rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
+import vutran.my_first_project_spring_boot.management_student.Dao.ParentRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.*;
 import vutran.my_first_project_spring_boot.management_student.Service.ClassService;
 import vutran.my_first_project_spring_boot.management_student.Service.ParentService;
@@ -26,19 +29,22 @@ public class ParentController {
     private SchoolService schoolService;
     private StudentService studentService;
     private ClassService classService;
+    private ParentRepository parentRepository;
 
     @Autowired
-    public ParentController(ParentService parentService, AuthorityRepository authorityRepository, SchoolService schoolService, StudentService studentService, ClassService classService) {
+    public ParentController(ParentRepository parentRepository, ParentService parentService, AuthorityRepository authorityRepository, SchoolService schoolService, StudentService studentService, ClassService classService) {
         this.parentService = parentService;
         this.authorityRepository = authorityRepository;
         this.schoolService = schoolService;
         this.studentService = studentService;
         this.classService = classService;
+        this.parentRepository = parentRepository;
     }
 
     @GetMapping("/showManageParent")
-    public String showParentList(Model model){
-        List<Parent> parentList = parentService.findALlParentByPosition();
+    public String showParentList(Model model, @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "15") int size){
+        Page<Parent> parentList = parentRepository.findAll(PageRequest.of(page, size));
 
         // check list parent
         if(parentList.isEmpty()){

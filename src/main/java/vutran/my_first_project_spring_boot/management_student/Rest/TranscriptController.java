@@ -1,10 +1,13 @@
 package vutran.my_first_project_spring_boot.management_student.Rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import vutran.my_first_project_spring_boot.management_student.Dao.TranscriptRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Transcript;
 import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
 import vutran.my_first_project_spring_boot.management_student.Service.TranscriptService;
@@ -17,16 +20,19 @@ import java.util.List;
 public class TranscriptController {
     private TranscriptService transcriptService;
     private SchoolService schoolService;
+    private TranscriptRepository transcriptRepository;
 
     @Autowired
-    public TranscriptController(TranscriptService transcriptService, SchoolService schoolService) {
+    public TranscriptController(TranscriptRepository transcriptRepository,TranscriptService transcriptService, SchoolService schoolService) {
         this.transcriptService = transcriptService;
         this.schoolService = schoolService;
+        this.transcriptRepository = transcriptRepository;
     }
 
     @GetMapping("/showManageTranscript")
-    public String showManage(Model model) {
-        List<Transcript> transcriptList = transcriptService.getAllTranscripts();
+    public String showManage(Model model, @RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "15") int size) {
+        Page<Transcript> transcriptList = transcriptRepository.findAll(PageRequest.of(page, size));
         // check empty
         if (transcriptList.isEmpty()) {
             model.addAttribute("Error", "Error, List Transcript empty!!!");
@@ -100,6 +106,12 @@ public class TranscriptController {
         // check transcript exist
         Transcript transcriptExist = transcriptService.getTranscriptById(transcript.getId());
         if (transcriptExist != null) {
+            transcriptExist.getStudentSet().clear();
+            transcriptExist.getStudyRecordList().clear();
+            transcriptExist.getSubjectSet().clear();
+            transcriptExist.setSchool(null);
+            // update then delete
+            transcriptService.updateTranscript(transcriptExist);
             transcriptService.deleteTranscriptById(transcriptExist.getId());
             redirectAttributes.addFlashAttribute("success", "You deleted a transcript has id: " + transcript.getId());
         } else {

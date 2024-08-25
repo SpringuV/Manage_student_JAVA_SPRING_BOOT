@@ -4,12 +4,15 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import vutran.my_first_project_spring_boot.management_student.Dao.SchoolRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.School;
 import vutran.my_first_project_spring_boot.management_student.Entity.Subject;
 import vutran.my_first_project_spring_boot.management_student.Service.*;
@@ -22,11 +25,13 @@ import java.util.List;
 public class SchoolController {
     private SchoolService schoolService;
     private SubjectService subjectService;
+    private SchoolRepository schoolRepository;
 
     @Autowired
-    public SchoolController(SchoolService schoolService, SubjectService subjectService) {
+    public SchoolController(SchoolRepository schoolRepository, SchoolService schoolService, SubjectService subjectService) {
         this.schoolService = schoolService;
         this.subjectService = subjectService;
+        this.schoolRepository = schoolRepository;
     }
 
     @GetMapping("/getSchoolById/{schoolId}")
@@ -36,9 +41,10 @@ public class SchoolController {
     }
 
     @GetMapping("/showManageSchool")
-    public String showSchool(Model model){
+    public String showSchool(Model model, @RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "15") int size){
         // get school from database
-        List<School> schoolList = schoolService.getAllSchools();
+        Page<School> schoolList = schoolRepository.findAll(PageRequest.of(page, size));
         // check size
         if (schoolList.isEmpty()){
             model.addAttribute("Error", "List School empty");

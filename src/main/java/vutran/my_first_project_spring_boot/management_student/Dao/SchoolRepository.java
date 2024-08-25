@@ -1,5 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Dao;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,6 +12,8 @@ import java.util.List;
 
 @Repository
 public interface SchoolRepository extends JpaRepository<School, Integer> {
+
+    Page<School> findAll (Pageable pageable);
 
     // jpql query to find school by name
     @Query("SELECT s FROM School s WHERE s.name LIKE %:name%")

@@ -1,5 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Dao;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +13,9 @@ import java.util.List;
 
 @Repository
 public interface DetailNoteRepository extends JpaRepository<NoteBookDetail, Integer> {
+
+    @Query(value = "SELECT * FROM notebook_detail JOIN note_book ON note_book.note_id = notebook_detail.notebook_id WHERE notebook_detail.notebook_id =:id",nativeQuery = true)
+    Page<NoteBookDetail> findAllByNotebookId(@Param("id") int id, Pageable pageable);
 
     @Query(value = "SELECT * FROM notebook_detail JOIN note_book ON note_book.note_id = notebook_detail.notebook_id WHERE notebook_detail.notebook_id =:id",nativeQuery = true)
     public List<NoteBookDetail> getDetailNoteByNoteBookId(@Param("id") int id);

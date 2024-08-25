@@ -1,12 +1,15 @@
 package vutran.my_first_project_spring_boot.management_student.Rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import vutran.my_first_project_spring_boot.management_student.Dao.ClassRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Classes;
 import vutran.my_first_project_spring_boot.management_student.Entity.School;
 import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
@@ -23,17 +26,20 @@ public class ClassController {
     private ClassService classService;
     private TeacherService teacherService;
     private SchoolService schoolService;
+    private ClassRepository classRepository;
 
     @Autowired
-    public ClassController(ClassService classService, TeacherService teacherService, SchoolService schoolService) {
+    public ClassController(ClassRepository classRepository, ClassService classService, TeacherService teacherService, SchoolService schoolService) {
         this.classService = classService;
         this.teacherService = teacherService;
         this.schoolService = schoolService;
+        this.classRepository = classRepository;
     }
 
     @GetMapping("/showManageClass")
-    public String showClass(Model model){
-        List<Classes> classesList = classService.getAllClasses();
+    public String showClass(Model model, @RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "15") int size){
+        Page<Classes> classesList = classRepository.findAll(PageRequest.of(page, size));
         // check the class empty
         if(classesList.isEmpty()){
             model.addAttribute("classList", new ArrayList<>());

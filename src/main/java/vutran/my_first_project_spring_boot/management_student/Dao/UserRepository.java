@@ -1,5 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Dao;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -9,6 +11,9 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
+
+    Page<User> findAll(Pageable pageable);
+
     @Query("SELECT u FROM User u WHERE u.username LIKE :username")
     public User findUserByUserName (String username);
 
