@@ -1,6 +1,8 @@
 package vutran.my_first_project_spring_boot.management_student.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -62,6 +64,11 @@ public class UserServiceImple implements UserService{
     @Override
     public List<User> getListUserByPosition(String position) {
         return userRepository.findAllUserByPosition(position);
+    }
+
+    @Override
+    public Page<User> getListUserByFirstName(String firstName, Pageable pageable) {
+        return userRepository.getListUserByFirstName(firstName, pageable);
     }
 
 

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vutran.my_first_project_spring_boot.management_student.Entity.User;
 
@@ -15,11 +16,14 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Page<User> findAll(Pageable pageable);
 
     @Query("SELECT u FROM User u WHERE u.username LIKE :username")
-    public User findUserByUserName (String username);
+    User findUserByUserName (String username);
 
     @Query("SELECT u FROM User u WHERE u.identity LIKE :identity")
-    public User findUserByIdentity(String identity);
+    User findUserByIdentity(String identity);
 
     @Query("SELECT u FROM User u WHERE u.position LIKE :position")
-    public List<User> findAllUserByPosition(String position);
+    List<User> findAllUserByPosition(String position);
+
+    @Query("SELECT u FROM User u WHERE u.firstName LIKE %:name%")
+    Page<User> getListUserByFirstName(@Param("name") String name, Pageable pageable);
 }

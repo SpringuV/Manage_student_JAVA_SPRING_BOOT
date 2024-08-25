@@ -3,6 +3,8 @@ package vutran.my_first_project_spring_boot.management_student.Rest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +18,10 @@ import vutran.my_first_project_spring_boot.management_student.Service.UserServic
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Controller
+@RequestMapping("/event")
 public class EventFormController {
 
     private UserService userService;
@@ -69,6 +73,17 @@ public class EventFormController {
     public void initBinder(WebDataBinder webDataBinder){
         StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
         webDataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+    }
+
+    // search user by name
+    @GetMapping("/search-name")
+    public String processSearch(@ModelAttribute String searchName, Model model, @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "15") int size){
+        Page<User> userPage = userService.getListUserByFirstName(searchName, PageRequest.of(page, size));
+        // check List
+        if(userPage.isEmpty()){
+            model.addAttribute("Error", "Error, Not found User!!!");
+        }
     }
 
     @PostMapping("/register/process")

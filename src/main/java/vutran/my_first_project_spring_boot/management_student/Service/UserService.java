@@ -1,17 +1,28 @@
 package vutran.my_first_project_spring_boot.management_student.Service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import vutran.my_first_project_spring_boot.management_student.Entity.User;
 
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
-    public List<User> getAllUser();
-    public User getUserById(int id);
-    public User addUser(User user);
-    public void deleteUserById(int id);
-    public User updateUser(User user);
-    public User findUserByIdentity(String position);
-    public User findUserByName(String username);
-    public List<User> getListUserByPosition(String position);
+    List<User> getAllUser();
+
+    User getUserById(int id);
+
+    User addUser(User user);
+
+    void deleteUserById(int id);
+
+    User updateUser(User user);
+
+    User findUserByIdentity(String position);
+
+    User findUserByName(String username);
+
+    List<User> getListUserByPosition(String position);
+
+    Page<User> getListUserByFirstName(String firstName, Pageable pageable);
 }
