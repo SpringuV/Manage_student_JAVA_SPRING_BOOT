@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+//@DiscriminatorValue("STUDENT")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // muốn giữ lại cấu trúc tuần tự hóa nhưng tránh vòng lặp bằng cách sử dụng định danh
 public class Student extends User{
 

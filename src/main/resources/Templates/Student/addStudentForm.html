@@ -168,7 +168,7 @@ so that the class must to selected before the teacher
         function getClassBySchoolId(schoolId){
             if(schoolId){
                 // fetch class
-                fetch(`/m-student/getClassBySchool/${schoolId}`)
+                fetch(`/m-class/getClassBySchoolId/${schoolId}`)
                 .then(response => response.json())
                 .then(classes =>{
                     // clear previous classes
@@ -192,7 +192,7 @@ so that the class must to selected before the teacher
         function getTeacherBySchoolIdAndClassId(schoolId, classId){
             if(schoolId && classId){
                 // fetch teacher
-                fetch(`/m-student/getTeacherBySchoolAndClass/${schoolId}/${classId}`)
+                fetch(`/m-teacher/getTeacherBySchoolAndClass/${schoolId}/${classId}`)
                 .then(response => response.json())
                 .then(teachers => {
                     // clear teacher previous

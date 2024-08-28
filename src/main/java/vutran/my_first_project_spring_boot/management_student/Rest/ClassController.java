@@ -136,12 +136,12 @@ public class ClassController {
     }
 
     @GetMapping("/modify-delete")
-    public String processDelete(@ModelAttribute Classes classes, RedirectAttributes redirectAttributes){
-        Classes classExist = classService.getClassById(classes.getId());
+    public String processDelete(@RequestParam("id") int id, RedirectAttributes redirectAttributes){
+        Classes classExist = classService.getClassById(id);
         if (classExist == null) {
             redirectAttributes.addFlashAttribute("Error", "Error, Not found Class !!!");
         } else {
-            classService.deleteClassById(classExist.getId());
+            classService.deleteClassById(id);
             redirectAttributes.addFlashAttribute("success", "You deleted success classes has id: "+classExist.getId() + "belong school "+ classExist.getSchool().getName());
         }
         return "redirect:/m-class/showManageClass";

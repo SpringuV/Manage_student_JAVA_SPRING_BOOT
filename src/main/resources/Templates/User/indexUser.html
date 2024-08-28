@@ -12,6 +12,7 @@
 <div><h1>Manage User</h1></div>
 <div class="container">
     <div class="row">
+<!--        START notify-->
         <div id="autoHide">
             <div th:if="${Error}">
                 <span th:text="${Error}" class="alert alert-danger"></span>
@@ -20,7 +21,10 @@
                 <span th:text="${success}" class="alert alert-success"></span>
             </div>
         </div>
-        <div th:insert="~{Fragment/searchElementForm :: searchElementForm}"></div>
+<!--        END notify-->
+<!--        START SEARCH-->
+        <div th:replace="~{Fragment/searchElementForm :: searchElementForm('/m-user/search-name')}"></div>
+<!--        END SEARCH-->
         <table>
             <thead>
                 <th>User Id</th>
@@ -32,7 +36,7 @@
                 <th>Position</th>
                 <th>Feature</th>
             </thead>
-            <tbody>
+            <tbody >
                 <tr th:each="user,iterStat : ${userList.content}" th:classappend="${iterStat.index % 2 == 0} ? 'even-row' : 'old-row'">
                     <td th:text="${user.id}"></td>
                     <td th:text="${user.firstName}"></td>
@@ -46,11 +50,15 @@
                         <a th:href="@{/m-user/modify-delete(id=${user.id})}" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
+                <!-- Hiển thị thông báo khi danh sách trống -->
+                <tr th:if="${userList.content.isEmpty()}">
+                    <td colspan="8">List Empty!!!</td>
+                </tr>
             </tbody>
         </table>
     </div>
     <div>
-        <span >
+        <span>
             <a th:if="${userList.hasPrevious()}" th:href="@{/m-user/showManageUser(page=${userList.number - 1}, size=${userList.size})}">Previous</a>
             <a th:if="${not userList.hasPrevious()}" href="#" class="disabled-link" aria-disabled="true">Previous</a>
         </span>

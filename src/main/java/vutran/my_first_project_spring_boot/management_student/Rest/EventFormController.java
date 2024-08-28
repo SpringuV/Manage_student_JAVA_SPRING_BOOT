@@ -18,10 +18,8 @@ import vutran.my_first_project_spring_boot.management_student.Service.UserServic
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Controller
-@RequestMapping("/event")
 public class EventFormController {
 
     private UserService userService;
@@ -47,11 +45,12 @@ public class EventFormController {
 
     // login
     @GetMapping("/showLoginPage")
-    public String showLoginPage(@RequestParam(value = "expired", required = false) String expired){
+    public String showLoginPage(@RequestParam(value = "expired", required = false) String expired, Model model){
         // Có thể kiểm tra xem tham số expired có tồn tại hay không
-//        if (expired != null) {
-//            // Xử lý logic nếu cần khi tham số expired tồn tại
-//        }
+        if (expired != null) {
+            // Xử lý logic nếu cần khi tham số expired tồn tại
+            model.addAttribute("error", "Your session has expired. Please log in again.");
+        }
         return "login";
     }
 
@@ -74,71 +73,4 @@ public class EventFormController {
         StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
         webDataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
     }
-
-    // search user by name
-    @GetMapping("/search-name")
-    public String processSearch(@ModelAttribute String searchName, Model model, @RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "15") int size){
-        Page<User> userPage = userService.getListUserByFirstName(searchName, PageRequest.of(page, size));
-        // check List
-        if(userPage.isEmpty()){
-            model.addAttribute("Error", "Error, Not found User!!!");
-        }
-    }
-
-    @PostMapping("/register/process")
-    public String process(@ModelAttribute User user, BindingResult bindingResult, Model model, HttpSession httpSession){
-    //@Valid: check chuan 100%, binding result trả về kết quả - thông báo, session lưu lại thông tin khi nhap sai...
-        // validation user ?
-        String username = user.getUsername();
-        // có lỗi thì redirect to register/form
-        if(bindingResult.hasErrors()){
-            return "Register/formRegister";
-        }
-        // check user existed
-        User userCheck = userService.findUserByName(username);
-        if(userCheck != null) {
-            model.addAttribute("registerUser", new User());
-            model.addAttribute("myError", "Account existed");
-            return "Register/formRegister";
-        }
-
-        // if doesn't exist
-        // encode password by bcrypt
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        User userNew = new User();
-        userNew.setUsername(user.getUsername());
-        userNew.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userNew.setEnabled(true);
-        userNew.setIdentity(user.getIdentity());
-        userNew.setLastName(user.getLastName());
-        userNew.setFirstName(user.getFirstName());
-        userNew.setEmail(user.getEmail());
-        userNew.setPosition(user.getPosition());
-        userNew.setAvatar(user.getAvatar());
-        userNew.setAddress(user.getAddress());
-        userNew.setPhoneNumber(user.getPhoneNumber());
-
-        // create authority
-        Authority defaultRole = new Authority();
-        if(userNew.getPosition().equals("Teacher")){
-            defaultRole = authorityRepository.findByName("ROLE_TEACHER");
-        } else if (userNew.getPosition().equals("User")) {
-            defaultRole = authorityRepository.findByName("ROLE_USER");
-        } else if (userNew.getPosition().equals("Parent")) {
-            defaultRole = authorityRepository.findByName("ROLE_PARENT");
-        } else if (userNew.getPosition().equals("Student")) {
-            defaultRole = authorityRepository.findByName("ROLE_STUDENT");
-        }
-        Collection<Authority> roles = new ArrayList<>();
-        roles.add(defaultRole);
-        userNew.setCollectionAuthority(roles);
-
-        userService.addUser(userNew);
-
-        // notify success
-        httpSession.setAttribute("myUser", userNew);
-        return "Register/confirmation";
-    }
-
 }

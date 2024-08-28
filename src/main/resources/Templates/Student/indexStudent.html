@@ -20,6 +20,9 @@
                 <span th:text="${success}" class="alert-success"></span>
             </div>
         </div>
+        <!--        START SEARCH-->
+        <div th:replace="~{Fragment/searchElementForm :: searchElementForm('/m-student/search-name')}"></div>
+        <!--        END SEARCH-->
         <table>
             <thead>
                 <th>Student Id</th>
@@ -73,6 +76,10 @@
                             <a th:href="@{/m-student/modify-delete(id=${student.id})}" class="btn btn-danger">Delete</a>
                         </div>
                     </td>
+                </tr>
+                <!-- Hiển thị thông báo khi danh sách trống -->
+                <tr th:if="${studentList.content.isEmpty()}">
+                    <td colspan="8">List Empty!!!</td>
                 </tr>
             </tbody>
         </table>

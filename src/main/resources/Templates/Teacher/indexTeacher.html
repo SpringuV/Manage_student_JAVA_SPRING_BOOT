@@ -24,6 +24,9 @@
                 <span th:text="${success}" class="alert-success"></span>
             </div>
         </div>
+<!--        START SEARCH-->
+        <div th:replace="~{Fragment/searchElementForm :: searchElementForm('/m-teacher/search-name')}"></div>
+<!--        END SEARCH-->
         <table>
             <thead>
                 <th>Teacher Id</th>
@@ -66,6 +69,10 @@
                            class="btn btn-success">Modify</a>
                         <a th:href="@{/m-teacher/modify-delete(id=${teacher.id})}" class="btn btn-danger">Delete</a>
                     </td>
+                </tr>
+                <!-- Hiển thị thông báo khi danh sách trống -->
+                <tr th:if="${teacherList.content.isEmpty()}">
+                    <td colspan="11">List Empty!!!</td>
                 </tr>
             </tbody>
         </table>

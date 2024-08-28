@@ -42,6 +42,10 @@
                 <a th:href="@{/m-class/showModifyFormClass(id=${class.id})}" class="btn btn-success">Modify</a>
             </td>
             <td>
+<!--                <form action="#" th:action="@{/m-class/modify-delete}" th:object="${class}" method="post">-->
+<!--                    <input type="hidden" th:field="*{id}"/>-->
+<!--                    <button type="submit" class="btn btn-danger">Delete</button>-->
+<!--                </form>-->
                 <a th:href="@{/m-class/modify-delete(id=${class.id})}" class="btn btn-danger">Delete</a>
             </td>
             <!--                end feature-->

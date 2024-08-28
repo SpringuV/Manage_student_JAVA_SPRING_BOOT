@@ -2,6 +2,7 @@ package vutran.my_first_project_spring_boot.management_student.Rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -12,10 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
 import vutran.my_first_project_spring_boot.management_student.Dao.UserRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.*;
-import vutran.my_first_project_spring_boot.management_student.Service.ParentService;
-import vutran.my_first_project_spring_boot.management_student.Service.StudentService;
-import vutran.my_first_project_spring_boot.management_student.Service.TeacherService;
-import vutran.my_first_project_spring_boot.management_student.Service.UserService;
+import vutran.my_first_project_spring_boot.management_student.Service.*;
 
 import java.util.ArrayList;
 
@@ -32,15 +30,17 @@ public class UserController {
     private TeacherService teacherService;
     private StudentService studentService;
     private UserRepository userRepository;
+    private SchoolService schoolService;
 
     @Autowired
-    public UserController(UserService userService, AuthorityRepository authorityRepository, ParentService parentService, StudentService studentService, TeacherService teacherService, UserRepository userRepository) {
+    public UserController(SchoolService schoolService, UserService userService, AuthorityRepository authorityRepository, ParentService parentService, StudentService studentService, TeacherService teacherService, UserRepository userRepository) {
         this.userService = userService;
         this.authorityRepository = authorityRepository;
         this.parentService = parentService;
         this.teacherService = teacherService;
         this.studentService = studentService;
         this.userRepository = userRepository;
+        this.schoolService = schoolService;
     }
 
     @GetMapping("/showManageUser")
@@ -58,9 +58,27 @@ public class UserController {
         return "User/indexUser";
     }
 
+    // search user by name
+    @GetMapping("/search-name")
+    public String processSearch(@RequestParam("searchName") String searchName, Model model, @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "15") int size){
+
+        Page<User> userPage = userService.getListUserByFirstName(searchName, PageRequest.of(page, size));
+        // check List
+        if(userPage.isEmpty()){
+            model.addAttribute("Error", "Error, Not found User!!!");
+            model.addAttribute("userList", new PageImpl<>(new ArrayList<>(), PageRequest.of(page, size), 0));
+        } else {
+            model.addAttribute("userList", userPage);
+        }
+        model.addAttribute("searchName", searchName);
+        return "User/indexUser";
+    }
+
     @GetMapping("/showFormAddUser")
     public String showFormAddUser(Model model){
         model.addAttribute("user", new User());
+        model.addAttribute("schoolList", schoolService.getAllSchools());
         return "User/addFormUser";
     }
 

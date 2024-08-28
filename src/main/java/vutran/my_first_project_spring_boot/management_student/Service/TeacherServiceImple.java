@@ -1,6 +1,8 @@
 package vutran.my_first_project_spring_boot.management_student.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vutran.my_first_project_spring_boot.management_student.Dao.TeacherRepository;
@@ -90,5 +92,15 @@ public class TeacherServiceImple implements TeacherService{
     @Override
     public void updateTeachersBySubjectId(int subject_id) {
         teacherRepository.updateTeachersBySubjectId(subject_id);
+    }
+
+    @Override
+    public Page<Teacher> findTeachersByFirstName(String searchName, PageRequest pageRequest) {
+        return teacherRepository.findTeachersByFirstName(searchName, pageRequest);
+    }
+
+    @Override
+    public List<Teacher> getListTeacherByClass(int id_class) {
+        return teacherRepository.getListTeacherByClass(id_class);
     }
 }

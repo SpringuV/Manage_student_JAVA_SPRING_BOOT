@@ -10,6 +10,7 @@ import java.sql.Blob;
 import java.util.Collection;
 
 @Entity
+//@DiscriminatorValue("PARENT")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // muốn giữ lại cấu trúc tuần tự hóa nhưng tránh vòng lặp bằng cách sử dụng định danh
 public class Parent extends User{
 

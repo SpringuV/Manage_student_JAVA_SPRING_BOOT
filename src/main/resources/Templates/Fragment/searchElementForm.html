@@ -1,5 +1,6 @@
-<form th:fragment="searchElementForm" th:action="@{/event/search-name}" id="form_input_search_name" method="get">
+<!-- templates/fragments/searchElementForm.html -->
+<form th:fragment="searchElementForm(searchAction)" th:action="@{${searchAction}}" id="form_input_search_name" method="get">
     <label for="name_input">Search Name: </label>
-    <input style="width: 300px;" id="name_input" type="text" placeholder="Search name of User">
+    <input style="width: 300px;" name="searchName" id="name_input" type="text" placeholder="Search name of User">
     <button type="submit" class="btn btn-primary">Search</button>
 </form>

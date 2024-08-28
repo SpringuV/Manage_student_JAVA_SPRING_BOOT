@@ -3,6 +3,8 @@ package vutran.my_first_project_spring_boot.management_student.Service;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vutran.my_first_project_spring_boot.management_student.Dao.ParentRepository;
@@ -59,5 +61,10 @@ public class ParentServiceImple implements ParentService{
     @Override
     public Parent getParentByUserName(String username) {
         return parentRepository.findParentByUserName(username);
+    }
+
+    @Override
+    public Page<Parent> findParentsByFirstName(String searchName, PageRequest pageRequest) {
+        return parentRepository.findParentsByFirstName(searchName, pageRequest);
     }
 }

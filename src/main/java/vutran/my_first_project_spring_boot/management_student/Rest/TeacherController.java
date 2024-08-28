@@ -55,6 +55,22 @@ public class TeacherController {
         return classService.getListClassByIdSchool(schoolId);
     }
 
+    // search user by name
+    @GetMapping("/search-name")
+    public String processSearch(@RequestParam("searchName") String searchName, Model model, @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "15") int size){
+        Page<Teacher> teacherPage = teacherService.findTeachersByFirstName(searchName, PageRequest.of(page, size));
+        // check List
+        if(teacherPage.isEmpty()){
+            model.addAttribute("Error", "Error, Search not found Teacher!!!");
+            model.addAttribute("teacherList", new ArrayList<>());
+        } else {
+            model.addAttribute("teacherList", teacherPage);
+        }
+        model.addAttribute("searchName", searchName);
+        return "Teacher/indexTeacher";
+    }
+
     @GetMapping("/showManageTeacher")
     public String showTeacherList(Model model, @RequestParam(defaultValue = "0") int page,
                                                 @RequestParam(defaultValue = "15") int size){
@@ -71,6 +87,12 @@ public class TeacherController {
         model.addAttribute("schoolList", schoolService.getAllSchools());
         model.addAttribute("teacherList", teacherList);
         return "Teacher/indexTeacher";
+    }
+
+    @GetMapping("/getTeacherBySchoolAndClass/{schoolId}/{classId}")
+    @ResponseBody
+    public List<Teacher> returnListTeacher(@PathVariable int schoolId, @PathVariable int classId){
+        return teacherService.getListTeacherBySchoolIdAndClassID(schoolId, classId);
     }
 
     @GetMapping("/showModifyFormTeacher")

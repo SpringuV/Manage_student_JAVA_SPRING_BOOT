@@ -135,7 +135,11 @@ public class SecurityConfiguration  {
                         .requestMatchers(HttpMethod.PUT, "/api-transript/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api-transript/**").hasRole("ADMIN")
                         // register
-                        .requestMatchers("/register/**").permitAll()
+                        .requestMatchers("/m-user/showFormAddUser").permitAll()
+                        .requestMatchers("/m-class/getClassBySchoolId/**").permitAll()
+                        .requestMatchers("/m-student/getStudentByClassAndSchool/**").permitAll()
+                        .requestMatchers("/m-subject/getSubjectBySchool/**").permitAll()
+                        .requestMatchers("/m-teacher/getTeacherBySchoolAndClass/**").permitAll()
                         .anyRequest().authenticated()
                 // .authenticated()
         ).formLogin(

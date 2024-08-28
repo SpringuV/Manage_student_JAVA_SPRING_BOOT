@@ -77,14 +77,12 @@
                 </div>
 
                 <div class="mb-1">
-                    <label class="form-label">School: </label>
-                    <form action="#" method="get" th:action="@{/m-parent/add-process}">
-                        <select th:field="*{school}" required onchange="this.form.submit()">
-                            <option value="">--Select School--</option>
+                    <label for="school_select" class="form-label">School Select: </label>
+                        <select id="school_select" th:field="*{school}" required>
+                            <option value="0">--Select School--</option>
                             <option th:each="school : ${schoolList}" th:value="${school.id}"
                                     th:text="${school.name} +' ('+${school.level}+')'"></option>
                         </select>
-                    </form>
                     <div th:if="${#fields.hasErrors('school')}">
                         <ul>
                             <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
@@ -93,24 +91,20 @@
                 </div>
 
                 <div class="mb-1">
-                    <label class="form-label">Class: </label>
+                    <label for="class_select" class="form-label">Class: </label>
                     <select id="class_select" required>
-                        <option value="">--Select Class--</option>
-                        <option th:each="class : ${classList}"
-                                th:text="${class.name}"></option>
+                        <option value="0">--Select Class--</option>
                     </select>
                 </div>
 
                 <div class="mb-1">
                     <label class="form-label">Student: </label>
-                    <select th:field="*{student}" required>
-                        <option value="">--Select Student--</option>
-                        <option th:each="student : ${studentList}" th:value="${student.id}"
-                                th:text="${student.name}"></option>
+                    <select id="student_select" th:field="*{student}" required>
+                        <option value="0">--Select Student--</option>
                     </select>
-                    <div th:if="${#fields.hasErrors('school')}">
+                    <div th:if="${#fields.hasErrors('student')}">
                         <ul>
-                            <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
+                            <li th:each="error: ${#fields.hasErrors('student')}" th:text="${error}"></li>
                         </ul>
                     </div>
                 </div>
@@ -157,6 +151,108 @@
     </div>
     <p class="mt-5 mb-3 text-body-secondary">© 2017–2024</p>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        const schoolSelect = document.getElementById('school_select');
+        const classSelect = document.getElementById('class_select');
+        const studentSelect = document.getElementById('student_select');
+
+        function getClassBySchoolId(schoolId){
+            if(schoolId && schoolId !== "0"){
+                // fetch class
+                fetch(`/m-class/getClassBySchoolId/${schoolId}`)
+                .then(response => response.json())
+                .then(classes =>{
+                    // clear previous classes
+                    classSelect.innerHTML = '<option value="0">--Select Class--</option>';
+
+                    // populate new class
+                    classes.forEach(classItem =>{
+                        const option = document.createElement('option');
+                        option.value = classItem.id;
+                        option.textContent = classItem.name;
+                        classSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching Class:', error));
+            } else {
+                // if no school selected
+                classSelect.innerHTML = '<option value="0">--Select Class--</option>';
+            }
+        }
+
+        function getStudentByClassAndSchool(schoolId, classId){
+            if(schoolId && classId && schoolId !== "0" && classId !== "0"){
+                fetch(`/m-student/getStudentByClassAndSchool/${schoolId}/${classId}`)
+                .then(response => response.json())
+                .then(students => {
+                    // clear previous student
+                    studentSelect.innerHTML='<option value="0">--Select Student--</option>';
+
+                    students.forEach(studentItem =>{
+                        const option = document.createElement('option');
+                        option.value = studentItem.id;
+                        option.textContent = `${studentItem.lastName} ${studentItem.firstName}`;
+                        studentSelect.appendChild(option);
+                    });
+                })
+                .catch(error =>console.error('Error fetching Student:', error));
+            } else {
+                // if no class or school selected
+                studentSelect.innerHTML='<option value="0">--Select Student--</option>';
+            }
+        }
+
+        function getClassByStudentAndSchool(schoolId, studentId){
+            if(schoolId && studentId && schoolId !== "0" && studentId !== "0"){
+                fetch(`/m-class/getClassByStudentAndSchool/${schoolId}/${studentId}`)
+                .then(response => response.json())
+                .then(classes => {
+                    // clear previous class
+                    classSelect.innerHTML='<option value ="0">--Select Class--</option>';
+
+                    // populate new class
+                    classes.forEach(classItem => {
+                        const option = document.createElement('option');
+                        option.value = classItem.id;
+                        option.textContent = classItem.name;
+                        classSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching Class: ', error));
+            } else {
+                // if the student or school not select
+                classSelect.innerHTML='<option value ="0">--Select Class--</option>';
+            }
+        }
+
+        // if school and student selected
+        const schoolId = schoolSelect.value;
+        const studentId = studentSelect.value;
+        if(schoolId && studentId && schoolId !== "0" && studentId !== "0"){
+            getClassByStudentAndSchool(schoolId, studentId);
+        }
+
+        // if school and class selected
+        const classId = classSelect.value;
+        if(schoolId && classId && schoolId !== "0" && classId !== "0"){
+            getStudentByClassAndSchool(schoolId, classId);
+        }
+
+        // event listener
+        schoolSelect.addEventListener('change', function(){
+            const schoolId = schoolSelect.value;
+            // get class
+            getClassBySchoolId(schoolId);
+        });
+
+        classSelect.addEventListener('change', function(){
+            const schoolId = schoolSelect.value;
+            const classId = classSelect.value;
+            getStudentByClassAndSchool(schoolId, classId);
+        });
+    });
+</script>
 <script src="/docs/5.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>

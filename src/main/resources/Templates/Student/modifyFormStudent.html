@@ -161,7 +161,7 @@
         function getTeacherBySchoolIdAndClassId(schoolId, classId){
             if(schoolId && classId){
                 // fetch teacher
-                fetch(`/m-student/getTeacherBySchoolAndClass/${schoolId}/${classId}`)
+                fetch(`/m-teacher/getTeacherBySchoolAndClass/${schoolId}/${classId}`)
                 .then(response => response.json())
                 .then(teachers => {
                     // clear teacher previous

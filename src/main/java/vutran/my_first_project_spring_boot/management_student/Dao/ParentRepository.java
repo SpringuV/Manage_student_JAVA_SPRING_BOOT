@@ -1,6 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Dao;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,14 +17,17 @@ public interface ParentRepository extends JpaRepository<Parent, Integer> {
     Page<Parent> findAll (Pageable pageable);
 
     @Query(value = "SELECT * FROM users as u JOIN parent as p ON p.id = u.id WHERE u.position = 'Parent'",nativeQuery = true)
-    public List<Parent> findParentByPosition();
+    List<Parent> findParentByPosition();
 
     @Query(value = "SELECT * FROM users as u JOIN parent as p ON p.id = u.id WHERE u.username =:username AND u.position LIKE 'Parent' AND u.id=:user_id",nativeQuery = true)
-    public Parent findParentByUserNameAndId(@Param("username") String username, @Param("user_id") int id);
+    Parent findParentByUserNameAndId(@Param("username") String username, @Param("user_id") int id);
 
     @Query(value = "SELECT * FROM users as u JOIN parent as p ON p.id = u.id WHERE u.username =:username AND u.position LIKE 'Parent'",nativeQuery = true)
-    public Parent findParentByUserName(@Param("username") String username);
+    Parent findParentByUserName(@Param("username") String username);
 
     @Query(value = "SELECT * FROM users as u JOIN parent as p ON p.id = u.id WHERE u.identity =:identity",nativeQuery = true)
-    public Parent findParentByIdentity(@Param("identity") String identity);
+    Parent findParentByIdentity(@Param("identity") String identity);
+
+    @Query("SELECT p FROM Parent p WHERE p.firstName LIKE %:searchName%")
+    Page<Parent> findParentsByFirstName(@Param("searchName") String searchName, PageRequest pageRequest);
 }

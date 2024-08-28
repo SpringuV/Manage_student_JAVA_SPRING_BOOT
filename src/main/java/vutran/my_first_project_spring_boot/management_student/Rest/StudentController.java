@@ -42,6 +42,21 @@ public class StudentController {
         this.studentRepository = studentRepository;
     }
 
+    @GetMapping("/search-name")
+    public String processSearch(@RequestParam("searchName") String searchName, Model model,@RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "15") int size){
+        Page<Student> studentPage = studentService.findStudentsByFirstName(searchName, PageRequest.of(page, size));
+        // check list
+        if(studentPage.isEmpty()){
+            model.addAttribute("Error", "Error, Search not found Student!!!");
+            model.addAttribute("studentList", new ArrayList<>());
+        } else {
+            model.addAttribute("studentList", studentPage);
+        }
+        model.addAttribute("searchName", searchName);
+        return "Student/indexStudent";
+    }
+
     @GetMapping("/showManageStudent")
     public String showListStudent(Model model, @RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "15") int size){
@@ -55,18 +70,6 @@ public class StudentController {
         // else
         model.addAttribute("studentList", studentList);
         return "Student/indexStudent";
-    }
-
-    @GetMapping("/getClassBySchool/{schoolId}")
-    @ResponseBody
-    public List<Classes> returnListClass(@PathVariable int schoolId){
-        return classService.getListClassByIdSchool(schoolId);
-    }
-
-    @GetMapping("/getTeacherBySchoolAndClass/{schoolId}/{classId}")
-    @ResponseBody
-    public List<Teacher> returnListTeacher(@PathVariable int schoolId, @PathVariable int classId){
-        return teacherService.getListTeacherBySchoolIdAndClassID(schoolId, classId);
     }
 
     @GetMapping("/getStudentByClassAndSchool/{schoolId}/{classId}")

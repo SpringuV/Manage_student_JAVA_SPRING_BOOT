@@ -12,7 +12,9 @@ import java.util.Collection;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
+//@DiscriminatorColumn(name = "clazz_", discriminatorType = DiscriminatorType.STRING)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // muốn giữ lại cấu trúc tuần tự hóa nhưng tránh vòng lặp bằng cách sử dụng định danh
+
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +43,17 @@ public class User {
     @Lob
     @Column(name = "avatar")
     private Blob avatar;
+
+    @Transient
+    private School school;
+    @Transient
+    private Student student;
+    @Transient
+    private Classes classes;
+    @Transient
+    private Teacher teacher;
+    @Transient
+    private Subject subject;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "users_authority", joinColumns = @JoinColumn(name = "user_id"),
@@ -199,6 +212,46 @@ public class User {
 
     public void setCollectionAuthority(Collection<Authority> authority) {
         this.authority = authority;
+    }
+
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Classes getClasses() {
+        return classes;
+    }
+
+    public void setClasses(Classes classes) {
+        this.classes = classes;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Dao;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -40,4 +41,10 @@ public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
     @Modifying
     @Query("UPDATE Teacher t SET t.subject = null WHERE t.subject.id = :subjectId")
     void updateTeachersBySubjectId(@Param("subjectId") int subjectId);
+
+    @Query("SELECT t FROM Teacher t WHERE t.firstName LIKE %:searchName%")
+    Page<Teacher> findTeachersByFirstName(@Param("searchName") String searchName, PageRequest pageRequest);
+
+    @Query("SELECT t FROM Teacher t WHERE t.classes=:id_class")
+    List<Teacher> getListTeacherByClass(@Param("id_class") int class_id);
 }

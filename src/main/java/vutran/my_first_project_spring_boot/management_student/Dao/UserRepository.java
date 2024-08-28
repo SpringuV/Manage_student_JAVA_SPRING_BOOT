@@ -1,6 +1,7 @@
 package vutran.my_first_project_spring_boot.management_student.Dao;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,6 +25,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT u FROM User u WHERE u.position LIKE :position")
     List<User> findAllUserByPosition(String position);
 
-    @Query("SELECT u FROM User u WHERE u.firstName LIKE %:name%")
-    Page<User> getListUserByFirstName(@Param("name") String name, Pageable pageable);
+    @Query("SELECT u FROM User u WHERE u.firstName LIKE %:searchName%")
+    Page<User> findUsersByFirstName(@Param("searchName") String searchName, PageRequest pageRequest);
 }

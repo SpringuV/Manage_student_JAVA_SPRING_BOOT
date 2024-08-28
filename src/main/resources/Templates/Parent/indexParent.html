@@ -24,6 +24,10 @@
                 <span th:text="${success}" class="alert-success"></span>
             </div>
         </div>
+<!--START SEARCH-->
+        <div th:replace="~{Fragment/searchElementForm :: searchElementForm('/m-parent/search-name')}"></div>
+<!--END SEARCH-->
+<!--START DATA-->
         <table>
             <thead>
                 <th>Parent Id</th>
@@ -49,9 +53,14 @@
                         <a th:href="@{/m-parent/modify-delete(id=${parent.id})}" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
+                <!-- Hiển thị thông báo khi danh sách trống -->
+                <tr th:if="${parentList.content.isEmpty()}">
+                    <td colspan="8">List Empty!!!</td>
+                </tr>
             </tbody>
         </table>
     </div>
+<!--END DATA-->
     <!--    START pagination-->
     <div>
         <span>

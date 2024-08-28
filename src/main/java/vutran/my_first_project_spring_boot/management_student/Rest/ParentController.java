@@ -57,34 +57,25 @@ public class ParentController {
         }
     }
 
-    @GetMapping("/getClassBySchoolId/{schoolId}")
-    @ResponseBody
-    public List<Classes> returnListClass(@RequestParam("schoolId") int school_id){
-        return classService.getListClassByIdSchool(school_id);
-    }
-
-    @GetMapping("/getStudentByClassAndSchool/{classId}/{schoolId}")
-    @ResponseBody
-    public List<Student> returnListStudent(@RequestParam("classId") int class_id, @RequestParam("schoolId") int school_id){
-        return studentService.getListStudentByClassAndSchool(class_id, school_id);
+    @GetMapping("/search-name")
+    public String processSearch(@RequestParam("searchName") String searchName, @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "15") int size, Model model){
+        Page<Parent> parentPage = parentService.findParentsByFirstName(searchName, PageRequest.of(page, size));
+        // check list
+        if(parentPage.isEmpty()){
+            model.addAttribute("Error", "Error, Search not found Parent!!!");
+            model.addAttribute("parentList", new ArrayList<>());
+        } else {
+            model.addAttribute("parentList", parentPage);
+        }
+        model.addAttribute("searchName", searchName);
+        return "Parent/indexParent";
     }
 
     @GetMapping("showFormAddParent")
     public String addParentForm(Model model){
         model.addAttribute("parent", new Parent());
         model.addAttribute("schoolList", schoolService.getAllSchools());
-        return "Parent/addParentForm";
-    }
-
-    @GetMapping("/add-process")
-    public String selectSchoolProcess(Model model, @RequestParam(value = "school", required = false) int id_school){
-        model.addAttribute("parent", new Parent());
-        // get List student
-        List<Student> studentList = studentService.getListStudentBySchoolId(id_school);
-        model.addAttribute("studentList", studentList);
-        // get List school
-        List<School> schoolList = schoolService.getAllSchools();
-        model.addAttribute("schoolList", schoolList);
         return "Parent/addParentForm";
     }
 
@@ -158,6 +149,7 @@ public class ParentController {
             parentExist.setIdentity(parent.getIdentity());
             parentExist.setLastName(parent.getLastName());
             parentExist.setSchool(parent.getSchool());
+            parentExist.setFirstName(parent.getFirstName());
             parentExist.setPhoneNumber(parent.getPhoneNumber());
             parentExist.setStudent(parent.getStudent());
             // tìm hiểu check pass encode

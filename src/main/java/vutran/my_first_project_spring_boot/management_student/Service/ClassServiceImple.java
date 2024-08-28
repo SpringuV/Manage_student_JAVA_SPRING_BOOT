@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vutran.my_first_project_spring_boot.management_student.Dao.ClassRepository;
 import vutran.my_first_project_spring_boot.management_student.Dao.StudentRepository;
+import vutran.my_first_project_spring_boot.management_student.Dao.TeacherRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Classes;
 import vutran.my_first_project_spring_boot.management_student.Entity.Student;
+import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
 
 import java.util.List;
 
@@ -15,11 +17,13 @@ public class ClassServiceImple implements ClassService{
 
     private ClassRepository classRepository;
     private StudentRepository studentRepository;
+    private TeacherRepository teacherRepository;
 
     @Autowired
-    public ClassServiceImple(ClassRepository classRepository, StudentRepository studentRepository) {
+    public ClassServiceImple(ClassRepository classRepository, StudentRepository studentRepository, TeacherRepository teacherRepository) {
         this.classRepository = classRepository;
         this.studentRepository = studentRepository;
+        this.teacherRepository = teacherRepository;
     }
 
     @Override
@@ -40,17 +44,26 @@ public class ClassServiceImple implements ClassService{
     @Transactional
     @Override
     public void deleteClassById(int id) {
-        // Lấy danh sách các sinh viên liên kết với class cần xóa
-        List<Student> students = studentRepository.getListByClassId(id);
-
-        // Đặt class_id của các sinh viên này thành null
-        for (Student student : students) {
-            student.setClasses(null);
-            studentRepository.saveAndFlush(student);
+        try {
+            // Lấy danh sách các sinh viên, teacher liên kết với class cần xóa
+            List<Student> students = studentRepository.getListByClassId(id);
+            List<Teacher> teachers = teacherRepository.getListTeacherByClass(id);
+            // Đặt class_id của các sinh viên này thành null
+            for (Student student : students) {
+                student.setClasses(null);
+                studentRepository.saveAndFlush(student);
+            }
+            for (Teacher teacher : teachers){
+                teacher.setClasses(null);
+                teacherRepository.saveAndFlush(teacher);
+            }
+            classRepository.deleteById(id);
+        } catch (Exception e){
+            // Xử lý lỗi nếu có
+            e.printStackTrace();
+            throw new RuntimeException("Failed to delete class with id: " + id, e);
         }
 
-        // Sau đó xóa class
-        this.classRepository.deleteById(id);
     }
 
     @Override
