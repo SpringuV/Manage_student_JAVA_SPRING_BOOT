@@ -36,8 +36,6 @@ public class Transcript {
     @JsonBackReference
     private Set<Student> studentSet;
 
-    @Column(name = "transcript_score")
-    private double score;
     @Column(name = "transcript_semester")
     private int semester;
 
@@ -49,18 +47,30 @@ public class Transcript {
     @JsonManagedReference
     private List<StudyRecord> studyRecordList;
 
+    @OneToMany(mappedBy = "transcript")
+    @JsonManagedReference
+    private List<ScoreCard> scoreCardList;
+
     public Transcript() {
     }
 
-    public Transcript(String nameTranscript,Set<Subject> subjectSet, Set<Student> studentSet, double score, int semester,List<StudyRecord> studyRecordList, String schoolYear, School school) {
+    public Transcript(String nameTranscript,Set<Subject> subjectSet, Set<Student> studentSet, int semester,List<StudyRecord> studyRecordList, String schoolYear, School school, List<ScoreCard> scoreCardList) {
         this.nameTranscript = nameTranscript;
         this.subjectSet = subjectSet;
         this.studentSet = studentSet;
-        this.score = score;
         this.semester = semester;
         this.studyRecordList = studyRecordList;
         this.schoolYear = schoolYear;
         this.school = school;
+        this.scoreCardList = scoreCardList;
+    }
+
+    public List<ScoreCard> getScoreCardList() {
+        return scoreCardList;
+    }
+
+    public void setScoreCardList(List<ScoreCard> scoreCardList) {
+        this.scoreCardList = scoreCardList;
     }
 
     public String getNameTranscript() {
@@ -103,14 +113,6 @@ public class Transcript {
         this.studentSet = studentSet;
     }
 
-    public double getScore() {
-        return score;
-    }
-
-    public void setScore(double score) {
-        this.score = score;
-    }
-
     public int getSemester() {
         return semester;
     }
@@ -143,8 +145,8 @@ public class Transcript {
                 ", school=" + school.getName() +
                 ", subjectSet=" + subjectSet.size() +
                 ", studentSet=" + studentSet.size() +
-                ", score=" + score +
                 ", semester=" + semester +
+                ", scoreCardList=" + scoreCardList.size() +
                 ", schoolYear='" + schoolYear + '\'' +
                 ", studyRecordList=" + studyRecordList.size() +
                 '}';

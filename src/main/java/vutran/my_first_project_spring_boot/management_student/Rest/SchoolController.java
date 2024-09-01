@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import vutran.my_first_project_spring_boot.management_student.Dao.SchoolReposito
 import vutran.my_first_project_spring_boot.management_student.Entity.School;
 import vutran.my_first_project_spring_boot.management_student.Entity.Subject;
 import vutran.my_first_project_spring_boot.management_student.Service.*;
+import vutran.my_first_project_spring_boot.management_student.Util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +46,7 @@ public class SchoolController {
     public String showSchool(Model model, @RequestParam(defaultValue = "0") int page,
                              @RequestParam(defaultValue = "15") int size){
         // get school from database
-        Page<School> schoolList = schoolRepository.findAll(PageRequest.of(page, size));
+        Page<School> schoolList = schoolRepository.findAll(PageRequest.of(page, size, Sort.by("name").ascending()));
         // check size
         if (schoolList.isEmpty()){
             model.addAttribute("Error", "List School empty");
@@ -91,8 +93,8 @@ public class SchoolController {
 
         // school doesn't exist
         School school = new School();
-        school.setName(addSchool.getName());
-        school.setAddress(addSchool.getAddress());
+        school.setName(StringUtils.formatString(addSchool.getName()));
+        school.setAddress(StringUtils.formatString(addSchool.getAddress()));
         school.setPhone(addSchool.getPhone());
         // get subjectList
         List<Subject> subjectList = subjectService.getListSubjectBySchoolLevel(addSchool.getLevel());
@@ -131,8 +133,8 @@ public class SchoolController {
 
         School existSchool = schoolService.getSchoolById(school.getId());
         if(existSchool != null){
-            existSchool.setName(school.getName());
-            existSchool.setAddress(school.getAddress());
+            existSchool.setName(StringUtils.formatString(school.getName()));
+            existSchool.setAddress(StringUtils.formatString(school.getAddress()));
             existSchool.setPhone(school.getPhone());
             existSchool.setLevel(school.getLevel());
             // update subject

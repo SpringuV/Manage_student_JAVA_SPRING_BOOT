@@ -3,6 +3,7 @@ package vutran.my_first_project_spring_boot.management_student.Rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import vutran.my_first_project_spring_boot.management_student.Service.ClassServi
 import vutran.my_first_project_spring_boot.management_student.Service.ParentService;
 import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
 import vutran.my_first_project_spring_boot.management_student.Service.StudentService;
+import vutran.my_first_project_spring_boot.management_student.Util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,7 +46,7 @@ public class ParentController {
     @GetMapping("/showManageParent")
     public String showParentList(Model model, @RequestParam(defaultValue = "0") int page,
                                                 @RequestParam(defaultValue = "15") int size){
-        Page<Parent> parentList = parentRepository.findAll(PageRequest.of(page, size));
+        Page<Parent> parentList = parentRepository.findAll(PageRequest.of(page, size, Sort.by("firstName").ascending()));
 
         // check list parent
         if(parentList.isEmpty()){
@@ -60,7 +62,7 @@ public class ParentController {
     @GetMapping("/search-name")
     public String processSearch(@RequestParam("searchName") String searchName, @RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "15") int size, Model model){
-        Page<Parent> parentPage = parentService.findParentsByFirstName(searchName, PageRequest.of(page, size));
+        Page<Parent> parentPage = parentService.findParentsByFirstName(searchName, PageRequest.of(page, size, Sort.by("firstName").ascending()));
         // check list
         if(parentPage.isEmpty()){
             model.addAttribute("Error", "Error, Search not found Parent!!!");
@@ -94,8 +96,8 @@ public class ParentController {
         Parent newParent = new Parent();
         newParent.setPhoneNumber(parent.getPhoneNumber());
         newParent.setId(parent.getId());
-        newParent.setFirstName(parent.getFirstName());
-        newParent.setLastName(parent.getLastName());
+        newParent.setFirstName(StringUtils.formatString(parent.getFirstName()));
+        newParent.setLastName(StringUtils.formatString(parent.getLastName()));
         newParent.setStudent(parent.getStudent());
         newParent.setPosition("Parent");
         newParent.setUsername(parent.getUsername());
@@ -105,7 +107,7 @@ public class ParentController {
         newParent.setEmail(parent.getEmail());
         newParent.setIdentity(parent.getIdentity());
         newParent.setAvatar(parent.getAvatar());
-        newParent.setAddress(parent.getAddress());
+        newParent.setAddress(StringUtils.formatString(parent.getAddress()));
         newParent.setStudent(parent.getStudent());
         // role
         Authority authority = authorityRepository.findByName("ROLE_PARENT");
@@ -144,12 +146,12 @@ public class ParentController {
             model.addAttribute("parent", new Parent());
             return "Parent/modifyParent";
         } else {
-            parentExist.setAddress(parent.getAddress());
+            parentExist.setAddress(StringUtils.formatString(parent.getAddress()));
             parentExist.setEmail(parent.getEmail());
             parentExist.setIdentity(parent.getIdentity());
-            parentExist.setLastName(parent.getLastName());
+            parentExist.setLastName(StringUtils.formatString(parent.getLastName()));
             parentExist.setSchool(parent.getSchool());
-            parentExist.setFirstName(parent.getFirstName());
+            parentExist.setFirstName(StringUtils.formatString(parent.getFirstName()));
             parentExist.setPhoneNumber(parent.getPhoneNumber());
             parentExist.setStudent(parent.getStudent());
             // tìm hiểu check pass encode
@@ -170,13 +172,9 @@ public class ParentController {
             // delete
             parentService.deleteParentById(parentExist.getId());
             redirectAttributes.addFlashAttribute("success", "You have deleted parent have id: "+ parentExist.getId());
-            List<Parent> parentList = parentService.findALlParentByPosition();
-            redirectAttributes.addFlashAttribute("teacherList", parentList);
             return "redirect:/m-parent/showManageParent";
         } else {
             redirectAttributes.addFlashAttribute("Error", "Error process delete parent, null !!");
-            List<Parent> parentList = parentService.findALlParentByPosition();
-            redirectAttributes.addFlashAttribute("teacherList", parentList);
             return "redirect:/m-parent/showManageParent";
         }
     }

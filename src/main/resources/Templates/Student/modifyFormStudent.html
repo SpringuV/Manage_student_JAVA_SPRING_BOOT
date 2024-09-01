@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Modify Teacher</title>
+    <title>Modify Student</title>
     <link href="/CSS/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="/CSS/main.css" rel="stylesheet" type="text/css">
     <script src="/JavaScript/function.js"></script>
@@ -11,115 +11,30 @@
 
 <body>
 <h1>Modify Student</h1>
-<div>
+<div class="container">
     <form th:action="@{/m-student/modify-process}" th:object="${student}" method="post">
-        <div th:if="${Error}" class="alert alert-danger">
-            <span th:text="${Error}"></span>
+        <div>
+            <div th:if="${Error}" class="alert alert-danger">
+                <span th:text="${Error}"></span>
+            </div>
+            <div th:if="${success}">
+                <h3>You updated a student "<span th:text="${success}"></span> ",</h3>
+            </div>
         </div>
         <div>
-            <label th:field="*{id}" for="studentid">Student Id: </label>
+            <label>Student Id: <span th:text="*{id}" ></span></label>
             <input type="hidden" th:field="*{id}" name="studentid" id="studentid">
-            <div th:if="${#fields.hasErrors('id')}">
-                <ul>
-                    <li th:each="error: ${#fields.hasErrors('id')}" th:text="${Error}"></li>
-                </ul>
-            </div>
         </div>
-        <div>
-            <label for="teacherFirstName">Student First Name: </label>
-            <input type="text" th:field="*{firstName}" placeholder="Input First Name student"
-                   name="teacherFirstName" id="teacherFirstName">
-            <div th:if="${#fields.hasErrors('firstName')}">
-                <ul>
-                    <li th:each="error: ${#fields.hasErrors('firstName')}" th:text="${Error}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label for="teacherLastName">Student Last Name: </label>
-            <input type="text" th:field="*{lastName}" placeholder="Input Last Name student"
-                   name="teacherLastName" id="teacherLastName">
-            <div th:if="${#fields.hasErrors('lastName')}">
-                <ul>
-                    <li th:each="error: ${#fields.hasErrors('lastName')}" th:text="${Error}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label for="teacherAddress">Student Address: </label>
-            <input type="text" th:field="*{address}" placeholder="Input address student"
-                   name="teacherAdress" id="teacherAddress">
-            <div th:if="${#fields.hasErrors('address')}">
-                <ul>
-                    <li th:each="error: ${#fields.hasErrors('address')}" th:text="${Error}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label for="teacherPhone">Student Phone: </label>
-            <input type="tel" th:field="*{phoneNumber}" placeholder="Input phone student"
-                   name="teacherPhone" id="teacherPhone">
-            <div th:if="${#fields.hasErrors('phoneNumber')}">
-                <ul>
-                    <li th:each="error: ${#fields.hasErrors('phoneNumber')}" th:text="${Error}"></li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label for="teacherEmail">Student Mail: </label>
-            <input type="email" th:field="*{email}" placeholder="Input email student"
-                   name="teacherEmail" id="teacherEmail">
-            <div th:if="${#fields.hasErrors('email')}">
-                <ul>
-                    <li th:each="error: ${#fields.hasErrors('email')}" th:text="${Error}"></li>
-                </ul>
-            </div>
-        </div>
-        <div class="mb-1">
-            <label class="form-label">Study at school: </label>
-            <select th:field="*{school}" id="school_select" required>
-                <option value="0">--Select School--</option>
-                <option th:each="school : ${schoolList}" th:value="${school.id}"
-                        th:text="${school.name}"></option>
-            </select>
-            <div th:if="${#fields.hasErrors('school')}">
-                <ul>
-                    <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
-                </ul>
-            </div>
-        </div>
-        <!-- Because relation between the entity class and the entity teacher is one to many, a class has many teacher, and opposite
-        so that the class must to selected before the teacher
-        -->
-        <div class="mb-1">
-            <label class="form-label" for="class_select">Select Class: </label>
-            <select th:field="*{classes}" id="class_select">
-                <option value="0">--Select Class--</option>
-            </select>
-            <div th:if="${#fields.hasErrors('classes')}">
-                <ul>
-                    <li th:each="error: ${#fields.hasErrors('classes')}" th:text="${error}"></li>
-                </ul>
-            </div>
-        </div>
-        <div class="mb-1">
-            <label class="form-label" for="teacher_select">Select Teacher: </label>
-            <select th:field="*{teacher}" id="teacher_select">
-                <option value="0">--Select Teacher--</option>
-            </select>
-            <div th:if="${#fields.hasErrors('teacher')}">
-                <ul>
-                    <li th:each="error: ${#fields.hasErrors('teacher')}" th:text="${error}"></li>
-                </ul>
-            </div>
-        </div>
+<!-- START Fragment/CommonFieldInputUser-->
+        <div th:replace="~{Fragment/CommonFieldInputUser :: fragmentCommonFieldInput}"></div>
+<!-- END Fragment/CommonFieldInputUser-->
+<!-- START Fragment Add - Modify Student-->
+        <div th:replace="~{Fragment/Student :: fragmentStudentAdd-Modify}"></div>
+<!-- END Fragment Add - Modify Student-->
         <div>
             <button class="btn btn-primary" type="submit">Modify</button>
         </div>
     </form>
-    <div th:if="${success}">
-        <h3>You updated a student "<span th:text="${success}"></span> ",</h3>
-    </div>
 </div>
 
 <div>
@@ -137,7 +52,7 @@
         function getClassBySchoolId(schoolId){
             if(schoolId){
                 // fetch class
-                fetch(`/m-student/getClassBySchool/${schoolId}`)
+                fetch(`/m-class/getClassBySchoolId/${schoolId}`)
                 .then(response => response.json())
                 .then(classes =>{
                     // clear previous classes
@@ -165,7 +80,7 @@
                 .then(response => response.json())
                 .then(teachers => {
                     // clear teacher previous
-                    teacherSelect.innerHTML= '<option value="0">--Select Teacher--</option>';
+                    teacherSelect.innerHTML= '<option>--Select Teacher--</option>';
 
                     // populate new teacher
                     teachers.forEach(teacherItem =>{
@@ -178,7 +93,7 @@
                 .catch(error => console.error('Error fetching Teacher:', error));
             } else {
                 // if no class or school selected
-                teacherSelect.innerHTML= '<option value="0">--Select Teacher--</option>';
+                teacherSelect.innerHTML= '<option>--Select Teacher--</option>';
             }
         }
 

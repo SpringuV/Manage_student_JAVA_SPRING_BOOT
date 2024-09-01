@@ -136,6 +136,7 @@ public class SecurityConfiguration  {
                         .requestMatchers(HttpMethod.DELETE, "/api-transript/**").hasRole("ADMIN")
                         // register
                         .requestMatchers("/m-user/showFormAddUser").permitAll()
+                        .requestMatchers("/m-user/add-process").permitAll()
                         .requestMatchers("/m-class/getClassBySchoolId/**").permitAll()
                         .requestMatchers("/m-student/getStudentByClassAndSchool/**").permitAll()
                         .requestMatchers("/m-subject/getSubjectBySchool/**").permitAll()
@@ -152,7 +153,7 @@ public class SecurityConfiguration  {
                 configurer -> configurer.accessDeniedPage("/showPage403")
 //                        .authenticationEntryPoint(customAuthenticationEntryPoint())
         );
-        httpSecurity.httpBasic(Customizer.withDefaults());
+//        httpSecurity.httpBasic(Customizer.withDefaults());
         httpSecurity.csrf(csrf -> csrf.disable());
         // csrf chống giả mạo những phương thức, trong api này không quan trọng, không quan tâm tới trạng thái, thích gửi gì thì gửi, còn mk sẽ xử lý
         return httpSecurity.build();

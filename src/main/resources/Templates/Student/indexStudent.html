@@ -25,7 +25,7 @@
         <!--        END SEARCH-->
         <table>
             <thead>
-                <th>Student Id</th>
+                <th>Id</th>
                 <th>FirstName</th>
                 <th>LastName</th>
                 <th>Username</th>
@@ -36,7 +36,6 @@
                 <th>Homeroom Teacher</th>
                 <th>Study at School</th>
                 <th>Parent</th>
-                <th>Position</th>
                 <th>Feature</th>
             </thead>
             <tbody>
@@ -67,7 +66,6 @@
                               th:utext="${student.parent.lastName}+ ' '+${student.parent.firstName} + ' (' +${student.parent.id}+ ')'"></span>
                         <span th:if="${student.parent == null}">--null--</span>
                     </td>
-                    <td th:text="${student.position}"></td>
                     <td>
                         <div>
                             <a th:href="@{/m-student/showModifyFormStudent(id=${student.id})}" class="btn btn-success">Modify</a>

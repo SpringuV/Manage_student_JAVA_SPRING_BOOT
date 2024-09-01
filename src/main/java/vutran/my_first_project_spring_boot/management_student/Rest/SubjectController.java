@@ -3,6 +3,7 @@ package vutran.my_first_project_spring_boot.management_student.Rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +46,7 @@ public class SubjectController {
     @GetMapping("/showManageSubject")
     public String showManageSubject(Model model, @RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "15") int size) {
-        Page<Subject> subjectList = subjectRepository.findAll(PageRequest.of(page, size));
+        Page<Subject> subjectList = subjectRepository.findAll(PageRequest.of(page, size, Sort.by("nameSubject").ascending()));
         // check List empty
         if (subjectList.isEmpty()) {
             model.addAttribute("Error", "Error, List Subject Empty !!!");

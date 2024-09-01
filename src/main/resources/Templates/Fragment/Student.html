@@ -1,0 +1,41 @@
+<div th:fragment="fragmentStudentAdd-Modify" id="student_add_modify" class="form-group">
+    <div class=" mb-1">
+        <label for="student_school_select" class="form-label">Study at school: </label>
+        <select th:field="*{school}" class="school_select"  id="student_school_select" required>
+            <option value="0">--Select School--</option>
+            <option th:each="school : ${schoolList}" th:value="${school.id}"
+                    th:text="${school.name}"></option>
+        </select>
+        <div th:if="${#fields.hasErrors('school')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+    <!-- Because relation between the entity class and the entity teacher is one to many, a class has many teacher, and opposite
+    so that the class must to selected before the teacher
+    -->
+    <div class=" mb-1">
+        <label class="form-label" for="student_class_select">Select Class: </label>
+        <select th:field="*{classes}" class="class_select" data-type="student" id="student_class_select">
+            <option value="0">--Select Class--</option>
+        </select>
+        <div th:if="${#fields.hasErrors('classes')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('classes')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class=" mb-1">
+        <label class="form-label" for="student_teacher_select">Select Teacher: </label>
+        <select th:field="*{teacher}" class="teacher_select" data-type="student" id="student_teacher_select">
+            <option value="0">--Select Teacher--</option>
+        </select>
+        <div th:if="${#fields.hasErrors('teacher')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('teacher')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+</div>

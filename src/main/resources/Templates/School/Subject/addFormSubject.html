@@ -6,8 +6,6 @@
     <title>Add Subject</title>
     <link href="/CSS/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="/CSS/main.css" rel="stylesheet" type="text/css">
-    <script src="/JavaScript/function.js"></script>
-    <script src="/CSS/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -31,7 +29,7 @@
             </div>
             <div>
                 <label>Subject Name: </label>
-                <select id="subjectSelect" th:field="*{nameSubject}" required>
+                <select id="subjectSelectName" th:field="*{nameSubject}" required>
                     <option th:value="None">--Select Subject--</option>
                     <option th:value="Literature1">Literature 1</option>
                     <option th:value="Literature2">Literature 2</option>
@@ -162,156 +160,10 @@
         <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
         <a class="btn btn-primary" th:href="@{/m-subject/showManageSubject}">Subject List Manage</a>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const schoolLevelSelect = document.getElementById('schoolLevelSelect');
-            const subjectSelect = document.getElementById('subjectSelect');
-            const schoolSelect = document.getElementById('school_select');
-            function getValueSchoolLevelSelected(selectValue) {
-                let option = [];
-                if (selectValue === "Primary_School") {
-                    option = ['Literature 1', 'Literature 2', 'Literature 3', 'Literature 4', 'Literature 5', 'Math 1',
-                        'Math 2',
-                        'Math 3',
-                        'Math 4',
-                        'Math 5',
-                        'Music 1',
-                        'Music 2',
-                        'Music 3',
-                        'Music 4',
-                        'Music 5',
-                        'History 1',
-                        'History 2',
-                        'History 3',
-                        'History 4',
-                        'History 5',
-                        'Geography 1',
-                        'Geography 2',
-                        'Geography 3',
-                        'Geography 4',
-                        'Geography 5',
-                        'Civic Education 1',
-                        'Civic Education 2',
-                        'Civic Education 3',
-                        'Civic Education 4',
-                        'Civic Education 5',
-                        'English Language 1',
-                        'English Language 2',
-                        'English Language 3',
-                        'English Language 4',
-                        'English Language 5',
-                    ];
-                } else if (selectValue === "Junior_High_School") {
-                    option = [
-                        'Literature 6',
-                        'Literature 7',
-                        'Literature 8',
-                        'Literature 9',
-                        'Math 6',
-                        'Math 7',
-                        'Math 8',
-                        'Math 9',
-                        'History 6',
-                        'History 7',
-                        'History 8',
-                        'History 9',
-                        'Music 6',
-                        'Music 7',
-                        'Music 8',
-                        'Music 9',
-                        'Geography 6',
-                        'Geography 7',
-                        'Geography 8',
-                        'Geography 9',
-                        'Biology 6',
-                        'Biology 7',
-                        'Biology 8',
-                        'Biology 9',
-                        'Civic Education 6',
-                        'Civic Education 7',
-                        'Civic Education 8',
-                        'Civic Education 9',
-                        'Physical Education 6',
-                        'Physical Education 7',
-                        'Physical Education 8',
-                        'Physical Education 9',
-                        'English Language 6',
-                        'English Language 7',
-                        'English Language 8',
-                        'English Language 9',
-                        'Information Technology 6',
-                        'Information Technology 7',
-                        'Information Technology 8',
-                        'Information Technology 9',
-                        'Chemistry 8',
-                        'Chemistry 9',
-                    ];
-                } else {
-                    option = [
-                        'Literature 10',
-                        'Literature 11',
-                        'Literature 12',
-                        'Math 10',
-                        'Math 11',
-                        'Math 12',
-                        'History 10',
-                        'History 11',
-                        'History 12',
-                        'Geography 10',
-                        'Geography 11',
-                        'Geography 12',
-                        'Biology 10',
-                        'Biology 11',
-                        'Biology 12',
-                        'Music 10',
-                        'Music 11',
-                        'Music 12',
-                        'Civic Education 10',
-                        'Civic Education 11',
-                        'Civic Education 12',
-                        'Physical Education 10',
-                        'Physical Education 11',
-                        'Physical Education 12',
-                        'English Language 10',
-                        'English Language 11',
-                        'English Language 12',
-                        'Chemistry 10',
-                        'Chemistry 11',
-                        'Chemistry 12',
-                        'Information Technology 10',
-                        'Information Technology 11',
-                        'Information Technology 12',
-                    ];
-                }
-                // Xóa tất cả các option hiện tại trừ option đầu tiên (None)
-                subjectSelect.innerHTML = 1;
-
-                // add new options into subject select
-                option.forEach(function (otp) {
-                    const optionElement = document.createElement('option');
-                    optionElement.value = otp.replace(/\s+/g, '_');
-                    optionElement.textContent = otp;
-                    subjectSelect.appendChild(optionElement);
-                });
-            }
-
-            schoolLevelSelect.addEventListener('change', function () {
-                // show subject
-                const selectLevelValue = schoolLevelSelect.value;
-
-                getValueSchoolLevelSelected(selectLevelValue);
-
-                // Tùy chọn "Select Subject"
-                const defaultOption = document.createElement('option');
-                defaultOption.value = "None";
-                defaultOption.textContent = "--Select Subject Name--";
-                defaultOption.selected = true;
-                subjectSelect.prepend(defaultOption);
-            });
-
-            // if schoolLevelSelected
-        });
-    </script>
 </body>
-
+<script src="/JavaScript/function.js"></script>
+<script src="/JavaScript/views/addSubject.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+<script src="/CSS/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
 </html>

@@ -1,8 +1,6 @@
 package vutran.my_first_project_spring_boot.management_student.Util;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class StringUtils {
 
@@ -23,8 +21,6 @@ public class StringUtils {
         }
         return res.trim();
     }
-
-
 
 //    public static void main(String[] args) {
 //        Scanner sc = new Scanner(System.in);

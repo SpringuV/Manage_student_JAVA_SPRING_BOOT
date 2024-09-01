@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import vutran.my_first_project_spring_boot.management_student.Service.ClassServi
 import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
 import vutran.my_first_project_spring_boot.management_student.Service.SubjectService;
 import vutran.my_first_project_spring_boot.management_student.Service.TeacherService;
+import vutran.my_first_project_spring_boot.management_student.Util.StringUtils;
 
 import java.util.*;
 
@@ -59,7 +61,7 @@ public class TeacherController {
     @GetMapping("/search-name")
     public String processSearch(@RequestParam("searchName") String searchName, Model model, @RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "15") int size){
-        Page<Teacher> teacherPage = teacherService.findTeachersByFirstName(searchName, PageRequest.of(page, size));
+        Page<Teacher> teacherPage = teacherService.findTeachersByFirstName(searchName, PageRequest.of(page, size, Sort.by("firstName").ascending()));
         // check List
         if(teacherPage.isEmpty()){
             model.addAttribute("Error", "Error, Search not found Teacher!!!");
@@ -75,7 +77,7 @@ public class TeacherController {
     public String showTeacherList(Model model, @RequestParam(defaultValue = "0") int page,
                                                 @RequestParam(defaultValue = "15") int size){
         // get list teacher from database
-        Page<Teacher> teacherList = teacherRepository.findAll(PageRequest.of(page, size));
+        Page<Teacher> teacherList = teacherRepository.findAll(PageRequest.of(page, size,Sort.by("firstName").ascending()));
 
         if(teacherList.isEmpty()){
             model.addAttribute("schoolList", schoolService.getAllSchools());
@@ -129,9 +131,9 @@ public class TeacherController {
             existTeacher.setEmail(teacher.getEmail());
             existTeacher.setClasses(teacher.getClasses());
             existTeacher.setSchool(teacher.getSchool());
-            existTeacher.setAddress(teacher.getAddress());
-            existTeacher.setLastName(teacher.getLastName());
-            existTeacher.setFirstName(teacher.getFirstName());
+            existTeacher.setAddress(StringUtils.formatString(teacher.getAddress()));
+            existTeacher.setLastName(StringUtils.formatString(teacher.getLastName()));
+            existTeacher.setFirstName(StringUtils.formatString(teacher.getFirstName()));
             existTeacher.setPhoneNumber(teacher.getPhoneNumber());
             existTeacher.setSubject(teacher.getSubject());
             teacherService.updateTeacher(existTeacher);
@@ -184,15 +186,15 @@ public class TeacherController {
         newTeacher.setPassword(bCryptPasswordEncoder.encode(teacher.getPassword()));
         newTeacher.setEnabled(true);
         newTeacher.setClasses(teacher.getClasses());
-        newTeacher.setFirstName(teacher.getFirstName());
-        newTeacher.setLastName(teacher.getLastName());
+        newTeacher.setFirstName(StringUtils.formatString(teacher.getFirstName()));
+        newTeacher.setLastName(StringUtils.formatString(teacher.getLastName()));
         newTeacher.setIdentity(teacher.getIdentity());
         newTeacher.setEmail(teacher.getEmail());
         newTeacher.setAvatar(teacher.getAvatar());
         newTeacher.setPosition("Teacher");
         newTeacher.setSchool(teacher.getSchool());
         newTeacher.setPhoneNumber(teacher.getPhoneNumber());
-        newTeacher.setAddress(teacher.getAddress());
+        newTeacher.setAddress(StringUtils.formatString(teacher.getAddress()));
         newTeacher.setSubject(teacher.getSubject());
 
         // set role teacher

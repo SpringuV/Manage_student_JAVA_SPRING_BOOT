@@ -1,0 +1,34 @@
+<div th:fragment="fragmentParentAdd-Modify" id="parent_add_modify" class="form-group">
+    <div class="mb-1">
+        <label for="parent_school_select" class="form-label">School Select: </label>
+        <select id="parent_school_select" data-type="parent" class="school_select" th:field="*{school}" required>
+            <option value="0">--Select School--</option>
+            <option th:each="school : ${schoolList}" th:value="${school.id}"
+                    th:text="${school.name} +' ('+${school.level}+')'"></option>
+        </select>
+        <div th:if="${#fields.hasErrors('school')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mb-1">
+        <label for="parent_class_select" class="form-label">Select Class: </label>
+        <select id="parent_class_select" data-type="parent" class="class_select" required>
+            <option value="0">--Select Class--</option>
+        </select>
+    </div>
+
+    <div class="mb-1">
+        <label for="parent_student_select" class="form-label">Select Student: </label>
+        <select id="parent_student_select" data-type="parent" class="student_select" th:field="*{student}" required>
+            <option value="0">--Select Student--</option>
+        </select>
+        <div th:if="${#fields.hasErrors('student')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('student')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+</div>

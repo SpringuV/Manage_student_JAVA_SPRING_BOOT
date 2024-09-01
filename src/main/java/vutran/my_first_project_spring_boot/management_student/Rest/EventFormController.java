@@ -60,14 +60,6 @@ public class EventFormController {
         return "error/403";
     }
 
-    // register
-    @GetMapping("/register/showRegisterForm")
-    public String showRegister(Model model){
-        User registerUser = new User();
-        model.addAttribute("registerUser", registerUser);
-        return "Register/formRegister";
-    }
-
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder){
         StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);

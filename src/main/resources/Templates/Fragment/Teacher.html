@@ -1,0 +1,40 @@
+<div th:fragment="fragmentTeacherAdd-Modify" id="teacher_add_modify" class="form-group">
+    <div class=" mb-1">
+        <label for="teacher_school_select" class="form-label">Work at school: </label>
+        <select id="teacher_school_select" class="school_select" data-type="teacher" th:field="*{school}" required>
+            <option value="0">--Select School--</option>
+            <option th:each="school : ${schoolList}" th:value="${school.id}"
+                    th:text="${school.name}"></option>
+        </select>
+        <div th:if="${#fields.hasErrors('school')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class=" mb-1">
+        <label class="form-label" for="teacher_subject_select">Subject Select: </label>
+        <select name="subject" class="subject_select" data-type="teacher" id="teacher_subject_select" th:field="*{subject}" required>
+            <option th:value="0">--Select Subject--</option>
+        </select>
+        <div th:if="${#fields.hasErrors('subject')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('subject')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class=" mb-1">
+        <label class="form-label" for="teacher_class_select">Class Select: </label>
+        <select name="classes" class="class_select" data-type="teacher" id="teacher_class_select" th:field="*{classes}" required>
+            <option th:value="0">--Select Class--</option>
+        </select>
+
+        <div th:if="${#fields.hasErrors('classes')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('classes')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+</div>

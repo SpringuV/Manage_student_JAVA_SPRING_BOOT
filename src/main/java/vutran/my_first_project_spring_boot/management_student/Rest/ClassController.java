@@ -97,6 +97,7 @@ public class ClassController {
         classesExist.setGrade(classes.getGrade());
         classService.addClass(classesExist);
         model.addAttribute("success", "You created new Class");
+        model.addAttribute("schoolList", schoolService.getAllSchools());
         model.addAttribute("classes", classesExist);
         return "School/Classes/addFormClass";
     }

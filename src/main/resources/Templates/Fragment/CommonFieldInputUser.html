@@ -1,0 +1,68 @@
+<div th:fragment="fragmentCommonFieldInput" id="commonFieldInput">
+    <!-- input the correct attribute name of the entity-->
+    <div class="form-floating mb-1">
+        <input type="text" th:field="*{firstName}" name="firstname" required
+               placeholder="Input FirstName" id="firstname" class="form-control"/>
+        <label class="form-label" for="firstname">First Name: </label>
+        <div th:if="${#fields.hasErrors('firstName')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('firstName')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="form-floating mb-1">
+        <input type="text" th:field="*{lastName}" name="lastname" placeholder="Input LastName"
+               id="lastname" class="form-control" required/>
+        <label class="form-label" for="lastname">Last Name: </label>
+        <div th:if="${#fields.hasErrors('lastName')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('lastName')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="form-floating mb-1">
+        <input type="text" th:field="*{address}" name="lastname" placeholder="Input Address"
+               id="address" class="form-control" required/>
+        <label class="form-label" for="address">Address: </label>
+        <div th:if="${#fields.hasErrors('address')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('address')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="form-floating mb-1">
+        <input type="tel" th:field="*{phoneNumber}" name="phoneNumber" placeholder="Input Phone"
+               id="phoneNumber" class="form-control" required/>
+        <label class="form-label" for="phoneNumber">PhoneNumber: </label>
+        <div th:if="${#fields.hasErrors('phoneNumber')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('phoneNumber')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="form-floating mb-1">
+        <input type="text" th:field="*{identity}" name="identity" placeholder="Input identity"
+               id="identity" class="form-control" required/>
+        <label class="form-label" for="identity">Identity: </label>
+        <div th:if="${#fields.hasErrors('identity')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('identity')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="form-floating mb-1">
+        <input type="email" th:field="*{email}" placeholder="Input Email" name="email" id="email"
+               class="form-control" required/>
+        <label class="form-label" for="email">Email: </label>
+        <div th:if="${#fields.hasErrors('email')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('email')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -41,19 +41,33 @@ public class ScoreCard {
     @JsonBackReference
     private Subject subject;
 
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH })
+    @JoinColumn(name = "cs_transcript_id")
+    @JsonBackReference
+    private Transcript transcript;
+
     @Column(name = "cs_school_year")
     private String schoolYear;
 
     public ScoreCard() {
     }
 
-    public ScoreCard(String nameExam, Student student, Date dayExam, double score, Subject subject, School school, String schoolYear) {
+    public ScoreCard(String nameExam, Student student, Date dayExam, double score, Subject subject, School school, String schoolYear, Transcript transcript) {
         this.student = student;
         this.dayExam = dayExam;
         this.score = score;
         this.subject = subject;
         this.school = school;
         this.schoolYear = schoolYear;
+        this.transcript = transcript;
+    }
+
+    public Transcript getTranscript() {
+        return transcript;
+    }
+
+    public void setTranscript(Transcript transcript) {
+        this.transcript = transcript;
     }
 
     public String getNameExam() {

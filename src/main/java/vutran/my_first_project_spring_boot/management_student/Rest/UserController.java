@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,7 @@ import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepos
 import vutran.my_first_project_spring_boot.management_student.Dao.UserRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.*;
 import vutran.my_first_project_spring_boot.management_student.Service.*;
+import vutran.my_first_project_spring_boot.management_student.Util.StringUtils;
 
 import java.util.ArrayList;
 
@@ -46,7 +48,7 @@ public class UserController {
     @GetMapping("/showManageUser")
     public String showListUser(Model model, @RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "15") int size){
-        Page<User> userPage = userRepository.findAll(PageRequest.of(page, size));
+        Page<User> userPage = userRepository.findAll(PageRequest.of(page, size, Sort.by("firstName").ascending()));
         // Necessary update if insert by mysql workbench
         //        updateRole();
         // check List
@@ -63,7 +65,7 @@ public class UserController {
     public String processSearch(@RequestParam("searchName") String searchName, Model model, @RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "15") int size){
 
-        Page<User> userPage = userService.getListUserByFirstName(searchName, PageRequest.of(page, size));
+        Page<User> userPage = userService.getListUserByFirstName(searchName, PageRequest.of(page, size, Sort.by("firstName").ascending()));
         // check List
         if(userPage.isEmpty()){
             model.addAttribute("Error", "Error, Not found User!!!");
@@ -120,12 +122,21 @@ public class UserController {
                 // encode password by bcrypt
                 BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 teacherNew.setUsername(user.getUsername());
+                if(user.getSchool() != null){
+                    teacherNew.setSchool(user.getSchool());
+                }
+                if(user.getClasses() != null){
+                    teacherNew.setClasses(user.getClasses());
+                }
+                if(user.getSubject() != null){
+                    teacherNew.setSubject(user.getSubject());
+                }
                 teacherNew.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
                 teacherNew.setEnabled(true);
-                teacherNew.setAddress(user.getAddress());
+                teacherNew.setAddress(StringUtils.formatString(user.getAddress()));
                 teacherNew.setIdentity(user.getIdentity());
-                teacherNew.setLastName(user.getLastName());
-                teacherNew.setFirstName(user.getFirstName());
+                teacherNew.setLastName(StringUtils.formatString(user.getLastName()));
+                teacherNew.setFirstName(StringUtils.formatString(user.getFirstName()));
                 teacherNew.setEmail(user.getEmail());
                 teacherNew.setPosition(user.getPosition());
                 Collection<Authority> roles = new ArrayList<>();
@@ -133,9 +144,8 @@ public class UserController {
                 teacherNew.setCollectionAuthority(roles);
                 teacherService.addTeacher(teacherNew);
                 // notify success
-                model.addAttribute("success", "You created new User have id: " + teacherNew.getId() + " Name: " + teacherNew.getFirstName());
+                model.addAttribute("success", "You have successfully registered has id: " + teacherNew.getId() + " Name: " + teacherNew.getFirstName());
                 model.addAttribute("user", teacherNew);
-
             }
             case "User" -> {
                 defaultRole = authorityRepository.findByName("ROLE_USER");
@@ -146,10 +156,10 @@ public class UserController {
                 userNew.setUsername(user.getUsername());
                 userNew.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
                 userNew.setEnabled(true);
-                userNew.setAddress(user.getAddress());
+                userNew.setAddress(StringUtils.formatString(user.getAddress()));
                 userNew.setIdentity(user.getIdentity());
-                userNew.setLastName(user.getLastName());
-                userNew.setFirstName(user.getFirstName());
+                userNew.setLastName(StringUtils.formatString(user.getLastName()));
+                userNew.setFirstName(StringUtils.formatString(user.getFirstName()));
                 userNew.setEmail(user.getEmail());
                 userNew.setPosition(user.getPosition());
 
@@ -160,7 +170,7 @@ public class UserController {
 
                 userService.addUser(userNew);
                 // notify success
-                model.addAttribute("success", "You created new User have id: " + userNew.getId() + " Name: " + userNew.getFirstName());
+                model.addAttribute("success", "You have successfully registered has id: " + userNew.getId() + " Name: " + userNew.getFirstName());
                 model.addAttribute("user", userNew);
             }
             case "Parent" -> {
@@ -172,10 +182,16 @@ public class UserController {
                 newParent.setUsername(user.getUsername());
                 newParent.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
                 newParent.setEnabled(true);
-                newParent.setAddress(user.getAddress());
+                if(user.getSchool() != null){
+                    newParent.setSchool(user.getSchool());
+                }
+                if(user.getStudent() != null){
+                    newParent.setStudent(user.getStudent());
+                }
+                newParent.setAddress(StringUtils.formatString(user.getAddress()));
                 newParent.setIdentity(user.getIdentity());
-                newParent.setLastName(user.getLastName());
-                newParent.setFirstName(user.getFirstName());
+                newParent.setLastName(StringUtils.formatString(user.getLastName()));
+                newParent.setFirstName(StringUtils.formatString(user.getFirstName()));
                 newParent.setEmail(user.getEmail());
                 newParent.setPosition(user.getPosition());
 
@@ -186,7 +202,7 @@ public class UserController {
 
                 parentService.addParent(newParent);
                 // notify success
-                model.addAttribute("success", "You created new User have id: " + newParent.getId() + " Name: " + newParent.getFirstName());
+                model.addAttribute("success", "You have successfully registered has id: " + newParent.getId() + " Name: " + newParent.getFirstName());
                 model.addAttribute("user", newParent);
             }
             case "Student" -> {
@@ -198,10 +214,19 @@ public class UserController {
                 newStudent.setUsername(user.getUsername());
                 newStudent.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
                 newStudent.setEnabled(true);
-                newStudent.setAddress(user.getAddress());
+                if(user.getSchool() != null){
+                    newStudent.setSchool(user.getSchool());
+                }
+                if(user.getClasses() != null){
+                    newStudent.setClasses(user.getClasses());
+                }
+                if(user.getTeacher() != null){
+                    newStudent.setTeacher(user.getTeacher());
+                }
+                newStudent.setAddress(StringUtils.formatString(user.getAddress()));
                 newStudent.setIdentity(user.getIdentity());
-                newStudent.setLastName(user.getLastName());
-                newStudent.setFirstName(user.getFirstName());
+                newStudent.setLastName(StringUtils.formatString(user.getLastName()));
+                newStudent.setFirstName(StringUtils.formatString(user.getFirstName()));
                 newStudent.setEmail(user.getEmail());
                 newStudent.setPosition(user.getPosition());
 
@@ -212,7 +237,7 @@ public class UserController {
 
                 studentService.addStudent(newStudent);
                 // notify success
-                model.addAttribute("success", "You created new User have id: " + newStudent.getId() + " Name: " + newStudent.getFirstName());
+                model.addAttribute("success", "You have successfully registered has id: " + newStudent.getId() + " Name: " + newStudent.getFirstName());
                 model.addAttribute("user", newStudent);
             }
         }
@@ -233,43 +258,43 @@ public class UserController {
         String position = userExist.getPosition();
         if(position.equals("Teacher") && (user instanceof Teacher)){
             Teacher teacherExist = (Teacher) userExist;
-            teacherExist.setFirstName(user.getFirstName());
-            teacherExist.setAddress(user.getAddress());
+            teacherExist.setFirstName(StringUtils.formatString(user.getFirstName()));
+            teacherExist.setAddress(StringUtils.formatString(user.getAddress()));
             teacherExist.setIdentity(user.getIdentity());
             teacherExist.setPhoneNumber(user.getPhoneNumber());
-            teacherExist.setLastName(user.getLastName());
+            teacherExist.setLastName(StringUtils.formatString(user.getLastName()));
             teacherExist.setEmail(user.getEmail());
             teacherService.updateTeacher(teacherExist);
             model.addAttribute("success", "Modified User have id: "+ teacherExist.getId()+" Name: "+teacherExist.getFirstName());
             model.addAttribute("user", teacherExist);
         } else if (position.equals("Student") && (user instanceof Student)){
             Student studentExist = (Student) userExist;
-            studentExist.setFirstName(user.getFirstName());
-            studentExist.setAddress(user.getAddress());
+            studentExist.setFirstName(StringUtils.formatString(user.getFirstName()));
+            studentExist.setAddress(StringUtils.formatString(user.getAddress()));
             studentExist.setIdentity(user.getIdentity());
             studentExist.setPhoneNumber(user.getPhoneNumber());
-            studentExist.setLastName(user.getLastName());
+            studentExist.setLastName(StringUtils.formatString(user.getLastName()));
             studentExist.setEmail(user.getEmail());
             studentService.updateStudent(studentExist);
             model.addAttribute("success", "Modified User have id: "+ studentExist.getId()+" Name: "+studentExist.getFirstName());
             model.addAttribute("user", studentExist);
         } else if (position.equals("Parent") && (user instanceof Parent)){
             Parent parentExist = (Parent) userExist;
-            parentExist.setFirstName(user.getFirstName());
-            parentExist.setAddress(user.getAddress());
+            parentExist.setFirstName(StringUtils.formatString(user.getFirstName()));
+            parentExist.setAddress(StringUtils.formatString(user.getAddress()));
             parentExist.setIdentity(user.getIdentity());
             parentExist.setPhoneNumber(user.getPhoneNumber());
-            parentExist.setLastName(user.getLastName());
+            parentExist.setLastName(StringUtils.formatString(user.getLastName()));
             parentExist.setEmail(user.getEmail());
             parentService.updateParent(parentExist);
             model.addAttribute("success", "Modified User have id: "+ parentExist.getId()+" Name: "+parentExist.getFirstName());
             model.addAttribute("user", parentExist);
         } else {
-            userExist.setFirstName(user.getFirstName());
-            userExist.setAddress(user.getAddress());
+            userExist.setFirstName(StringUtils.formatString(user.getFirstName()));
+            userExist.setAddress(StringUtils.formatString(user.getAddress()));
             userExist.setIdentity(user.getIdentity());
             userExist.setPhoneNumber(user.getPhoneNumber());
-            userExist.setLastName(user.getLastName());
+            userExist.setLastName(StringUtils.formatString(user.getLastName()));
             userExist.setEmail(user.getEmail());
             userService.updateUser(userExist);
             model.addAttribute("success", "Modified User have id: "+ userExist.getId()+" Name: "+userExist.getFirstName());

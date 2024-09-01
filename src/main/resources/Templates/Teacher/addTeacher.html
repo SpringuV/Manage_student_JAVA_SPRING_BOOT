@@ -20,137 +20,15 @@
                     <span th:text="${success}"></span>
                 </div>
                 <h3>Add teacher</h3>
-                <!-- User name -->
-                <div class="form-floating mb-1 mt-3">
-                    <input type="text" th:field="*{username}" name="username" placeholder="Input Teacher username (*)"
-                           id="usernameid" class="form-control" required/>
-                    <label class="form-label" for="usernameid">User name: </label>
-                    <div th:if="${#fields.hasErrors('username')}">
-                        <ul>
-                            <li th:each="error: ${#fields.hasErrors('username')}" th:text="${error}"></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Password input -->
-                <div class="form-floating mb-1">
-                    <input type="password" th:field="*{password}" name="password" placeholder="Input Teacher Password"
-                           id="password" class="form-control" required/>
-                    <label class="form-label" for="password">Password: </label>
-                    <div th:if="${#fields.hasErrors('password')}">
-                        <ul>
-                            <li th:each="error: ${#fields.hasErrors('password')}" th:text="${error}"></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- input the correct attribute name of the entity-->
-                <div class="form-floating mb-1">
-                    <input type="text" th:field="*{firstName}" name="firstname" required
-                           placeholder="Input Teacher FirstName" id="firstname" class="form-control"/>
-                    <label class="form-label" for="firstname">First Name: </label>
-                    <div th:if="${#fields.hasErrors('firstName')}">
-                        <ul>
-                            <li th:each="error: ${#fields.hasErrors('firstName')}" th:text="${error}"></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="form-floating mb-1">
-                    <input type="text" th:field="*{lastName}" name="lastname" placeholder="Input Teacher LastName"
-                           id="lastname" class="form-control" required/>
-                    <label class="form-label" for="lastname">Last Name: </label>
-                    <div th:if="${#fields.hasErrors('lastName')}">
-                        <ul>
-                            <li th:each="error: ${#fields.hasErrors('lastName')}" th:text="${error}"></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="form-floating mb-1">
-                    <input type="text" th:field="*{address}" name="lastname" placeholder="Input Teacher Address"
-                           id="address" class="form-control" required/>
-                    <label class="form-label" for="address">Address: </label>
-
-                    <div th:if="${#fields.hasErrors('address')}">
-                        <ul>
-                            <li th:each="error: ${#fields.hasErrors('address')}" th:text="${error}"></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="form-floating mb-1">
-                    <input type="tel" th:field="*{phoneNumber}" name="phoneNumber" placeholder="Input Teacher Phone"
-                           id="phoneNumber" class="form-control" required/>
-                    <label class="form-label" for="phoneNumber">PhoneNumber: </label>
-                    <div th:if="${#fields.hasErrors('phoneNumber')}">
-                        <ul>
-                            <li th:each="error: ${#fields.hasErrors('phoneNumber')}" th:text="${error}"></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="mb-1">
-                    <label class="form-label">Work at school: </label>
-                    <select id="school_select" th:field="*{school}" required>
-                        <option value="">--Select School--</option>
-                        <option th:each="school : ${schoolList}" th:value="${school.id}"
-                                th:text="${school.name}"></option>
-                    </select>
-                    <div th:if="${#fields.hasErrors('school')}">
-                        <ul>
-                            <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="mb-1">
-                    <label class="form-label" for="subject_select">Subject Select: </label>
-                    <select name="subject" id="subject_select" th:field="*{subject}" required>
-                        <option th:value="0">--Select Subject--</option>
-                    </select>
-
-                    <div th:if="${#fields.hasErrors('subject')}">
-                        <ul>
-                            <li th:each="error: ${#fields.hasErrors('subject')}" th:text="${error}"></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="mb-1">
-                    <label class="form-label" for="class_select">Class Select: </label>
-                    <select name="classes" id="class_select" th:field="*{classes}" required>
-                        <option th:value="0">--Select Class--</option>
-                    </select>
-
-                    <div th:if="${#fields.hasErrors('classes')}">
-                        <ul>
-                            <li th:each="error: ${#fields.hasErrors('classes')}" th:text="${error}"></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="form-floating mb-4">
-                    <input type="text" th:field="*{identity}" name="identity" placeholder="Input your identity"
-                           id="identity" class="form-control" required/>
-                    <label class="form-label" for="identity">Identity: </label>
-                    <div th:if="${#fields.hasErrors('identity')}">
-                        <ul>
-                            <li th:each="error: ${#fields.hasErrors('identity')}" th:text="${error}"></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="form-floating mb-1">
-                    <input type="email" th:field="*{email}" placeholder="Input Teacher Email" name="email" id="email"
-                           class="form-control" required/>
-                    <label class="form-label" for="email">Email: </label>
-                    <div th:if="${#fields.hasErrors('email')}">
-                        <ul>
-                            <li th:each="error: ${#fields.hasErrors('email')}" th:text="${error}"></li>
-                        </ul>
-                    </div>
-                </div>
+                <!-- START Fragment/UsernamePassword-->
+                <div th:replace="~{Fragment/UsernamePassword :: fragmentUsernamePassword}"></div>
+                <!-- END Fragment/UsernamePassword-->
+                <!-- START Fragment/CommonFieldInputUser-->
+                <div th:replace="~{Fragment/CommonFieldInputUser :: fragmentCommonFieldInput}"></div>
+                <!-- END Fragment/CommonFieldInputUser-->
+                <!-- START Fragment Add - Modify Teacher-->
+                <div th:replace="~{Fragment/Teacher :: fragmentTeacherAdd-Modify}"></div>
+                <!-- START Fragment Add - Modify Teacher-->
                 <button class="btn btn-primary py-2" type="submit">Add</button>
             </form>
         </div>

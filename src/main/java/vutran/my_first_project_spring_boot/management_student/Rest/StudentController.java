@@ -3,6 +3,7 @@ package vutran.my_first_project_spring_boot.management_student.Rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import vutran.my_first_project_spring_boot.management_student.Service.ClassServi
 import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
 import vutran.my_first_project_spring_boot.management_student.Service.StudentService;
 import vutran.my_first_project_spring_boot.management_student.Service.TeacherService;
+import vutran.my_first_project_spring_boot.management_student.Util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,7 +47,7 @@ public class StudentController {
     @GetMapping("/search-name")
     public String processSearch(@RequestParam("searchName") String searchName, Model model,@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "15") int size){
-        Page<Student> studentPage = studentService.findStudentsByFirstName(searchName, PageRequest.of(page, size));
+        Page<Student> studentPage = studentService.findStudentsByFirstName(searchName, PageRequest.of(page, size, Sort.by("firstName").ascending()));
         // check list
         if(studentPage.isEmpty()){
             model.addAttribute("Error", "Error, Search not found Student!!!");
@@ -60,7 +62,7 @@ public class StudentController {
     @GetMapping("/showManageStudent")
     public String showListStudent(Model model, @RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "15") int size){
-        Page<Student> studentList = studentRepository.findAll(PageRequest.of(page, size));
+        Page<Student> studentList = studentRepository.findAll(PageRequest.of(page, size, Sort.by("firstName").ascending()));
         //check List
         if(studentList.isEmpty()){
             model.addAttribute("studentList", new ArrayList<>());
@@ -84,7 +86,7 @@ public class StudentController {
         model.addAttribute("schoolList", schoolService.getAllSchools());
         return "Student/addStudentForm";
     }
-
+    
     @PostMapping("/add-process")
     public String addStudentProcess(@ModelAttribute Student student, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
@@ -106,8 +108,8 @@ public class StudentController {
         } else {
             Student newStudent = new Student();
             newStudent.setPhoneNumber(student.getPhoneNumber());
-            newStudent.setLastName(student.getLastName());
-            newStudent.setFirstName(student.getFirstName());
+            newStudent.setLastName(StringUtils.formatString(student.getLastName()));
+            newStudent.setFirstName(StringUtils.formatString(student.getFirstName()));
             if(student.getTeacher().getId() != 0){
                 newStudent.setTeacher(student.getTeacher());
             }
@@ -116,7 +118,7 @@ public class StudentController {
             if(student.getSchool().getId() != 0){
                 newStudent.setSchool(student.getSchool());
             }
-            newStudent.setAddress(student.getAddress());
+            newStudent.setAddress(StringUtils.formatString(student.getAddress()));
             newStudent.setEmail(student.getEmail());
             newStudent.setEnabled(true);
             newStudent.setParent(student.getParent());
@@ -163,9 +165,9 @@ public class StudentController {
         Student studentExist = studentService.getStudentById(student.getId());
         // exits, modify
         if(studentExist != null){
-            studentExist.setFirstName(student.getFirstName());
-            studentExist.setLastName(student.getLastName());
-            studentExist.setAddress(student.getAddress());
+            studentExist.setFirstName(StringUtils.formatString(student.getFirstName()));
+            studentExist.setLastName(StringUtils.formatString(student.getLastName()));
+            studentExist.setAddress(StringUtils.formatString(student.getAddress()));
             if(student.getSchool().getId() != 0 && student.getSchool() != null){
                 studentExist.setSchool(student.getSchool());
             }
