@@ -10,10 +10,15 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <form th:action="@{/m-student/add-process}" th:object="${student}" method="post">
+                <div>
                     <div th:if="${Error}" class="alert alert-danger">
                         <span th:text="${Error}"></span>
                     </div>
+                    <div th:if="${success}" class="alert alert-success">
+                        <span th:text="${success}"></span>
+                    </div>
+                </div>
+                <form th:action="@{/m-student/add-process}" th:object="${student}" method="post">
                     <h3>Add Student</h3>
     <!-- START Fragment/UsernamePassword-->
                     <div th:replace="~{Fragment/UsernamePassword :: fragmentUsernamePassword}"></div>
@@ -28,11 +33,9 @@
                 </form>
             </div>
         </div>
-        <div th:if="${success}" class="alert alert-success">
-            <span th:text="${success}"></span>
-        </div>
         <div>
             <a class="btn btn-primary" th:href="@{/m-student/showManageStudent}">Return ListStudent</a>
+            <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
         </div>
         <p class="mt-5 mb-3 text-body-secondary">© 2017–2024</p>
     </div>

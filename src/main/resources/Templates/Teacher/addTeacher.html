@@ -23,142 +23,26 @@
                 <!-- START Fragment/UsernamePassword-->
                 <div th:replace="~{Fragment/UsernamePassword :: fragmentUsernamePassword}"></div>
                 <!-- END Fragment/UsernamePassword-->
+
                 <!-- START Fragment/CommonFieldInputUser-->
                 <div th:replace="~{Fragment/CommonFieldInputUser :: fragmentCommonFieldInput}"></div>
                 <!-- END Fragment/CommonFieldInputUser-->
+
                 <!-- START Fragment Add - Modify Teacher-->
                 <div th:replace="~{Fragment/Teacher :: fragmentTeacherAdd-Modify}"></div>
                 <!-- START Fragment Add - Modify Teacher-->
+
                 <button class="btn btn-primary py-2" type="submit">Add</button>
             </form>
         </div>
     </div>
     <div>
         <a class="btn btn-primary" th:href="@{/m-teacher/showManageTeacher}">Return ListTeacher</a>
+        <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
     </div>
     <p class="mt-5 mb-3 text-body-secondary">© 2017–2024</p>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function(){
-        const schoolSelect = document.getElementById('school_select');
-        const subjectSelect = document.getElementById('subject_select');
-        const classSelect = document.getElementById('class_select');
-        schoolSelect.addEventListener('change', function(){
-            const schoolId = schoolSelect.value;
-            if(schoolId){
-                fetch(`/m-teacher/getSubjectBySchool/${schoolId}`)
-                .then(response => response.json())
-                .then(subjects => {
-                    // clear previous subjects
-                    subjectSelect.innerHTML = '<option value="0">--Select Subject--</option>';
-
-                    // Populate new subjects
-                    subjects.forEach(subject => {
-                        const option = document.createElement('option');
-                        option.value = subject.id;
-                        option.textContent = subject.nameSubject;
-                        subjectSelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error fetching Subject:', error));
-
-                // fetch class
-                fetch(`/m-teacher/getClassBySchoolId/${schoolId}`)
-                .then(response => response.json())
-                .then(classes => {
-                    // clear previous class
-                    classSelect.innerHTML = '<option value="0">--Select Class--</option>';
-
-                    // Populate new subjects
-                    classes.forEach(classItem => {
-                        const option = document.createElement('option');
-                        option.value = classItem.id;
-                        option.textContent = classItem.name;
-                        classSelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error fetching Class:', error));
-            } else {
-                // Clear subjects if no school is selected
-                subjectSelect.innerHTML = '<option value="0">--Select Subject--</option>';
-                // Clear subjects if no school is selected
-                classSelect.innerHTML = '<option value="0">--Select Class--</option>';
-            }
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function(){
-        const schoolSelect = document.getElementById('school_select');
-        const teacherSelect = document.getElementById('teacher_select');
-        const classSelect = document.getElementById('class_select');
-
-        function getClassBySchoolId(schoolId){
-            if(schoolId){
-                // fetch class
-                fetch(`/m-student/getClassBySchoolId/${schoolId}`)
-                .then(response => response.json())
-                .then(classes =>{
-                    // clear previous classes
-                    classSelect.innerHTML = '<option value="0">--Select Class--</option>';
-
-                    // populate new class
-                    classes.forEach(classItem =>{
-                        const option = document.createElement('option');
-                        option.value = classItem.id;
-                        option.textContent = classItem.name;
-                        classes.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error fetching Class:', error));
-            } else {
-                // if no school selected
-                classSelect.innerHTML = '<option value="0">--Select Class--</option>';
-            }
-        }
-
-        function getTeacherBySchoolIdAndClassId(schoolId, classId){
-            if(schoolId && classId){
-                // fetch teacher
-                fetch(`/m-student/getTeacherBySchoolIdAndClassId/${schoolId}&${classId}`)
-                .then(response => response.json())
-                .then(teachers => {
-                    // clear teacher previous
-                    teacherSelect.innerHTML= '<option>--Select Teacher--</option>';
-                
-                    // populate new teacher
-                    teachers.forEach(teacherItem =>{
-                        const option = document.createElement('option');
-                        option.value = teacherItem.id;
-                        option.textContent = `${teacherItem.lastName} ${teacherItem.firstName}`;
-                        teachers.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error fetching Teacher:', error));
-            } else {
-                // if no class or school selected
-                teacherSelect.innerHTML= '<option>--Select Teacher--</option>';
-            }
-        }
-
-        // event listener for school selection change
-        schoolSelect.addEventListener('change', function(){
-            const schoolId = schoolSelect.value;
-            getClassBySchoolId(schoolId);
-        });
-
-        // event listener for the school and the class selection change
-        classSelect.addEventListener('change', function(){
-            const schoolId = schoolSelect.value;
-            const classId = classSelect.value;
-            getTeacherBySchoolIdAndClassId(schoolId, classId);
-        });
-
-    });
-</script>
-<script src="/resources/static/JavaScript/function.js"></script>
-<script src="/docs/5.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
 </body>
+<script src="/JavaScript/function.js"></script>
+<script src="/CSS/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 </html>

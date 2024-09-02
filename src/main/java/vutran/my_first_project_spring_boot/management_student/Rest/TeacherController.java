@@ -45,18 +45,6 @@ public class TeacherController {
         this.teacherRepository = teacherRepository;
     }
 
-    @GetMapping("/getSubjectBySchool/{schoolId}")
-    @ResponseBody
-    public List<Subject> returnListSubject(@PathVariable int schoolId){
-        return subjectService.getListSubjectOfSchoolId(schoolId);
-    }
-
-    @GetMapping("/getClassBySchoolId/{schoolId}")
-    @ResponseBody
-    public List<Classes> returnListClass(@PathVariable int schoolId){
-        return classService.getListClassByIdSchool(schoolId);
-    }
-
     // search user by name
     @GetMapping("/search-name")
     public String processSearch(@RequestParam("searchName") String searchName, Model model, @RequestParam(defaultValue = "0") int page,
@@ -89,12 +77,6 @@ public class TeacherController {
         model.addAttribute("schoolList", schoolService.getAllSchools());
         model.addAttribute("teacherList", teacherList);
         return "Teacher/indexTeacher";
-    }
-
-    @GetMapping("/getTeacherBySchoolAndClass/{schoolId}/{classId}")
-    @ResponseBody
-    public List<Teacher> returnListTeacher(@PathVariable int schoolId, @PathVariable int classId){
-        return teacherService.getListTeacherBySchoolIdAndClassID(schoolId, classId);
     }
 
     @GetMapping("/showModifyFormTeacher")

@@ -2,7 +2,6 @@ package vutran.my_first_project_spring_boot.management_student.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
@@ -22,6 +21,10 @@ public class Parent extends User{
     @JsonBackReference
     private School school;
 
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH})
+    @JoinColumn(name = "p_class_id")
+    @JsonBackReference
+    private Classes classes;
     public Parent() {
     }
 
@@ -29,14 +32,11 @@ public class Parent extends User{
         super(firstName, lastName, identity, address, phoneNumber, username, email, position, avatar);
     }
 
-    public Parent(String firstName, String lastName, String address, String phoneNumber, String identity, String username, String password, Boolean enabled, String email, String position, Blob avatar, Collection<Authority> authority) {
+    public Parent(String firstName, String lastName, String address, String phoneNumber, String identity, String username, String password, Boolean enabled, String email, String position, Blob avatar, Collection<Authority> authority, Student student, School school, Classes classes) {
         super(firstName, lastName, address, phoneNumber, identity, username, password, enabled, email, position, avatar, authority);
-    }
-
-    public Parent(Blob avatar, String position, String email, Boolean enabled, String password, String username, String identity, String phoneNumber, String address, String lastName, String firstName, Student student, School school) {
-        super(avatar, position, email, enabled, password, username, identity, phoneNumber, address, lastName, firstName);
         this.student = student;
         this.school = school;
+        this.classes = classes;
     }
 
     public School getSchool() {
@@ -53,6 +53,16 @@ public class Parent extends User{
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    @Override
+    public Classes getClasses() {
+        return classes;
+    }
+
+    @Override
+    public void setClasses(Classes classes) {
+        this.classes = classes;
     }
 
     @Override

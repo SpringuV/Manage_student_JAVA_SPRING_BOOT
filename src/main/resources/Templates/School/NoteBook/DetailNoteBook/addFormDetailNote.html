@@ -15,6 +15,9 @@
             <div th:if="${Error}" class="alert alert-danger">
                 <span th:text="${Error}"></span>
             </div>
+            <div th:if="${success}">
+                <h3>You created a new notebook "<span th:text="${success}"></span>"</h3>
+            </div>
         </div>
         <div>
             <label>Id NoteBook: <span th:text="${noteBook_id}"></span></label>
@@ -86,9 +89,6 @@
             <button class="btn btn-primary" type="submit">Add</button>
         </div>
     </form>
-    <div th:if="${success}">
-        <h3>You created a new notebook "<span th:text="${success}"></span>"</h3>
-    </div>
 </div>
 <div>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>

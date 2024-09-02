@@ -35,94 +35,15 @@
             <button class="btn btn-primary" type="submit">Modify</button>
         </div>
     </form>
+
+    <div>
+        <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
+        <a class="btn btn-primary" th:href="@{/m-student/showManageStudent}">Student List Manage</a>
+    </div>
 </div>
 
-<div>
-    <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-    <a class="btn btn-primary" th:href="@{/m-student/showManageStudent}">Student List Manage</a>
-</div>
 </body>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function(){
-        const schoolSelect = document.getElementById('school_select');
-        const teacherSelect = document.getElementById('teacher_select');
-        const classSelect = document.getElementById('class_select');
-
-        function getClassBySchoolId(schoolId){
-            if(schoolId){
-                // fetch class
-                fetch(`/m-class/getClassBySchoolId/${schoolId}`)
-                .then(response => response.json())
-                .then(classes =>{
-                    // clear previous classes
-                    classSelect.innerHTML = '<option value="0">--Select Class--</option>';
-
-                    // populate new class
-                    classes.forEach(classItem =>{
-                        const option = document.createElement('option');
-                        option.value = classItem.id;
-                        option.textContent = classItem.name;
-                        classSelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error fetching Class:', error));
-            } else {
-                // if no school selected
-                classSelect.innerHTML = '<option value="0">--Select Class--</option>';
-            }
-        }
-
-        function getTeacherBySchoolIdAndClassId(schoolId, classId){
-            if(schoolId && classId){
-                // fetch teacher
-                fetch(`/m-teacher/getTeacherBySchoolAndClass/${schoolId}/${classId}`)
-                .then(response => response.json())
-                .then(teachers => {
-                    // clear teacher previous
-                    teacherSelect.innerHTML= '<option>--Select Teacher--</option>';
-
-                    // populate new teacher
-                    teachers.forEach(teacherItem =>{
-                        const option = document.createElement('option');
-                        option.value = teacherItem.id;
-                        option.textContent = `${teacherItem.lastName} ${teacherItem.firstName}`;
-                        teacherSelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error fetching Teacher:', error));
-            } else {
-                // if no class or school selected
-                teacherSelect.innerHTML= '<option>--Select Teacher--</option>';
-            }
-        }
-
-        // event listener for school selection change
-        schoolSelect.addEventListener('change', function(){
-            const schoolId = schoolSelect.value;
-            getClassBySchoolId(schoolId);
-        });
-
-        // event listener for the school and the class selection change
-        classSelect.addEventListener('change', function(){
-            const schoolId = schoolSelect.value;
-            const classId = classSelect.value;
-            getTeacherBySchoolIdAndClassId(schoolId, classId);
-        });
-
-        // automatically load class if the school is already selected
-        const initialSchoolId = schoolSelect.value;
-        if(initialSchoolId){
-            getClassBySchoolId(initialSchoolId);
-        }
-
-        // automatically load the teacher if the school and the class are already selected
-        const initialClassId = classSelect.value;
-        if(initialSchoolId && initialClassId){
-            getTeacherBySchoolIdAndClassId(initialSchoolId, initialClassId);
-        }
-    });
-</script>
+<script src="/JavaScript/function.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>

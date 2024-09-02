@@ -74,12 +74,6 @@ public class StudentController {
         return "Student/indexStudent";
     }
 
-    @GetMapping("/getStudentByClassAndSchool/{schoolId}/{classId}")
-    @ResponseBody
-    public List<Student> getListStudent(@PathVariable("schoolId") int school_id, @PathVariable("classId") int class_id){
-        return  studentService.getListStudentByClassAndSchool(class_id, school_id);
-    }
-
     @GetMapping("/showFormAddStudent")
     public String showFormAddStudent(Model model){
         model.addAttribute("student", new Student());

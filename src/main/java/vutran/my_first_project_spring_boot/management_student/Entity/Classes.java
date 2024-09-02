@@ -38,15 +38,23 @@ public class Classes {
     @JsonBackReference
     private School school;
 
+
+    @OneToMany(mappedBy = "classes", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonManagedReference
+    private List<Parent> parentList;
+
+
     public Classes() {
     }
 
-    public Classes(String name, String grade, NoteBook noteBook, School school, List<Teacher> teacherList) {
+    public Classes(String name, String grade, List<Teacher> teacherList, List<Student> studentList, NoteBook noteBook, School school, List<Parent> parentList) {
         this.name = name;
         this.grade = grade;
+        this.teacherList = teacherList;
+        this.studentList = studentList;
         this.noteBook = noteBook;
         this.school = school;
-        this.teacherList =teacherList;
+        this.parentList = parentList;
     }
 
     public int getId() {
@@ -105,6 +113,14 @@ public class Classes {
         this.teacherList = teacherList;
     }
 
+    public List<Parent> getParentList() {
+        return parentList;
+    }
+
+    public void setParentList(List<Parent> parentList) {
+        this.parentList = parentList;
+    }
+
     @Override
     public String toString() {
         return "Classes{" +
@@ -113,6 +129,7 @@ public class Classes {
                 ", grade='" + grade + '\'' +
                 ", teacherList=" + teacherList.size() +
                 ", studentList=" + studentList.size() +
+                ", parentList=" + parentList.size() +
                 ", noteBook=" + noteBook +
                 ", school=" + school +
                 '}';

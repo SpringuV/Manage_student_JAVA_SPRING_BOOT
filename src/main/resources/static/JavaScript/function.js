@@ -1,34 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // START DISPLAY POSITION
-        const positionSelect = document.getElementById('position_select');
-        function hideAllFields() {
-            // Hide all additional fields
-            document.getElementById('parent-fields').style.display = "none";
-            document.getElementById('teacher-fields').style.display = "none";
-            document.getElementById('student-fields').style.display = "none";
-        }
-
-        // Hide all fields initially
-        hideAllFields();
-
-        // Display the corresponding fields based on the position
-        if(positionSelect){
-            positionSelect.addEventListener('change', function () {
-                hideAllFields();
-                const position = positionSelect.value;
-                if (position === "Parent") {
-                    document.getElementById('parent-fields').style.display = "block";
-                } else if (position === "Teacher") {
-                    document.getElementById('teacher-fields').style.display = "block";
-                } else if (position === "Student") {
-                    document.getElementById('student-fields').style.display = "block";
-                } else {
-                    hideAllFields();
-                }
-            });
-        }
-    // END DISPLAY POSITION
-
     // START SELECT
         const schoolSelects = document.querySelectorAll('.school_select');
         const classSelects = document.querySelectorAll('.class_select');
@@ -36,20 +6,15 @@ document.addEventListener('DOMContentLoaded', function () {
         const subjectSelects = document.querySelectorAll('.subject_select');
         const studentSelects = document.querySelectorAll('.student_select');
 
-        function fetchOptions(url, selectElement, optionPlaceholder, createOption) {
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    selectElement.innerHTML = optionPlaceholder;
-                    data.forEach(createOption);
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        }
-
+        console.log("schoolSelects: ",schoolSelects);
+        console.log("classSelects: ",classSelects);
+        console.log("teacherSelects: ",teacherSelects);
+        console.log("subjectSelects: ",subjectSelects);
+        console.log("studentSelects: ",studentSelects);
         function getClassBySchoolId(schoolId, classSelect) {
             if (schoolId && schoolId !== "0") {
                 // fetch class
-                fetch(`/m-class/getClassBySchoolId/${schoolId}`)
+                fetch(`/event/getClassBySchoolId/${schoolId}`)
                     .then(response => response.json())
                     .then(classes => {
                         // clear previous class
@@ -71,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
         function getStudentByClassAndSchool(schoolId, classId, studentSelect) {
             if (schoolId && classId && schoolId !== "0" && classId !== "0") {
                 // fetch student
-                fetch(`/m-student/getStudentByClassAndSchool/${schoolId}/${classId}`)
+                fetch(`/event/getStudentByClassAndSchool/${schoolId}/${classId}`)
                     .then(response => response.json())
                     .then(students => {
                         // clear student previous
@@ -92,23 +57,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // function getStudentByClassAndSchool(schoolId, classId, studentSelects) {
-        //     if (schoolId && classId && schoolId !== "0" && classId !== "0") {
-        //         fetchOptions(`/m-student/getStudentByClassAndSchool/${schoolId}/${classId}`, studentSelects, '<option value="0">--Select Student--</option>', studentItem =>{
-        //             const option = document.createElement('option');
-        //             option.value = studentItem.id;
-        //             option.textContent = `${studentItem.lastName} ${studentItem.firstName}`;
-        //             studentSelect.appendChild(option);
-        //         });
-        //     } else {
-        //         // if no class or school selected
-        //         studentSelects.forEach(studentSelect => studentSelect.innerHTML = '<option value="0">--Select Student--</option>');
-        //     }
-        // }
-
         function getSubjectBySchool(schoolId, subjectSelect) {
             if (schoolId && schoolId !== "0") {
-                fetch(`/m-subject/getSubjectBySchool/${schoolId}`)
+                fetch(`/event/getSubjectBySchool/${schoolId}`)
                     .then(response => response.json())
                     .then(subjects => {
                         // clear previous subject
@@ -132,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
         function getTeacherBySchoolIdAndClassId(schoolId, classId, teacherSelect) {
             if (schoolId && classId && schoolId !== "0" && classId !== "0") {
                 // fetch teacher
-                fetch(`/m-teacher/getTeacherBySchoolAndClass/${schoolId}/${classId}`)
+                fetch(`/event/getTeacherBySchoolAndClass/${schoolId}/${classId}`)
                     .then(response => response.json())
                     .then(teachers => {
                         // clear teacher previous
@@ -153,20 +104,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // function getTeacherBySchoolIdAndClassId(schoolId, classId, teacherSelects) {
-        //     if (schoolId && classId && schoolId !== "0" && classId !== "0") {
-        //         fetchOptions(`/m-teacher/getTeacherBySchoolAndClass/${schoolId}/${classId}`, teacherSelects,
-        //             '<option value="0">--Select Teacher--</option>',
-        //             teacherItem => {
-        //                 const option = document.createElement('option');
-        //                 option.value = teacherItem.id;
-        //                 option.textContent = `${teacherItem.lastName} ${teacherItem.firstName}`;
-        //                 teacherSelects.forEach(teacherSelect => teacherSelect.appendChild(option.cloneNode(true)));
-        //             });
-        //     } else {
-        //         teacherSelects.forEach(teacherSelect => teacherSelect.innerHTML = '<option value="0">--Select Teacher--</option>');
-        //     }
-        // }
         // START EVENT LISTENER
             // event listener for school selection change
             schoolSelects.forEach(schoolSelect => {
@@ -174,27 +111,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     const schoolId = schoolSelect.value;
                     const type = schoolSelect.dataset.type;
                     // logic dependence type
-                    if (type === "parent") {
+                    if (type === "parent" || type === "student" || type === "teacher") {
                         classSelects.forEach(classSelect => {
                             if (classSelect) {
                                 getClassBySchoolId(schoolId, classSelect);
                             }
                         });
                     } else if (type === "teacher") {
-                        classSelects.forEach(classSelect => {
-                            if (classSelect) {
-                                getClassBySchoolId(schoolId, classSelect);
-                            }
-                        });
                         subjectSelects.forEach(subjectSelect => {
                             if (subjectSelect) {
                                 getSubjectBySchool(schoolId, subjectSelect);
-                            }
-                        });
-                    } else if (type === "student") {
-                        classSelects.forEach(classSelect => {
-                            if (classSelect) {
-                                getClassBySchoolId(schoolId, classSelect);
                             }
                         });
                     }
@@ -227,6 +153,66 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
             });
+            // automatically fetch classes if school selected
+            schoolSelects.forEach(schoolSelect => {
+                const schoolId = schoolSelect.value;
+                const type = schoolSelect.dataset.type;
+
+                if (schoolId && schoolId !== "0") {
+                    // logic dependence type
+                    if (type === "parent" || type === "student" || type === "teacher") {
+                        classSelects.forEach(classSelect => {
+                            if (classSelect) {
+                                getClassBySchoolId(schoolId, classSelect);
+                            }
+                        });
+                    } else if (type === "teacher") {
+                        subjectSelects.forEach(subjectSelect => {
+                            if (subjectSelect) {
+                                getSubjectBySchool(schoolId, subjectSelect);
+                            }
+                        });
+                    }
+                }
+            });
         // END EVENT LISTENER
     // END SELECT
 });
+
+//        function fetchOptions(url, selectElement, optionPlaceholder, createOption) {
+//            fetch(url)
+//                .then(response => response.json())
+//                .then(data => {
+//                    selectElement.innerHTML = optionPlaceholder;
+//                    data.forEach(createOption);
+//                })
+//                .catch(error => console.error('Error fetching data:', error));
+//        }
+        // function getTeacherBySchoolIdAndClassId(schoolId, classId, teacherSelects) {
+        //     if (schoolId && classId && schoolId !== "0" && classId !== "0") {
+        //         fetchOptions(`/m-teacher/getTeacherBySchoolAndClass/${schoolId}/${classId}`, teacherSelects,
+        //             '<option value="0">--Select Teacher--</option>',
+        //             teacherItem => {
+        //                 const option = document.createElement('option');
+        //                 option.value = teacherItem.id;
+        //                 option.textContent = `${teacherItem.lastName} ${teacherItem.firstName}`;
+        //                 teacherSelects.forEach(teacherSelect => teacherSelect.appendChild(option.cloneNode(true)));
+        //             });
+        //     } else {
+        //         teacherSelects.forEach(teacherSelect => teacherSelect.innerHTML = '<option value="0">--Select Teacher--</option>');
+        //     }
+        // }
+
+        // function getStudentByClassAndSchool(schoolId, classId, studentSelects) {
+        //     if (schoolId && classId && schoolId !== "0" && classId !== "0") {
+        //         fetchOptions(`/m-student/getStudentByClassAndSchool/${schoolId}/${classId}`, studentSelects, '<option value="0">--Select Student--</option>', studentItem =>{
+        //             const option = document.createElement('option');
+        //             option.value = studentItem.id;
+        //             option.textContent = `${studentItem.lastName} ${studentItem.firstName}`;
+        //             studentSelect.appendChild(option);
+        //         });
+        //     } else {
+        //         // if no class or school selected
+        //         studentSelects.forEach(studentSelect => studentSelect.innerHTML = '<option value="0">--Select Student--</option>');
+        //     }
+        // }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,23 +13,63 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
-import vutran.my_first_project_spring_boot.management_student.Entity.Authority;
-import vutran.my_first_project_spring_boot.management_student.Entity.User;
-import vutran.my_first_project_spring_boot.management_student.Service.UserService;
+import vutran.my_first_project_spring_boot.management_student.Entity.*;
+import vutran.my_first_project_spring_boot.management_student.Service.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 public class EventFormController {
-
     private UserService userService;
     private AuthorityRepository authorityRepository;
+    private SchoolService schoolService;
+    private ClassService classService;
+    private SubjectService subjectService;
+    private StudentService studentService;
+    private TeacherService teacherService;
 
     @Autowired
-    public EventFormController(UserService userService, AuthorityRepository authorityRepository){
+    public EventFormController(UserService userService, TeacherService teacherService, StudentService studentService, AuthorityRepository authorityRepository,SubjectService subjectService, SchoolService schoolService, ClassService classService){
         this.userService = userService;
+        this.subjectService = subjectService;
         this.authorityRepository = authorityRepository;
+        this.schoolService = schoolService;
+        this.classService = classService;
+        this.studentService = studentService;
+        this.teacherService = teacherService;
+    }
+
+    @GetMapping("/event/getTeacherBySchoolAndClass/{schoolId}/{classId}")
+    @ResponseBody
+    public List<Teacher> returnListTeacher(@PathVariable int schoolId, @PathVariable int classId){
+        return teacherService.getListTeacherBySchoolIdAndClassID(schoolId, classId);
+    }
+
+    @GetMapping("/event/getStudentByClassAndSchool/{schoolId}/{classId}")
+    @ResponseBody
+    public List<Student> getListStudent(@PathVariable("schoolId") int school_id, @PathVariable("classId") int class_id){
+        return  studentService.getListStudentByClassAndSchool(class_id, school_id);
+    }
+
+
+    @GetMapping("/event/getSubjectBySchool/{schoolId}")
+    @ResponseBody
+    public List<Subject> returnListSubject(@PathVariable int schoolId){
+        return subjectService.getListSubjectOfSchoolId(schoolId);
+    }
+
+    @GetMapping("/event/getSchoolById/{schoolId}")
+    @ResponseBody
+    public School returnSchool(@PathVariable("schoolId") int id_school){
+        return  schoolService.getSchoolById(id_school);
+    }
+
+    @GetMapping("/event/getClassBySchoolId/{schoolId}")
+    @ResponseBody
+    public List<Classes> returnListClass(@PathVariable("schoolId") int schoolId){
+        return classService.getListClassByIdSchool(schoolId);
     }
 
     // after login success return to home
@@ -57,7 +98,7 @@ public class EventFormController {
     //403
     @GetMapping("/showPage403")
     public String showPage403(){
-        return "error/403";
+        return "Error/403";
     }
 
     @InitBinder

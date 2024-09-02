@@ -44,8 +44,8 @@ public class UserController {
         this.userRepository = userRepository;
         this.schoolService = schoolService;
     }
-
-    @GetMapping("/showManageUser")
+    // auth: login success (authenticate)
+    @GetMapping("/auth/showManageUser")
     public String showListUser(Model model, @RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "15") int size){
         Page<User> userPage = userRepository.findAll(PageRequest.of(page, size, Sort.by("firstName").ascending()));
@@ -61,7 +61,7 @@ public class UserController {
     }
 
     // search user by name
-    @GetMapping("/search-name")
+    @GetMapping("/auth/search-name")
     public String processSearch(@RequestParam("searchName") String searchName, Model model, @RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "15") int size){
 
@@ -84,7 +84,7 @@ public class UserController {
         return "User/addFormUser";
     }
 
-    @GetMapping("/showModifyFormUser")
+    @GetMapping("/auth/showModifyFormUser")
     public String showModifyUser(@ModelAttribute User user, Model model){
         // check user exist
         User userExist = userService.getUserById(user.getId());
@@ -241,10 +241,10 @@ public class UserController {
                 model.addAttribute("user", newStudent);
             }
         }
-        return "User/addFormUser";
+        return "User/notify";
     }
 
-    @PostMapping("/modify-process")
+    @PostMapping("/auth/modify-process")
     public String processModify(@ModelAttribute User user, Model model){
         // check user
         User userExist = userService.getUserById(user.getId());
@@ -304,13 +304,12 @@ public class UserController {
         return "User/modifyFormUser";
     }
 
-    @GetMapping("/modify-delete")
+    @GetMapping("/auth/modify-delete")
     public String processDelete(@ModelAttribute User user, RedirectAttributes redirectAttributes){
         // check user
         User userExist = userService.getUserById(user.getId());
         if(userExist == null){
             redirectAttributes.addFlashAttribute("Error", "Not found User");
-            return "redirect:/m-user/showManageUser";
         } else {
             // check position and remove the constraints
             switch (userExist.getPosition()) {
@@ -365,8 +364,8 @@ public class UserController {
                     redirectAttributes.addFlashAttribute("success", "Deleted user has id: " + userExist.getId());
                 }
             }
-            return "redirect:/m-user/showManageUser";
         }
+        return "redirect:/m-user/auth/showManageUser";
     }
 
     // find position in User and set Role

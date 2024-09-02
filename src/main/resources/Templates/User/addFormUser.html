@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Add User</title>
@@ -69,13 +69,17 @@
             <div>
                 <button class="btn btn-primary py-2" type="submit">Register</button>
                 <a class="btn btn-primary py-2" th:href="@{/showLoginPage}">Return Login</a>
-                <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="btn btn-primary py-2" th:href="@{/m-user/showManageUser}">UserList Manage</a>
+                <div sec:authorize="isAuthenticated()">
+                    <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="btn btn-primary py-2" th:href="@{/m-user/showManageUser}">UserList Manage</a>
+                </div>
             </div>
         </form>
     </div>
     <p class="mt-5 mb-3 text-body-secondary">© 2017–2024</p>
 </div>
 </body>
+<script src="/JavaScript/views/fieldAddUser.js"></script>
 <script src="/JavaScript/function.js"></script>
+<script src="/CSS/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 <script src="/CSS/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
 </html>

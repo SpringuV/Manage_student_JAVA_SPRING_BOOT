@@ -51,18 +51,6 @@ public class ClassController {
         }
     }
 
-    @GetMapping("/getSchoolById/{schoolId}")
-    @ResponseBody
-    public School returnSchool(@PathVariable("schoolId") int id_school){
-        return  schoolService.getSchoolById(id_school);
-    }
-
-    @GetMapping("/getClassBySchoolId/{schoolId}")
-    @ResponseBody
-    public List<Classes> returnListClass(@PathVariable("schoolId") int schoolId){
-        return classService.getListClassByIdSchool(schoolId);
-    }
-
     @GetMapping("/getClassByStudentAndSchool/{schoolId}/{studentId}")
     @ResponseBody
     public Classes returnClass(@PathVariable("schoolId") int school_id, @PathVariable("studentId") int student_id){
