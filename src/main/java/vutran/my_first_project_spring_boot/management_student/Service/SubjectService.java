@@ -22,4 +22,6 @@ public interface SubjectService {
     Subject getSubjectByName(String nameSubject);
 
     List<Subject> getListSubjectBySchoolLevel(String schoolLevel);
+
+    List<Subject> getSubjectByClassGrade(String grade);
 }

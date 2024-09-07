@@ -6,11 +6,10 @@
     <link href="/CSS/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="/CSS/main.css" rel="stylesheet" type="text/css">
 </head>
-
 <body>
-<h1>Modify Score Card</h1>
-<div>
-    <form th:action="@{/m-score-card/modify-process}" th:object="${scoreCard}" method="post">
+<div class="container">
+    <h1>Modify Score Card</h1>
+    <form th:action="@{/m-score-card/modify-process}" class="form-group" th:object="${scoreCard}" method="post">
         <div id="autoHide">
             <div th:if="${Error}" class="alert alert-danger">
                 <span th:text="${Error}"></span>
@@ -20,21 +19,31 @@
             </div>
         </div>
         <div>
-            <label>ScoreCard Id: <span th:field="*{id}"></span></label>
+            <label class="form-label">ScoreCard Id: <span th:text="*{id}"></span></label>
             <input type="hidden" th:field="*{id}">
         </div>
         <div>
-            <label>School: </label>
-            <span th:field="*{school}" th:text="*{school.name}"></span>
+            <label class="form-label">Student: </label>
+            <span th:field="*{student}" th:text="*{student.firstName} +' '+ *{student.lastName}"></span>
         </div>
         <div>
-            <label>Student: </label>
-            <span th:field="*{student}" th:text="*{student.firstName}"></span>
+            <label class="form-label">School: </label>
+            <select th:field="*{school}" data-type="score-card" class="school_select" >
+                <option value="0">--Select School--</option>
+                <option th:each="school : ${schoolList}" th:text="${school.name}" th:value="${school.id}"></option>
+            </select>
         </div>
         <div>
-            <label>Name Exam: </label>
+            <label class="form-label">Transcript: </label>
+            <span th:if="*{transcript != null}" th:field="*{transcript}" th:text="*{transcript.nameTranscript} +' '+ *{transcript.semester} +' ('+ *{transcript.schoolYear}+')'"></span>
+            <select th:if="*{transcript == null}" class="transcript_select" data-type="score-card" th:field="*{transcript}" required>
+                <option value="None">--Select Transcript--</option>
+            </select>
+        </div>
+        <div>
+            <label class="form-label">Name Exam: </label>
             <select th:field="*{nameExam}" required>
-                <option value="">--Select Name Exam--</option>
+                <option value="None">--Select Name Exam--</option>
                 <option th:value="15-Minute-Test">15 Minute Test</option>
                 <option th:value="45-Minute-Test">45 Minute Test</option>
                 <option th:value="Review-Old-Lesson">Review Old Lesson</option>
@@ -50,8 +59,8 @@
             </div>
         </div>
         <div>
-            <label>School Year: </label>
-            <select th:field="*{schoolYear}">
+            <label class="form-label">School Year: </label>
+            <select th:field="*{schoolYear}" required>
                 <option value="#">--Select SchoolYear--</option>
                 <option th:value="2021_2022">2021-2022</option>
                 <option th:value="2022_2023">2022-2023</option>
@@ -70,8 +79,8 @@
             </div>
         </div>
         <div>
-            <label>Day Exam: </label>
-            <input type="date" th:field="*{dayExam}" placeholder="Input day exam" name="day-exam" required>
+            <label for="day_exam" class="form-label">Day Exam: </label>
+            <input type="date" id="day_exam" th:field="*{dayExam}" placeholder="Input day exam" name="day-exam" required>
             <div th:if="${#fields.hasErrors('dayExam')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('dayExam')}" th:text="${error}"></li>
@@ -79,21 +88,22 @@
             </div>
         </div>
         <div>
-            <label>Subject: </label>
-            <div>
-                <select th:field="*{subject}">
-                    <option value="">--Select Subject</option>
-                </select>
-            </div>
+            <label class="form-label">Subject: </label>
+            <select th:field="*{subject}" class="subject_select" data-type="score-card" required>
+                <option value="0">--Select Subject</option>
+            </select>
+            <span th:if="*{subject != null}" th:field="*{subject}" th:value="*{subject.id}">
+                (<label th:text="*{subject.nameSubject}"></label>)
+            </span>
             <div th:if="${#fields.hasErrors('subject')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('subject')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>
-        <div>
-            <label>Score: </label>
-            <input type="number" th:field="*{score}" placeholder="Input Score" name="score" required>
+        <div class="form-floating mb-1">
+            <input type="number" class="form-control" id="score_exam" th:field="*{score}" placeholder="Input Score" name="score" required>
+            <label class="form-label" for="score_exam">Score: </label>
             <div th:if="${#fields.hasErrors('score')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('score')}" th:text="${error}"></li>
@@ -104,10 +114,10 @@
             <button class="btn btn-primary" type="submit">Modify</button>
         </div>
     </form>
-</div>
-<div>
-    <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-    <a class="btn btn-primary" th:href="@{/m-score-card/showManageScoreCard}">Score Card List Manage</a>
+    <div>
+        <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
+        <a class="btn btn-primary" th:href="@{/m-score-card/showManageScoreCard}">Score Card List Manage</a>
+    </div>
 </div>
 </body>
 <script src="/JavaScript/function.js"></script>

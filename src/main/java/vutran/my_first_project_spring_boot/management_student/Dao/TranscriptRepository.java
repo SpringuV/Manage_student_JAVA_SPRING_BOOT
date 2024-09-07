@@ -8,11 +8,16 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Transcript;
 
+import java.util.List;
+
 @Repository
 public interface TranscriptRepository extends JpaRepository<Transcript, Integer> {
 
     Page<Transcript> findAll(Pageable pageable);
 
-    @Query(value = "SELECT * FROM transcript as T WHERE T.transcript_semester =:semester AND T.school_year =:schoolYear", nativeQuery = true)
-    Transcript getTranscriptBySemesterAndSchoolYear(@Param("semester") int semester,@Param("schoolYear") String schoolYear);
+    @Query(value = "SELECT * FROM transcript as T WHERE T.transcript_semester =:semester AND T.school_year =:schoolYear AND T.school_id=:school_id", nativeQuery = true)
+    Transcript getTranscriptBySemesterAndSchoolYear(@Param("semester") int semester,@Param("schoolYear") String schoolYear, @Param("school_id") int school_id);
+
+    @Query("SELECT t FROM Transcript t WHERE t.school.id = :school_id")
+    List<Transcript> getTranscriptBySchool(@Param("school_id") int school_id);
 }

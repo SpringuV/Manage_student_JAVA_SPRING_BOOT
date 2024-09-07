@@ -98,13 +98,20 @@ public class ParentController {
         newParent.setId(parent.getId());
         newParent.setFirstName(StringUtils.formatString(parent.getFirstName()));
         newParent.setLastName(StringUtils.formatString(parent.getLastName()));
-        newParent.setStudent(parent.getStudent());
         newParent.setPosition("Parent");
         newParent.setUsername(parent.getUsername());
         newParent.setPassword(new BCryptPasswordEncoder().encode(parent.getPassword()));
         newParent.setEnabled(true);
-        newParent.setSchool(parent.getSchool());
         newParent.setEmail(parent.getEmail());
+        if(parent.getSchool() != null && parent.getSchool().getId() != 0){
+            newParent.setSchool(parent.getSchool());
+        }
+        if(parent.getStudent() != null && parent.getStudent().getId() != 0){
+            newParent.setStudent(parent.getStudent());
+        }
+        if(parent.getClasses() != null && parent.getClasses().getId() != 0){
+            newParent.setClasses(parent.getClasses());
+        }
         newParent.setIdentity(parent.getIdentity());
         newParent.setAvatar(parent.getAvatar());
         newParent.setAddress(StringUtils.formatString(parent.getAddress()));
@@ -150,10 +157,17 @@ public class ParentController {
             parentExist.setEmail(parent.getEmail());
             parentExist.setIdentity(parent.getIdentity());
             parentExist.setLastName(StringUtils.formatString(parent.getLastName()));
-            parentExist.setSchool(parent.getSchool());
+            if(parent.getSchool() != null && parent.getSchool().getId() != 0){
+                parentExist.setSchool(parent.getSchool());
+            }
+            if(parent.getStudent() != null && parent.getStudent().getId() != 0){
+                parentExist.setStudent(parent.getStudent());
+            }
+            if(parent.getClasses() != null && parent.getClasses().getId() != 0){
+                parentExist.setClasses(parent.getClasses());
+            }
             parentExist.setFirstName(StringUtils.formatString(parent.getFirstName()));
             parentExist.setPhoneNumber(parent.getPhoneNumber());
-            parentExist.setStudent(parent.getStudent());
             // tìm hiểu check pass encode
             parentService.updateParent(parentExist);
             model.addAttribute("parent", parentExist);

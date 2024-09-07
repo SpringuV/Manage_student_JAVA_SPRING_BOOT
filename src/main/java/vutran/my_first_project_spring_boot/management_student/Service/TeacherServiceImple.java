@@ -11,9 +11,9 @@ import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
+@Transactional
 public class TeacherServiceImple implements TeacherService{
 
     private TeacherRepository teacherRepository;
@@ -40,7 +40,6 @@ public class TeacherServiceImple implements TeacherService{
         return teacherRepository.save(teacher);
     }
 
-    @Transactional
     @Override
     public void deleteTeacherById(int id) {
         Teacher teacher = teacherRepository.getReferenceById(id);

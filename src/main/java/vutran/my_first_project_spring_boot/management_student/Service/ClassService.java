@@ -20,4 +20,6 @@ public interface ClassService {
     List<Classes> getListClassByIdSchool(int school_id);
 
     Classes getClassByStudentAndSchool(int student_id, int school_id);
+
+    String getGrade(int class_id);
 }

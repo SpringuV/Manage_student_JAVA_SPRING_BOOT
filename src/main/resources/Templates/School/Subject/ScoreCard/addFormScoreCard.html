@@ -8,9 +8,9 @@
 </head>
 
 <body>
-<h1>Add new Score Card</h1>
-<div>
-    <form th:action="@{/m-score-card/add-process}" th:object="${scoreCard}" method="post">
+<div class="container">
+    <h1>Add new Score Card</h1>
+    <form th:action="@{/m-score-card/add-process}" th:object="${scoreCard}" class="form-group" method="post">
         <div id="autoHide">
             <div th:if="${Error}" class="alert alert-danger">
                 <span th:text="${Error}"></span>
@@ -19,27 +19,30 @@
                 <h3>You created a new score-card "<span th:text="${success}"></span>"</h3>
             </div>
         </div>
-        <div>
-            <label>School Select: </label>
-            <select id="school_select" th:field="*{school}">
+        <div class="mb-1">
+            <label class="form-label">School Select: </label>
+            <select class="school_select" data-type="score-card" th:field="*{school}" required>
                 <option value="0">--Select School--</option>
                 <option th:each="school : ${schoolList}" th:value="${school.id}" th:text="${school.name} +' ('+ ${school.level}+')'"></option>
             </select>
         </div>
-
-        <div>
-            <label>Select Class:</label>
-            <select id="class_select">
+        <div class="mb-1">
+            <label class="form-label">Transcript Select: </label>
+            <select class="transcript_select" data-type="score-card" th:field="*{transcript}" required>
+                <option value="0">--Select Transcript--</option>
+            </select>
+        </div>
+        <div class="mb-1" >
+            <label class="form-label">Select Class:</label>
+            <select class="class_select" data-type="score-card" required>
                 <option value="0">--Select Class--</option>
             </select>
         </div>
-        <div>
-            <label>Student: </label>
-            <th:block>
-                <select id="student_select" th:field="*{student}" required>
-                    <option value="0">--Select Student--</option>
-                </select>
-            </th:block>
+        <div class="mb-1">
+            <label class="form-label">Student: </label>
+            <select class="student_select" th:field="*{student}" data-type="score-card" required>
+                <option value="0">--Select Student--</option>
+            </select>
             <div th:if="${#fields.hasErrors('student')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('student')}" th:text="${error}"></li>
@@ -47,9 +50,9 @@
             </div>
         </div>
 
-        <div>
-            <label>Subject: </label>
-            <select id="subject_select" th:field="*{subject}">
+        <div class="mb-1">
+            <label class="form-label">Subject: </label>
+            <select class="subject_select" th:field="*{subject}" data-type="score-card" required>
                 <option value="0">--Select Subject--</option>
             </select>
             <div th:if="${#fields.hasErrors('subject')}">
@@ -59,10 +62,10 @@
             </div>
         </div>
 
-        <div>
-            <label>Name Exam: </label>
+        <div class="mb-1">
+            <label class="form-label">Name Exam: </label>
             <select th:field="*{nameExam}" required>
-                <option value="#">--Select Name Exam--</option>
+                <option th:value="None">--Select Name Exam--</option>
                 <option th:value="15-Minute-Test">15 Minute Test</option>
                 <option th:value="45-Minute-Test">45 Minute Test</option>
                 <option th:value="Review-Old-Lesson">Review Old Lesson</option>
@@ -77,8 +80,8 @@
                 </ul>
             </div>
         </div>
-        <div>
-            <label>Day Exam: </label>
+        <div class="mb-1">
+            <label class="form-label">Day Exam: </label>
             <input type="date" th:field="*{dayExam}" placeholder="Input day exam" name="day-exam" required>
             <div th:if="${#fields.hasErrors('dayExam')}">
                 <ul>
@@ -86,10 +89,10 @@
                 </ul>
             </div>
         </div>
-        <div>
-            <label>School Year: </label>
-            <select th:field="*{schoolYear}">
-                <option value="">--Select SchoolYear--</option>
+        <div class="mb-1">
+            <label class="form-label">School Year: </label>
+            <select th:field="*{schoolYear}" required>
+                <option value="None">--Select SchoolYear--</option>
                 <option th:value="2021_2022">2021-2022</option>
                 <option th:value="2022_2023">2022-2023</option>
                 <option th:value="2023_2024">2023-2024</option>
@@ -106,10 +109,10 @@
                 </ul>
             </div>
         </div>
-        <div>
-            <label>Score: </label>
-            <input type="number" th:field="*{score}" placeholder="Input Score" name="score" min="0" step="0.1" max="10"
-                   required>
+        <div class="form-floating mb-1">
+            <input type="number" th:field="*{score}" placeholder="Input Score" min="0.0" step="0.1" max="10"
+                   class="form-control" required>
+            <label class="form-label">Score: </label>
             <div th:if="${#fields.hasErrors('score')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('score')}" th:text="${error}"></li>
@@ -120,10 +123,10 @@
             <button class="btn btn-primary" type="submit">Add</button>
         </div>
     </form>
-</div>
-<div>
-    <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-    <a class="btn btn-primary" th:href="@{/m-score-card/showManageScoreCard}">ScoreCard List Manage</a>
+    <div>
+        <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
+        <a class="btn btn-primary" th:href="@{/m-score-card/showManageScoreCard}">ScoreCard List Manage</a>
+    </div>
 </div>
 </body>
 <script src="/JavaScript/function.js"></script>

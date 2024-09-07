@@ -2,12 +2,14 @@ package vutran.my_first_project_spring_boot.management_student.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vutran.my_first_project_spring_boot.management_student.Dao.TranscriptRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Transcript;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class TranscriptServiceImple implements TranscriptService{
 
     private TranscriptRepository transcriptRepository;
@@ -43,7 +45,12 @@ public class TranscriptServiceImple implements TranscriptService{
     }
 
     @Override
-    public Transcript getTranscriptBySemesterAndSchoolYear(int semester, String schoolYear) {
-        return this.transcriptRepository.getTranscriptBySemesterAndSchoolYear(semester, schoolYear);
+    public Transcript getTranscriptBySemesterAndSchoolYear(int semester, String schoolYear, int school_id) {
+        return this.transcriptRepository.getTranscriptBySemesterAndSchoolYear(semester, schoolYear, school_id);
+    }
+
+    @Override
+    public List<Transcript> getTranscriptBySchool(int school_id) {
+        return transcriptRepository.getTranscriptBySchool(school_id);
     }
 }

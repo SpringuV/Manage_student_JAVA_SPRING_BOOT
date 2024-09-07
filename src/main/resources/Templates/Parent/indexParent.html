@@ -34,7 +34,8 @@
                 <th>Username</th>
                 <th>Address</th>
                 <th>Phone</th>
-                <th>Position</th>
+<!--                <th>Position</th>-->
+                <th>Student</th>
                 <th>Feature</th>
             </thead>
             <tbody>
@@ -45,7 +46,11 @@
                     <td th:text="${parent.username}"></td>
                     <td th:text="${parent.address}"></td>
                     <td th:text="${parent.phoneNumber}"></td>
-                    <td th:text="${parent.position}"></td>
+                    <td>
+                        <span th:if="${parent.student != null}" th:text="${parent.student.firstName} + ' '+ ${parent.student.lastName}+' ('+${parent.student.id}+')'"></span>
+                        <span th:if="${parent.student == null}">[null]</span>
+                    </td>
+<!--                    <td th:text="${parent.position}"></td>-->
                     <td>
                         <a th:href="@{/m-parent/showModifyFormParent(id=${parent.id})}" class="btn btn-success">Modify</a>
                         <a th:href="@{/m-parent/modify-delete(id=${parent.id})}" class="btn btn-danger">Delete</a>

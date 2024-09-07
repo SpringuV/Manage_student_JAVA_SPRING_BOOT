@@ -39,6 +39,11 @@ public class Transcript {
     @Column(name = "transcript_semester")
     private int semester;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "transcript_class", joinColumns = @JoinColumn(name = "transcript_id"), inverseJoinColumns = @JoinColumn(name = "class_id"))
+    @JsonBackReference
+    private List<Classes> classesList;
+
     @Column(name = "school_year")
     private String schoolYear;
 
@@ -54,7 +59,19 @@ public class Transcript {
     public Transcript() {
     }
 
-    public Transcript(String nameTranscript,Set<Subject> subjectSet, Set<Student> studentSet, int semester,List<StudyRecord> studyRecordList, String schoolYear, School school, List<ScoreCard> scoreCardList) {
+    public Transcript(String nameTranscript, School school, Set<Subject> subjectSet, Set<Student> studentSet, int semester, List<Classes> classesList, String schoolYear, List<StudyRecord> studyRecordList, List<ScoreCard> scoreCardList) {
+        this.nameTranscript = nameTranscript;
+        this.school = school;
+        this.subjectSet = subjectSet;
+        this.studentSet = studentSet;
+        this.semester = semester;
+        this.classesList = classesList;
+        this.schoolYear = schoolYear;
+        this.studyRecordList = studyRecordList;
+        this.scoreCardList = scoreCardList;
+    }
+
+    public Transcript(String nameTranscript, Set<Subject> subjectSet, Set<Student> studentSet, int semester, List<StudyRecord> studyRecordList, String schoolYear, School school, List<ScoreCard> scoreCardList) {
         this.nameTranscript = nameTranscript;
         this.subjectSet = subjectSet;
         this.studentSet = studentSet;
@@ -63,6 +80,14 @@ public class Transcript {
         this.schoolYear = schoolYear;
         this.school = school;
         this.scoreCardList = scoreCardList;
+    }
+
+    public List<Classes> getClassesList() {
+        return classesList;
+    }
+
+    public void setClassesList(List<Classes> classesList) {
+        this.classesList = classesList;
     }
 
     public List<ScoreCard> getScoreCardList() {

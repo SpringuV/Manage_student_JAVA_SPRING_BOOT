@@ -43,11 +43,16 @@ public class Classes {
     @JsonManagedReference
     private List<Parent> parentList;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "transcript_class", joinColumns = @JoinColumn(name = "class_id"), inverseJoinColumns = @JoinColumn(name = "transcript_id"))
+    @JsonManagedReference
+    private List<Transcript> transcriptList;
+
 
     public Classes() {
     }
 
-    public Classes(String name, String grade, List<Teacher> teacherList, List<Student> studentList, NoteBook noteBook, School school, List<Parent> parentList) {
+    public Classes(String name, String grade, List<Teacher> teacherList, List<Student> studentList, NoteBook noteBook, School school, List<Parent> parentList, List<Transcript> transcriptList) {
         this.name = name;
         this.grade = grade;
         this.teacherList = teacherList;
@@ -55,6 +60,7 @@ public class Classes {
         this.noteBook = noteBook;
         this.school = school;
         this.parentList = parentList;
+        this.transcriptList = transcriptList;
     }
 
     public int getId() {
@@ -121,6 +127,14 @@ public class Classes {
         this.parentList = parentList;
     }
 
+    public List<Transcript> getTranscriptList() {
+        return transcriptList;
+    }
+
+    public void setTranscriptList(List<Transcript> transcriptList) {
+        this.transcriptList = transcriptList;
+    }
+
     @Override
     public String toString() {
         return "Classes{" +
@@ -130,6 +144,7 @@ public class Classes {
                 ", teacherList=" + teacherList.size() +
                 ", studentList=" + studentList.size() +
                 ", parentList=" + parentList.size() +
+                ", transcriptList=" + transcriptList.size() +
                 ", noteBook=" + noteBook +
                 ", school=" + school +
                 '}';

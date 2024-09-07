@@ -13,6 +13,7 @@ import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
 import java.util.List;
 
 @Service
+@Transactional
 public class ClassServiceImple implements ClassService{
 
     private ClassRepository classRepository;
@@ -41,7 +42,6 @@ public class ClassServiceImple implements ClassService{
         return this.classRepository.save(classes);
     }
 
-    @Transactional
     @Override
     public void deleteClassById(int id) {
         try {
@@ -84,5 +84,10 @@ public class ClassServiceImple implements ClassService{
     @Override
     public Classes getClassByStudentAndSchool(int student_id, int school_id) {
         return classRepository.getClassByStudentAndSchool(student_id, school_id);
+    }
+
+    @Override
+    public String getGrade(int class_id) {
+        return this.classRepository.getGrade(class_id);
     }
 }

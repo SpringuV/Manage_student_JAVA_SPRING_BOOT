@@ -29,7 +29,10 @@
             <th>Feature</th>
         </thead>
         <tbody>
-            <tr th:each="transcript,iterStat : ${transcripts.content}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'old-row'}">
+            <tr th:if="${transcripts.isEmpty()}">
+                <td colspan="6" class="text-center">No Transcripts Available</td>
+            </tr>
+            <tr th:if="${not transcripts.isEmpty()}" th:each="transcript,iterStat : ${transcripts}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'old-row'}">
                 <td th:text="${transcript.id}"></td>
                 <td th:text="${transcript.nameTranscript}"></td>
                 <td th:text="${transcript.school.name}"></td>
@@ -37,6 +40,7 @@
                 <td th:text="${transcript.semester}"></td>
                 <td>
                     <a th:href="@{/m-transcript/showModifyFormTranscript(id=${transcript.id})}" class="btn btn-success">Modify</a>
+                    <a th:href="@{/m-transcript/detailTranscript(id=${transcript.id})}" class="btn btn-primary">Detail</a>
                     <a th:href="@{/m-transcript/modify-delete(id=${transcript.id})}" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
@@ -44,11 +48,11 @@
     </table>
 </div>
 <!--    START pagination-->
-<div>
-        <span>
-            <a th:if="${transcripts.hasPrevious()}" th:href="@{/m-transcript/showManageTranscript(page=${transcripts.number - 1}, size=${transcripts.size})}">Previous</a>
-            <a th:if="${not transcripts.hasPrevious()}" href="#" aria-disabled="true" class="disabled-link">Previous</a>
-        </span>
+<div th:if="${not transcripts.isEmpty()}">
+    <span>
+        <a th:if="${transcripts.hasPrevious()}" th:href="@{/m-transcript/showManageTranscript(page=${transcripts.number - 1}, size=${transcripts.size})}">Previous</a>
+        <a th:if="${not transcripts.hasPrevious()}" href="#" aria-disabled="true" class="disabled-link">Previous</a>
+    </span>
     <span th:each="i : ${#numbers.sequence(0, transcripts.totalPages - 1)}" >
             <a th:href="@{/m-transcript/showManageTranscript(page=${i}, size=${transcripts.size})}" th:text="${i + 1}">1</a>
         </span>
@@ -63,6 +67,7 @@
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
 </div>
 </body>
+<script src="/JavaScript/views/hidden.js"></script>
 <script src="/JavaScript/function.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>

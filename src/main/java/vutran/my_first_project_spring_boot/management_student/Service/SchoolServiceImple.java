@@ -2,12 +2,14 @@ package vutran.my_first_project_spring_boot.management_student.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vutran.my_first_project_spring_boot.management_student.Dao.SchoolRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.School;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class SchoolServiceImple implements SchoolService{
 
     private SchoolRepository schoolRepository;

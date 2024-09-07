@@ -11,6 +11,7 @@ import vutran.my_first_project_spring_boot.management_student.Entity.Student;
 import java.util.List;
 
 @Service
+@Transactional
 public class StudentServiceImple implements StudentService{
 
     private StudentRepository studentRepository;

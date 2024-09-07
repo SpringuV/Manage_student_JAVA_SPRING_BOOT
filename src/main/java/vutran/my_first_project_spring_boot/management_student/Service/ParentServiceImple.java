@@ -13,6 +13,7 @@ import vutran.my_first_project_spring_boot.management_student.Entity.Parent;
 import java.util.List;
 
 @Service
+@Transactional
 public class ParentServiceImple implements ParentService{
 
     private ParentRepository parentRepository;

@@ -165,8 +165,8 @@ public class StudentController {
             if(student.getSchool().getId() != 0 && student.getSchool() != null){
                 studentExist.setSchool(student.getSchool());
             }
+            studentExist.setIdentity(student.getIdentity());
             studentExist.setEmail(student.getEmail());
-            studentExist.setParent(student.getParent());
             studentExist.setPhoneNumber(student.getPhoneNumber());
             if(student.getTeacher() != null && student.getTeacher().getId() != 0){
                 studentExist.setTeacher(student.getTeacher());

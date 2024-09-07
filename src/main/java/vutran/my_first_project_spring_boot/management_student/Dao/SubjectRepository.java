@@ -15,10 +15,10 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
 
     Page<Subject> findAll(Pageable pageable);
 
-    @Query(value = "SELECT * FROM subject as s1 JOIN school_subject as s2 ON s1.id = s2.subject_id WHERE s2.school_id =:idSchool AND s1.subject_name =:nameSubject", nativeQuery = true)
+    @Query(value = "SELECT * FROM subjects as s1 JOIN school_subject as s2 ON s1.id = s2.subject_id WHERE s2.school_id =:idSchool AND s1.subject_name =:nameSubject", nativeQuery = true)
     public Subject getSubjectBySchoolIdAndName(@Param("idSchool") int idSchool, @Param("nameSubject") String nameSubject);
 
-    @Query(value = "SELECT * FROM subject as S JOIN school_subject as SS ON SS.subject_id = S.id WHERE SS.school_id=:schoolId", nativeQuery = true)
+    @Query(value = "SELECT * FROM subjects as S JOIN school_subject as SS ON SS.subject_id = S.id WHERE SS.school_id=:schoolId", nativeQuery = true)
     public List<Subject> getListSubjectOfSchoolId(@Param("schoolId") int schoolId);
 
     @Query("SELECT s FROM Subject s WHERE s.nameSubject=:name")
@@ -26,4 +26,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
 
     @Query("SELECT s FROM Subject s WHERE s.sub_level=:school_level")
     List<Subject> getListSubjectBySchoolLevel(@Param("school_level") String schoolLevel);
+
+    @Query("SELECT s FROM Subject s WHERE s.nameSubject LIKE %:class_grade%")
+    List<Subject> getSubjectByClassGrade(@Param("class_grade") String class_grade);
 }

@@ -9,6 +9,7 @@ import vutran.my_first_project_spring_boot.management_student.Entity.NoteBook;
 import java.util.List;
 
 @Service
+@Transactional
 public class NotebookServiceImple implements NotebookService{
 
     private NotebookRepository notebookRepository;
@@ -33,7 +34,7 @@ public class NotebookServiceImple implements NotebookService{
         return this.notebookRepository.save(noteBook);
     }
 
-    @Transactional // đảm bảo 'delete' nằm trong 1 session
+    // @Transactional // đảm bảo 'delete' nằm trong 1 session
     @Override
     public void deleteNoteBookById(int id) {
         notebookRepository.deleteById(id);

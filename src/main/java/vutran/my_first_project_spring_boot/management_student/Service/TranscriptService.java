@@ -10,5 +10,6 @@ public interface TranscriptService {
     public Transcript addTranscript(Transcript transcript);
     public void deleteTranscriptById(int id);
     public Transcript updateTranscript(Transcript transcript);
-    public Transcript getTranscriptBySemesterAndSchoolYear(int semester, String schoolYear);
+    public Transcript getTranscriptBySemesterAndSchoolYear(int semester, String schoolYear, int school_id);
+    List<Transcript> getTranscriptBySchool(int school_id);
 }

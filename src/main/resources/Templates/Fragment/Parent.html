@@ -13,23 +13,31 @@
             </ul>
         </div>
     </div>
-
+    <!-- Because relation between the entity class and the entity teacher is one to many, a class has many teacher, and opposite
+        so that the class must to selected before the teacher
+        -->
     <div class="mb-1">
         <label for="parent_class_select" class="form-label">Select Class: </label>
-        <select id="parent_class_select" data-type="parent" class="class_select" required>
+        <select id="parent_class_select" data-type="parent" class="class_select" th:field="*{classes}" required>
             <option value="0">--Select Class--</option>
         </select>
+        <label th:if="${parent.classes != null}"><span th:text="${parent.classes.name}"></span></label>
+        <div th:if="${#fields.hasErrors('classes')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('classes')}" th:text="${error}"></li>
+            </ul>
+        </div>
     </div>
 
     <div class="mb-1">
         <label for="parent_student_select" class="form-label">Select Student: </label>
-        <select id="parent_student_select" data-type="parent" class="student_select" th:field="*{student}" required>
+        <select id="parent_student_select" data-type="parent" class="student_select" th:field="*{student.id}" required>
             <option value="0">--Select Student--</option>
         </select>
         <label th:if="${parent.student != null}"><span th:text="${parent.student.firstName} +' '+ ${parent.student.lastName}"></span></label>
-        <div th:if="${#fields.hasErrors('student')}">
+        <div th:if="${#fields.hasErrors('student.id')}">
             <ul>
-                <li th:each="error: ${#fields.hasErrors('student')}" th:text="${error}"></li>
+                <li th:each="error: ${#fields.hasErrors('student.id')}" th:text="${error}"></li>
             </ul>
         </div>
     </div>

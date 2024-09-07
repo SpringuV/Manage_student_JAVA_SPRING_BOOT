@@ -23,8 +23,7 @@ public class Student extends User{
     @JsonBackReference
     private Classes classes;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "parent_id")
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
     private Parent parent;
 
     // Một học sinh học nhiều môn học, một môn học được học bởi nhiều học sinh
@@ -146,7 +145,7 @@ public class Student extends User{
     @Override
     public String toString() {
         return "Student{" +
-                "teacher=" + teacher.getId() +
+                "teacher=" + (teacher != null ? teacher.getId() : "No Teacher") +
                 ", classes=" + classes.getName() +
                 ", parent=" + parent.getId() +
                 ", subjectList=" + subjectList.size() +

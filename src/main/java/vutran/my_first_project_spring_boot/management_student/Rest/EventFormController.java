@@ -1,15 +1,9 @@
 package vutran.my_first_project_spring_boot.management_student.Rest;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
@@ -17,7 +11,7 @@ import vutran.my_first_project_spring_boot.management_student.Entity.*;
 import vutran.my_first_project_spring_boot.management_student.Service.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -29,9 +23,10 @@ public class EventFormController {
     private SubjectService subjectService;
     private StudentService studentService;
     private TeacherService teacherService;
+    private TranscriptService transcriptService;
 
     @Autowired
-    public EventFormController(UserService userService, TeacherService teacherService, StudentService studentService, AuthorityRepository authorityRepository,SubjectService subjectService, SchoolService schoolService, ClassService classService){
+    public EventFormController(TranscriptService transcriptService, UserService userService, TeacherService teacherService, StudentService studentService, AuthorityRepository authorityRepository,SubjectService subjectService, SchoolService schoolService, ClassService classService){
         this.userService = userService;
         this.subjectService = subjectService;
         this.authorityRepository = authorityRepository;
@@ -39,6 +34,7 @@ public class EventFormController {
         this.classService = classService;
         this.studentService = studentService;
         this.teacherService = teacherService;
+        this.transcriptService = transcriptService;
     }
 
     @GetMapping("/event/getTeacherBySchoolAndClass/{schoolId}/{classId}")
@@ -70,6 +66,37 @@ public class EventFormController {
     @ResponseBody
     public List<Classes> returnListClass(@PathVariable("schoolId") int schoolId){
         return classService.getListClassByIdSchool(schoolId);
+    }
+
+    @GetMapping("/event/getListStudentByClass/{classId}")
+    @ResponseBody
+    public List<Student> returnListStudent(@PathVariable("classId") int class_id){
+        return studentService.getListByClassId(class_id);
+    }
+
+    @GetMapping("/event/getTranscriptBySchool/{schoolId}")
+    @ResponseBody
+    public List<Transcript> returnListTranscript(@PathVariable("schoolId") int id_school){
+        return transcriptService.getTranscriptBySchool(id_school);
+    }
+
+    @GetMapping("/event/getListSubjectByGrade/{classId}")
+    @ResponseBody
+    public List<Subject> returnListSubjectByGrade(@PathVariable("classId") int id_class){
+        String gradeClass = classService.getGrade(id_class);
+        System.out.println("grade: "+ gradeClass);
+        ArrayList<Subject> subjectListFromData = (ArrayList<Subject>) subjectService.getSubjectByClassGrade(gradeClass);
+        subjectListFromData.sort(new Comparator<Subject>() {
+            @Override
+            public int compare(Subject o1, Subject o2) {
+                if(o1.getNameSubject().compareTo(o2.getNameSubject()) < 0){
+                    return -1;
+                } else if(o1.getNameSubject().compareTo(o2.getNameSubject()) > 0){
+                    return 1;
+                } else return 0;
+            }
+        });
+        return subjectListFromData;
     }
 
     // after login success return to home

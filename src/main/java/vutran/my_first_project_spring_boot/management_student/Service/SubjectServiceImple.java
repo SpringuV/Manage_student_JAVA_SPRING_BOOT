@@ -9,6 +9,7 @@ import vutran.my_first_project_spring_boot.management_student.Entity.Subject;
 import java.util.List;
 
 @Service
+@Transactional
 public class SubjectServiceImple implements SubjectService{
 
     private SubjectRepository subjectRepository;
@@ -62,5 +63,10 @@ public class SubjectServiceImple implements SubjectService{
     @Override
     public List<Subject> getListSubjectBySchoolLevel(String schoolLevel) {
         return subjectRepository.getListSubjectBySchoolLevel(schoolLevel);
+    }
+
+    @Override
+    public List<Subject> getSubjectByClassGrade(String grade) {
+        return subjectRepository.getSubjectByClassGrade(grade);
     }
 }

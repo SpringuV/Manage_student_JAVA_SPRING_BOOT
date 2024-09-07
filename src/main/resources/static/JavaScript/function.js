@@ -5,12 +5,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const teacherSelects = document.querySelectorAll('.teacher_select');
         const subjectSelects = document.querySelectorAll('.subject_select');
         const studentSelects = document.querySelectorAll('.student_select');
+        const transcriptSelects = document.querySelectorAll('.transcript_select');
 
-        console.log("schoolSelects: ",schoolSelects);
-        console.log("classSelects: ",classSelects);
-        console.log("teacherSelects: ",teacherSelects);
-        console.log("subjectSelects: ",subjectSelects);
-        console.log("studentSelects: ",studentSelects);
+        const selectedSubjectId = [[${scoreCard.subject.id}]]; // Subject đã chọn trong cơ sở dữ liệu
+
         function getClassBySchoolId(schoolId, classSelect) {
             if (schoolId && schoolId !== "0") {
                 // fetch class
@@ -57,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        function getSubjectBySchool(schoolId, subjectSelect) {
+        function getSubjectBySchool(schoolId, subjectSelect, subjectSelectedId) {
             if (schoolId && schoolId !== "0") {
                 fetch(`/event/getSubjectBySchool/${schoolId}`)
                     .then(response => response.json())
@@ -70,6 +68,12 @@ document.addEventListener('DOMContentLoaded', function () {
                             const option = document.createElement('option');
                             option.value = subjectItem.id;
                             option.textContent = subjectItem.nameSubject;
+
+                            // If subject matches the one in the database, mark it as selected
+                            if (subjectItem.id === selectedSubjectId) {
+                                option.selected = true;
+                            }
+
                             subjectSelect.appendChild(option);
                         });
                     })
@@ -104,20 +108,67 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        function getTranscriptBySchool(schoolId, transcriptSelect){
+            if(schoolId !== "0"){
+                // fetch transcript
+                fetch(`/event/getTranscriptBySchool/${schoolId}`)
+                .then(response => response.json())
+                .then(transcripts => {
+                    // clear transcript previous
+                    transcriptSelect.innerHTML = '<option>--Select Transcript--</option>';
+                    // populate new transcript
+                    transcripts.forEach(transcriptItem => {
+                        const option = document.createElement('option');
+                        option.value = transcriptItem.id;
+                        option.textContent = `${transcriptItem.nameTranscript} ${transcriptItem.semester} (${transcriptItem.schoolYear})`;
+                        transcriptSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching Transcript:', error));
+            } else {
+                // if no class or school selected
+                transcriptSelect.innerHTML = '<option>--Select Transcript--</option>';
+            }
+        }
+
         // START EVENT LISTENER
             // event listener for school selection change
             schoolSelects.forEach(schoolSelect => {
                 schoolSelect.addEventListener('change', function () {
                     const schoolId = schoolSelect.value;
                     const type = schoolSelect.dataset.type;
+
+                    console.log('schoolId: ', schoolId);
+                    console.log('Type: ', type);
                     // logic dependence type
-                    if (type === "parent" || type === "student" || type === "teacher") {
+                    if (type === "parent" || type === "student") {
                         classSelects.forEach(classSelect => {
                             if (classSelect) {
                                 getClassBySchoolId(schoolId, classSelect);
                             }
                         });
                     } else if (type === "teacher") {
+                        classSelects.forEach(classSelect => {
+                            if (classSelect) {
+                                getClassBySchoolId(schoolId, classSelect);
+                            }
+                        });
+                        subjectSelects.forEach(subjectSelect => {
+                            if (subjectSelect) {
+                                getSubjectBySchool(schoolId, subjectSelect);
+                            }
+                        });
+                    } else if (type === "score-card") {
+                        classSelects.forEach(classSelect => {
+                            if (classSelect) {
+                                getClassBySchoolId(schoolId, classSelect);
+                            }
+                        });
+                        transcriptSelects.forEach(transcriptSelect => {
+                            if (transcriptSelect) {
+                                getTranscriptBySchool(schoolId, transcriptSelect);
+                            }
+                        });
                         subjectSelects.forEach(subjectSelect => {
                             if (subjectSelect) {
                                 getSubjectBySchool(schoolId, subjectSelect);
@@ -134,6 +185,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     const schoolId = schoolSelect ? schoolSelect.value : null;
                     const classId = classSelect.value;
                     const type = classSelect.dataset.type;
+                    console.log('classId: ', classId);
+                    console.log('Type: ', type);
 
                     if (schoolId && classId && schoolId !== "0" && classId !== "0") {
                         if (type === "student") {
@@ -143,6 +196,11 @@ document.addEventListener('DOMContentLoaded', function () {
                             });
 
                         } else if (type === "parent") {
+                            // Assume studentSelects is a collection of all student select elements
+                            studentSelects.forEach(studentSelect =>{
+                                getStudentByClassAndSchool(schoolId, classId, studentSelect);
+                            });
+                        } else if (type === "score-card") {
                             // Assume studentSelects is a collection of all student select elements
                             studentSelects.forEach(studentSelect =>{
                                 getStudentByClassAndSchool(schoolId, classId, studentSelect);
@@ -160,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (schoolId && schoolId !== "0") {
                     // logic dependence type
-                    if (type === "parent" || type === "student" || type === "teacher") {
+                    if (type === "parent" || type === "student") {
                         classSelects.forEach(classSelect => {
                             if (classSelect) {
                                 getClassBySchoolId(schoolId, classSelect);
@@ -172,12 +230,36 @@ document.addEventListener('DOMContentLoaded', function () {
                                 getSubjectBySchool(schoolId, subjectSelect);
                             }
                         });
+                        classSelects.forEach(classSelect => {
+                            if (classSelect) {
+                                getClassBySchoolId(schoolId, classSelect);
+                            }
+                        });
+                    } else if (type === "score-card") {
+                        classSelects.forEach(classSelect => {
+                            if (classSelect) {
+                                getClassBySchoolId(schoolId, classSelect);
+                            }
+                        });
+                        transcriptSelects.forEach(transcriptSelect => {
+                            if (transcriptSelect) {
+                                getTranscriptBySchool(schoolId, transcriptSelect);
+                            }
+                        });
+                        subjectSelects.forEach(subjectSelect => {
+                            if (subjectSelect) {
+                                getSubjectBySchool(schoolId, subjectSelect, selectedSubjectId);
+                            }
+                        });
                     }
                 }
             });
         // END EVENT LISTENER
     // END SELECT
 });
+
+
+
 
 //        function fetchOptions(url, selectElement, optionPlaceholder, createOption) {
 //            fetch(url)

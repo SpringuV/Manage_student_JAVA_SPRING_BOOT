@@ -124,6 +124,9 @@ document.addEventListener('DOMContentLoaded', function () {
         option.forEach(function (otp) {
             const optionElement = document.createElement('option');
             optionElement.value = otp.replace(/\s+/g, '_');
+            // \s+: This regular expression pattern matches one or more whitespace characters (e.g., spaces, tabs).
+            // g: The global flag, which means that the replacement should be done for all matches in the string, not just the first one.
+            // '_': The replacement string, which will replace each sequence of whitespace characters.
             optionElement.textContent = otp;
             subjectSelectName.appendChild(optionElement);
         });

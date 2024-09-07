@@ -26,6 +26,7 @@
             <th>Name Exam</th>
             <th>School</th>
             <th>Student</th>
+            <th>Transcript</th>
             <th>Day Exam</th>
             <th>Score</th>
             <th>Subject</th>
@@ -33,11 +34,15 @@
             <th>Feature</th>
         </thead>
         <tbody>
-            <tr th:each="scoreCard,iterStat : ${scoreCardList.content}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'old-row'}">
+            <tr th:if="${scoreCardList.isEmpty()}">
+                <td colspan="10" class="text-center">No Score Card Available</td>
+            </tr>
+            <tr th:if="${not scoreCardList.isEmpty()}" th:each="scoreCard,iterStat : ${scoreCardList}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'old-row'}">
                 <td th:text="${scoreCard.id != null ? scoreCard.id : 'null'}"></td>
                 <td th:text="${scoreCard.nameExam != null ? scoreCard.nameExam : 'null'}"></td>
                 <td th:text="${scoreCard.school.name != null ? scoreCard.school.name : 'null'}"></td>
                 <td th:text="${scoreCard.student.firstName != null ? scoreCard.student.firstName : 'null'}"></td>
+                <td th:text="${scoreCard.transcript != null ? scoreCard.transcript.nameTranscript : 'null'}"></td>
                 <td th:text="${scoreCard.dayExam != null ? scoreCard.dayExam : 'null'}"></td>
                 <td th:text="${scoreCard.score != null ? scoreCard.score : 'null'}"></td>
                 <td th:text="${scoreCard.subject.nameSubject != null ? scoreCard.subject.nameSubject : 'null'}"></td>
@@ -52,18 +57,18 @@
     </table>
 </div>
 <!--    START pagination-->
-<div>
-        <span>
-            <a th:if="${scoreCardList.hasPrevious()}" th:href="@{/m-score-card/showManageScoreCard(page=${scoreCardList.number - 1}, size=${scoreCardList.size})}">Previous</a>
-            <a th:if="${not scoreCardList.hasPrevious()}" href="#" aria-disabled="true" class="disabled-link">Previous</a>
-        </span>
+<div th:if="${not scoreCardList.isEmpty()}">
+    <span>
+        <a th:if="${scoreCardList.hasPrevious()}" th:href="@{/m-score-card/showManageScoreCard(page=${scoreCardList.number - 1}, size=${scoreCardList.size})}">Previous</a>
+        <a th:if="${not scoreCardList.hasPrevious()}" href="#" aria-disabled="true" class="disabled-link">Previous</a>
+    </span>
     <span th:each="i : ${#numbers.sequence(0, scoreCardList.totalPages - 1)}" >
             <a th:href="@{/m-score-card/showManageScoreCard(page=${i}, size=${scoreCardList.size})}" th:text="${i + 1}" th:classappend="${i == scoreCardList.number} ? 'active' : ''">1</a>
         </span>
     <span>
-            <a th:if="${scoreCardList.hasNext()}" th:href="@{/m-score-card/showManageScoreCard(page=${scoreCardList.number + 1}, size=${scoreCardList.size})}">Next</a>
-            <a th:if="${not scoreCardList.hasNext()}" href="#" aria-disabled="true" class="disabled-link">Next</a>
-        </span>
+        <a th:if="${scoreCardList.hasNext()}" th:href="@{/m-score-card/showManageScoreCard(page=${scoreCardList.number + 1}, size=${scoreCardList.size})}">Next</a>
+        <a th:if="${not scoreCardList.hasNext()}" href="#" aria-disabled="true" class="disabled-link">Next</a>
+    </span>
 </div>
 <!--    END pagination-->
 <div>

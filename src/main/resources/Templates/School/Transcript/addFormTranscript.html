@@ -19,17 +19,26 @@
                 <h3>You created a new transcript "<span th:text="${success}"></span>"</h3>
             </div>
         </div>
-        <div>
-            <label>Name Transcript: </label>
-            <input type="text" th:field="*{nameTranscript}" placeholder="Input Name Transcript" name="name">
+        <div class="form-group mb-1">
+            <label for="transcript_select">Name Transcript: </label>
+            <select id="transcript_select" th:field="*{nameTranscript}">
+                <option th:value="None" selected>--Select Transcript Name--</option>
+                <option th:value="15_Minute_Test">15 Minute Test</option>
+                <option th:value="45_Minute_Test">45 Minute Test</option>
+                <option th:value="Review_Old_Lesson">Review Old Lesson</option>
+                <option th:value="Midterm_Exam_1">Midterm Exam 1</option>
+                <option th:value="Midterm_Exam_2">Midterm Exam 1</option>
+                <option th:value="Final_Exam_1">Final Exam 1</option>
+                <option th:value="Final_Exam_2">Final Exam 2</option>
+            </select>
             <div th:if="${#fields.hasErrors('nameTranscript')}">
                 <ul>
                     <li th:each="error: ${#fields.hasErrors('nameTranscript')}" th:text="${error}"></li>
                 </ul>
             </div>
         </div>
-        <div>
-            <label>Select School: </label>
+        <div class="form-group mb-1">
+            <label for="school_select">Select School: </label>
             <select id="school_select" th:field="*{school}">
                 <option value="0">--Select School--</option>
                 <option th:each="school : ${schoolList}" th:value="${school.id}" th:text="${school.name} +' ('+${school.level}+')'"></option>
@@ -40,9 +49,9 @@
                 </ul>
             </div>
         </div>
-        <div>
-            <label>School Year: </label>
-            <select th:field="*{schoolYear}">
+        <div class="form-group mb-1">
+            <label for="school_year_select">School Year: </label>
+            <select id="school_year_select" th:field="*{schoolYear}">
                 <option value="">--Select SchoolYear--</option>
                 <option th:value="2021_2022">2021-2022</option>
                 <option th:value="2022_2023">2022-2023</option>
@@ -60,8 +69,8 @@
                 </ul>
             </div>
         </div>
-        <div>
-            <label>Select Semester: </label>
+        <div class="form-group mb-1">
+            <label for="select_semester">Select Semester: </label>
             <select id="select_semester" th:field="*{semester}">
                 <option th:value="1">1</option>
                 <option th:value="2">2</option>

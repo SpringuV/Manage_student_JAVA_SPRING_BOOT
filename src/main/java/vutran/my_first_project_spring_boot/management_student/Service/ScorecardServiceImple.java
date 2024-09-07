@@ -2,12 +2,14 @@ package vutran.my_first_project_spring_boot.management_student.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vutran.my_first_project_spring_boot.management_student.Dao.ScorecardRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.ScoreCard;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class ScorecardServiceImple implements ScoreCardService{
 
     private ScorecardRepository scorecardRepository;

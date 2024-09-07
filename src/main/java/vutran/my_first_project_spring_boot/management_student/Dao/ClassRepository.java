@@ -23,4 +23,7 @@ public interface ClassRepository extends JpaRepository<Classes, Integer> {
 
     @Query(value = "SELECT * FROM class AS c JOIN student AS s ON c.c_id = s.class_id WHERE s.id=:stu_id AND c.c_school_id=:school_id", nativeQuery = true)
     Classes getClassByStudentAndSchool(@Param("stu_id") int student_id, @Param("school_id") int school_id);
+
+    @Query("SELECT c.grade FROM Classes c WHERE c.id = :id_class")
+    String getGrade(@Param("id_class") int class_id);
 }

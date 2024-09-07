@@ -8,12 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vutran.my_first_project_spring_boot.management_student.Dao.TranscriptRepository;
-import vutran.my_first_project_spring_boot.management_student.Entity.Transcript;
-import vutran.my_first_project_spring_boot.management_student.Service.SchoolService;
-import vutran.my_first_project_spring_boot.management_student.Service.TranscriptService;
+import vutran.my_first_project_spring_boot.management_student.Entity.*;
+import vutran.my_first_project_spring_boot.management_student.Service.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Controller
 @RequestMapping("/m-transcript")
@@ -21,12 +22,20 @@ public class TranscriptController {
     private TranscriptService transcriptService;
     private SchoolService schoolService;
     private TranscriptRepository transcriptRepository;
+    private ClassService classService;
+    private SubjectService subjectService;
+    private StudentService studentService;
+    private ScoreCardService scoreCardService;
 
     @Autowired
-    public TranscriptController(TranscriptRepository transcriptRepository,TranscriptService transcriptService, SchoolService schoolService) {
+    public TranscriptController(ScoreCardService scoreCardService, StudentService studentService, SubjectService subjectService,ClassService classService, TranscriptRepository transcriptRepository,TranscriptService transcriptService, SchoolService schoolService) {
         this.transcriptService = transcriptService;
         this.schoolService = schoolService;
         this.transcriptRepository = transcriptRepository;
+        this.classService = classService;
+        this.subjectService = subjectService;
+        this.studentService = studentService;
+        this.scoreCardService = scoreCardService;
     }
 
     @GetMapping("/showManageTranscript")
@@ -53,7 +62,7 @@ public class TranscriptController {
     @PostMapping("/add-process")
     public String addprocess(@ModelAttribute Transcript transcript, Model model) {
         // check transcript exist
-        Transcript transcriptExist = transcriptService.getTranscriptBySemesterAndSchoolYear(transcript.getSemester(), transcript.getSchoolYear());
+        Transcript transcriptExist = transcriptService.getTranscriptBySemesterAndSchoolYear(transcript.getSemester(), transcript.getSchoolYear(), transcript.getSchool().getId());
         if (transcriptExist != null) {
             model.addAttribute("Error", "Error, Transcript Existed !!!");
             model.addAttribute("transcript", new Transcript());
@@ -118,6 +127,78 @@ public class TranscriptController {
             redirectAttributes.addFlashAttribute("Error", "Transcript has id: " + transcript.getId() + " not existed !!!");
         }
         return "redirect:/m-transcript/showManageTranscript";
+    }
+
+    @GetMapping("/detailTranscript")
+    public String showDetailForm(@RequestParam("id") int id, Model model){
+        // check transcript exist
+        Transcript transcriptExist = transcriptService.getTranscriptById(id);
+        if (transcriptExist != null){
+            List<Classes> classList = classService.getListClassByIdSchool(transcriptExist.getSchool().getId());
+            model.addAttribute("transcript", transcriptExist);
+            model.addAttribute("classList", classList);
+        } else {
+            model.addAttribute("Error", "Error, Not found Transcript !!!");
+            return "redirect:/m-transcript/showManageTranscript";
+        }
+        return "School/Transcript/detailTranscript";
+    }
+
+    @PostMapping("/modify-saveScores")
+    public String modifyDetail(@RequestParam("id_transcript") int id_transcript, @RequestParam Map<String, String> studentScores, Model model) throws Exception {
+        // springboot tự động ánh xạ các giá trị trong thẻ input khi được đặt tên theo cú pháp hợp lệ
+        // studentScores[1401][1], Spring sẽ gom tất cả các score lại trong một Map<String, String>
+
+        System.out.println("Id: "+id_transcript);
+        // check exist transcript
+        Transcript transcriptExist = transcriptService.getTranscriptById(id_transcript);
+        if(transcriptExist == null){
+            throw new Exception("Not found Transcript has Id: "+ id_transcript);
+        }
+        // process transcript
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDateTime = currentDate.format(formatter);
+        System.out.println("date after formatted: "+ formattedDateTime);
+            // convert LocalDate to java.util.date
+            Date date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        System.out.println("Name Transcript after formatted: "+transcriptExist.getNameTranscript().replace("_", " "));
+        // Loop through the scores map and process each score
+        for(Map.Entry<String, String> entry : studentScores.entrySet()){
+            String key = entry.getKey();  // This will be something like "studentScores[1401][1]"
+            String score = entry.getValue(); // The value entered in the form
+            System.out.println("Key: "+ key+" Value: "+score);
+            // Parse the student Id and subject Id from the key
+            String[] ids = key.substring(key.indexOf('[')+1, key.length()-1).split("\\]\\[");
+            try {
+                int studentId = Integer.parseInt(ids[0]);
+                int subjectId = Integer.parseInt(ids[1]);
+                Student studentExist = studentService.getStudentById(studentId);
+                Subject subjectExist = subjectService.getSubjectById(subjectId);
+                if(studentExist == null){
+                    throw new RuntimeException("Student Not Found !!!");
+                } else if (subjectExist == null){
+                    throw new RuntimeException("Subject Not Found !!!");
+                }
+                // create new scoreCard because a transcript have many scoreCards
+                ScoreCard scoreCardNew = new ScoreCard();
+                scoreCardNew.setTranscript(transcriptExist);
+                scoreCardNew.setDayExam(new java.sql.Date(date.getTime()));
+                scoreCardNew.setSchoolYear(transcriptExist.getSchoolYear());
+                scoreCardNew.setNameExam(transcriptExist.getNameTranscript().replace("_", " "));
+                scoreCardNew.setSchool(transcriptExist.getSchool());
+                scoreCardNew.setStudent(studentExist);
+                scoreCardNew.setSubject(subjectExist);
+                scoreCardNew.setScore(Double.parseDouble(score));
+                // save score card
+                scoreCardService.addScoreCard(scoreCardNew);
+            } catch (Exception e){
+                System.err.println("Invalid student or subject ID format: "+ key);
+                e.printStackTrace();
+            }
+        }
+        model.addAttribute("success", "All scores saved successfully !!!");
+        return "redirect:/m-transcript/detailTranscript";
     }
 }
 

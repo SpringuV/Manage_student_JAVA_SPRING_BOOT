@@ -81,6 +81,7 @@ public class ScorecardController {
             newScoreCard.setStudent(scoreCard.getStudent());
             newScoreCard.setNameExam(scoreCard.getNameExam());
             newScoreCard.setScore(scoreCard.getScore());
+            newScoreCard.setTranscript(scoreCard.getTranscript());
             newScoreCard.setSchoolYear(scoreCard.getSchoolYear());
             newScoreCard.setSubject(scoreCard.getSubject());
             newScoreCard.setSchool(scoreCard.getSchool());
@@ -100,6 +101,7 @@ public class ScorecardController {
             return "redirect:/m-score-card/showManageScoreCard";
         } else {
             model.addAttribute("scoreCard", scoreCardExist);
+            model.addAttribute("schoolList", schoolService.getAllSchools());
             return "School/Subject/ScoreCard/modifyFormScoreCard";
         }
     }
@@ -115,7 +117,10 @@ public class ScorecardController {
             scoreCardExist.setNameExam(scoreCard.getNameExam());
             scoreCardExist.setScore(scoreCard.getScore());
             scoreCardExist.setSchoolYear(scoreCard.getSchoolYear());
-            scoreCardExist.setSubject(scoreCard.getSubject());
+            if(scoreCardExist.getSubject() != null && scoreCardExist.getSubject().getId() != 0){
+                scoreCardExist.setSubject(scoreCard.getSubject());
+            }
+            scoreCardExist.setTranscript(scoreCard.getTranscript());
             scoreCardExist.setDayExam(scoreCard.getDayExam());
             scoreCardService.updateScoreCard(scoreCardExist);
             model.addAttribute("success", "You modified score card has id: "+scoreCardExist.getId());
