@@ -2,6 +2,7 @@ package vutran.my_first_project_spring_boot.management_student.Rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -10,9 +11,7 @@ import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepos
 import vutran.my_first_project_spring_boot.management_student.Entity.*;
 import vutran.my_first_project_spring_boot.management_student.Service.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class EventFormController {
@@ -24,9 +23,10 @@ public class EventFormController {
     private StudentService studentService;
     private TeacherService teacherService;
     private TranscriptService transcriptService;
+    private ScoreCardService scoreCardService;
 
     @Autowired
-    public EventFormController(TranscriptService transcriptService, UserService userService, TeacherService teacherService, StudentService studentService, AuthorityRepository authorityRepository,SubjectService subjectService, SchoolService schoolService, ClassService classService){
+    public EventFormController(ScoreCardService scoreCardService, TranscriptService transcriptService, UserService userService, TeacherService teacherService, StudentService studentService, AuthorityRepository authorityRepository,SubjectService subjectService, SchoolService schoolService, ClassService classService){
         this.userService = userService;
         this.subjectService = subjectService;
         this.authorityRepository = authorityRepository;
@@ -35,6 +35,7 @@ public class EventFormController {
         this.studentService = studentService;
         this.teacherService = teacherService;
         this.transcriptService = transcriptService;
+        this.scoreCardService = scoreCardService;
     }
 
     @GetMapping("/event/getTeacherBySchoolAndClass/{schoolId}/{classId}")
@@ -72,6 +73,30 @@ public class EventFormController {
     @ResponseBody
     public List<Student> returnListStudent(@PathVariable("classId") int class_id){
         return studentService.getListByClassId(class_id);
+    }
+
+    @GetMapping("/event/getListStudentByClassForDetailTranscript/{classId}/{semester}")
+    @ResponseBody
+    public ResponseEntity<?> returnListStudentAndScore(@PathVariable("classId") int class_id, @PathVariable("semester") int semester){
+        List<Student> studentList = studentService.getListByClassId(class_id);
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for(Student student : studentList){
+            Map<String, Object> studentData = new HashMap<>();
+            studentData.put("id", student.getId());
+            studentData.put("firstName", student.getFirstName());
+            studentData.put("lastName", student.getLastName());
+
+            // for each student, get their scores
+            List<ScoreCard> scoreCardList = scoreCardService.getScorecardByStudentAndClassAndSemester(student.getId(), class_id, semester);
+            Map<Integer, Double> subjectScores = new HashMap<>();
+            for(ScoreCard scoreCard : scoreCardList){
+                subjectScores.put(scoreCard.getSubject().getId(), scoreCard.getScore());
+            }
+            studentData.put("scores", subjectScores);
+            result.add(studentData);
+        }
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/event/getTranscriptBySchool/{schoolId}")

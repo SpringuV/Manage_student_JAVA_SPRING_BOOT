@@ -81,6 +81,7 @@ public class ScorecardController {
             newScoreCard.setStudent(scoreCard.getStudent());
             newScoreCard.setNameExam(scoreCard.getNameExam());
             newScoreCard.setScore(scoreCard.getScore());
+            newScoreCard.setSemester(scoreCard.getSemester());
             newScoreCard.setTranscript(scoreCard.getTranscript());
             newScoreCard.setSchoolYear(scoreCard.getSchoolYear());
             newScoreCard.setSubject(scoreCard.getSubject());
@@ -120,7 +121,10 @@ public class ScorecardController {
             if(scoreCardExist.getSubject() != null && scoreCardExist.getSubject().getId() != 0){
                 scoreCardExist.setSubject(scoreCard.getSubject());
             }
-            scoreCardExist.setTranscript(scoreCard.getTranscript());
+            if(scoreCardExist.getTranscript() != null && scoreCardExist.getTranscript().getId() != 0){
+                scoreCardExist.setTranscript(scoreCard.getTranscript());
+            }
+            scoreCardExist.setSemester(scoreCard.getSemester());
             scoreCardExist.setDayExam(scoreCard.getDayExam());
             scoreCardService.updateScoreCard(scoreCardExist);
             model.addAttribute("success", "You modified score card has id: "+scoreCardExist.getId());

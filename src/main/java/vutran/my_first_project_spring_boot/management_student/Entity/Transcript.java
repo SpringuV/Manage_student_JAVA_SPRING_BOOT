@@ -52,7 +52,7 @@ public class Transcript {
     @JsonManagedReference
     private List<StudyRecord> studyRecordList;
 
-    @OneToMany(mappedBy = "transcript")
+    @OneToMany(mappedBy = "transcript", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<ScoreCard> scoreCardList;
 

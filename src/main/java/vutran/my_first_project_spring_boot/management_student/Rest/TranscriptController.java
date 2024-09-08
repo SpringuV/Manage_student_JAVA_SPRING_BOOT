@@ -3,6 +3,7 @@ package vutran.my_first_project_spring_boot.management_student.Rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,10 +39,24 @@ public class TranscriptController {
         this.scoreCardService = scoreCardService;
     }
 
+    @GetMapping("/search-name")
+    public String returnListTranscriptOfSchool(@RequestParam("searchNameOfSchool") String nameOfSchool, Model model, @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "15") int size){
+        Page<Transcript> transcriptPage = transcriptService.getTranscriptBySchoolName(nameOfSchool, PageRequest.of(page, size, Sort.by("schoolYear").ascending()));
+        if(transcriptPage.isEmpty()){
+            model.addAttribute("Error", "Not found Name School !!!");
+            model.addAttribute("transcripts", new ArrayList<>());
+        } else {
+            model.addAttribute("success", "Have "+ transcriptPage.getTotalElements()+" result.");
+            model.addAttribute("transcripts", transcriptPage);
+        }
+        return "School/Transcript/indexTranscript";
+    }
+
     @GetMapping("/showManageTranscript")
     public String showManage(Model model, @RequestParam(defaultValue = "0") int page,
                              @RequestParam(defaultValue = "15") int size) {
-        Page<Transcript> transcriptList = transcriptRepository.findAll(PageRequest.of(page, size));
+        Page<Transcript> transcriptList = transcriptRepository.findAll(PageRequest.of(page, size, Sort.by("schoolYear").ascending()));
         // check empty
         if (transcriptList.isEmpty()) {
             model.addAttribute("Error", "Error, List Transcript empty!!!");
@@ -62,14 +77,16 @@ public class TranscriptController {
     @PostMapping("/add-process")
     public String addprocess(@ModelAttribute Transcript transcript, Model model) {
         // check transcript exist
-        Transcript transcriptExist = transcriptService.getTranscriptBySemesterAndSchoolYear(transcript.getSemester(), transcript.getSchoolYear(), transcript.getSchool().getId());
+        Transcript transcriptExist = transcriptService.getTranscriptBySemesterAndSchoolYearAndName(transcript.getSemester(), transcript.getSchoolYear(), transcript.getSchool().getId(), transcript.getNameTranscript());
         if (transcriptExist != null) {
             model.addAttribute("Error", "Error, Transcript Existed !!!");
+            model.addAttribute("schoolList", schoolService.getAllSchools());
             model.addAttribute("transcript", new Transcript());
         } else {
             // add transcript
             Transcript newTran = transcriptService.addTranscript(transcript);
             model.addAttribute("success", "You created new transcript have id: " + newTran.getId());
+            model.addAttribute("schoolList", schoolService.getAllSchools());
         }
         return "School/Transcript/addFormTranscript";
     }
@@ -145,9 +162,12 @@ public class TranscriptController {
     }
 
     @PostMapping("/modify-saveScores")
-    public String modifyDetail(@RequestParam("id_transcript") int id_transcript, @RequestParam Map<String, String> studentScores, Model model) throws Exception {
+    public String modifyDetail(@RequestParam("id_transcript") int id_transcript, @RequestParam Map<String, String> studentScores, RedirectAttributes redirectAttributes) throws Exception {
         // springboot tự động ánh xạ các giá trị trong thẻ input khi được đặt tên theo cú pháp hợp lệ
         // studentScores[1401][1], Spring sẽ gom tất cả các score lại trong một Map<String, String>
+
+        // remove any entries that do not start with "studentScores", remove unrelated input tags
+        studentScores.entrySet().removeIf(entry -> !entry.getKey().startsWith("studentScores"));
 
         System.out.println("Id: "+id_transcript);
         // check exist transcript
@@ -163,16 +183,20 @@ public class TranscriptController {
             // convert LocalDate to java.util.date
             Date date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         System.out.println("Name Transcript after formatted: "+transcriptExist.getNameTranscript().replace("_", " "));
+
         // Loop through the scores map and process each score
         for(Map.Entry<String, String> entry : studentScores.entrySet()){
             String key = entry.getKey();  // This will be something like "studentScores[1401][1]"
             String score = entry.getValue(); // The value entered in the form
             System.out.println("Key: "+ key+" Value: "+score);
+
             // Parse the student Id and subject Id from the key
             String[] ids = key.substring(key.indexOf('[')+1, key.length()-1).split("\\]\\[");
             try {
                 int studentId = Integer.parseInt(ids[0]);
                 int subjectId = Integer.parseInt(ids[1]);
+                System.out.println("student id: "+studentId);
+                System.out.println("subject id: "+subjectId);
                 Student studentExist = studentService.getStudentById(studentId);
                 Subject subjectExist = subjectService.getSubjectById(subjectId);
                 if(studentExist == null){
@@ -189,6 +213,7 @@ public class TranscriptController {
                 scoreCardNew.setSchool(transcriptExist.getSchool());
                 scoreCardNew.setStudent(studentExist);
                 scoreCardNew.setSubject(subjectExist);
+                scoreCardNew.setSemester(transcriptExist.getSemester());
                 scoreCardNew.setScore(Double.parseDouble(score));
                 // save score card
                 scoreCardService.addScoreCard(scoreCardNew);
@@ -197,8 +222,11 @@ public class TranscriptController {
                 e.printStackTrace();
             }
         }
-        model.addAttribute("success", "All scores saved successfully !!!");
-        return "redirect:/m-transcript/detailTranscript";
+        redirectAttributes.addFlashAttribute("transcript", transcriptExist);
+        redirectAttributes.addFlashAttribute("success", "All scores saved successfully !!!");
+
+        // redirect to url with transcript id as a parameter
+        return "redirect:/m-transcript/detailTranscript?id="+id_transcript;
     }
 }
 

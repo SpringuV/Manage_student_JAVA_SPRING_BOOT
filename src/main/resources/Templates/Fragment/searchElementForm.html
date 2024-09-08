@@ -1,6 +1,6 @@
 <!-- templates/fragments/searchElementForm.html -->
-<form th:fragment="searchElementForm(searchAction)" th:action="@{${searchAction}}" id="form_input_search_name" method="get">
-    <label for="name_input">Search Name: </label>
-    <input style="width: 300px;" name="searchName" id="name_input" type="text" placeholder="Search name of User">
+<form class="form-floating mb-1" th:fragment="searchElementForm(searchAction)" th:action="@{${searchAction}}" method="get">
+    <input style="width: 300px;" class="form-control" name="searchName" id="name_input" type="text">
+    <label for="name_input" class="form-label">Search Name: </label>
     <button type="submit" class="btn btn-primary">Search</button>
 </form>

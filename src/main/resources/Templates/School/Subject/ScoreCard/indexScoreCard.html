@@ -31,6 +31,7 @@
             <th>Score</th>
             <th>Subject</th>
             <th>School Year</th>
+            <th>Semester</th>
             <th>Feature</th>
         </thead>
         <tbody>
@@ -47,6 +48,7 @@
                 <td th:text="${scoreCard.score != null ? scoreCard.score : 'null'}"></td>
                 <td th:text="${scoreCard.subject.nameSubject != null ? scoreCard.subject.nameSubject : 'null'}"></td>
                 <td th:text="${scoreCard.schoolYear != null ? scoreCard.schoolYear : 'null'}"></td>
+                <td th:text="${scoreCard.semester != null ? scoreCard.semester : 'null'}"></td>
                 <td>
                     <a th:href="@{/m-score-card/showModifyFormScoreCard(id=${scoreCard.id})}"
                        class="btn btn-success">Modify</a>

@@ -5,10 +5,11 @@ import vutran.my_first_project_spring_boot.management_student.Entity.ScoreCard;
 import java.util.List;
 
 public interface ScoreCardService {
-    public List<ScoreCard> getAllScoreCard();
-    public ScoreCard getScoreCardById(int id);
-    public ScoreCard addScoreCard(ScoreCard scoreCard);
-    public void deleteScoreCardById(int id);
-    public ScoreCard updateScoreCard(ScoreCard scoreCard);
-    public ScoreCard getScoreCardBySchoolYear_NameExam_Student_Subject(String schoolYear, String nameExam, int student_id, int subject_id);
+     List<ScoreCard> getAllScoreCard();
+     ScoreCard getScoreCardById(int id);
+     ScoreCard addScoreCard(ScoreCard scoreCard);
+     void deleteScoreCardById(int id);
+     ScoreCard updateScoreCard(ScoreCard scoreCard);
+     ScoreCard getScoreCardBySchoolYear_NameExam_Student_Subject(String schoolYear, String nameExam, int student_id, int subject_id);
+    List<ScoreCard> getScorecardByStudentAndClassAndSemester(int student_id, int class_id, int semester);
 }

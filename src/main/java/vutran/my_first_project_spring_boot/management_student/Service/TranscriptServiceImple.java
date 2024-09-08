@@ -1,6 +1,8 @@
 package vutran.my_first_project_spring_boot.management_student.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vutran.my_first_project_spring_boot.management_student.Dao.TranscriptRepository;
@@ -45,12 +47,17 @@ public class TranscriptServiceImple implements TranscriptService{
     }
 
     @Override
-    public Transcript getTranscriptBySemesterAndSchoolYear(int semester, String schoolYear, int school_id) {
-        return this.transcriptRepository.getTranscriptBySemesterAndSchoolYear(semester, schoolYear, school_id);
+    public Transcript getTranscriptBySemesterAndSchoolYearAndName(int semester, String schoolYear, int school_id, String nameTranscript) {
+        return this.transcriptRepository.getTranscriptBySemesterAndSchoolYearAndName(semester, schoolYear, school_id, nameTranscript);
     }
 
     @Override
     public List<Transcript> getTranscriptBySchool(int school_id) {
         return transcriptRepository.getTranscriptBySchool(school_id);
+    }
+
+    @Override
+    public Page<Transcript> getTranscriptBySchoolName(String school_name, PageRequest pageRequest) {
+        return transcriptRepository.getTranscriptBySchoolName(school_name, pageRequest);
     }
 }

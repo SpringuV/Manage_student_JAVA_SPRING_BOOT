@@ -8,8 +8,7 @@
 </head>
 
 <body>
-<div><h1>Manage Transcript</h1></div>
-<div>
+<div class="container">
     <div id="autoHide">
         <div th:if="${Error}">
             <span th:text="${Error}" class="alert alert-danger"></span>
@@ -18,7 +17,8 @@
             <span th:text="${success}" class="alert alert-success"></span>
         </div>
     </div>
-
+    <div><h1>Manage Transcript</h1></div>
+    <div th:replace="~{Fragment/searchTranscriptFrag :: fragmentTranscriptSearch('/m-transcript/search-name')}"></div>
     <table>
         <thead>
             <th>Transcript Id</th>
@@ -46,25 +46,25 @@
             </tr>
         </tbody>
     </table>
-</div>
-<!--    START pagination-->
-<div th:if="${not transcripts.isEmpty()}">
-    <span>
-        <a th:if="${transcripts.hasPrevious()}" th:href="@{/m-transcript/showManageTranscript(page=${transcripts.number - 1}, size=${transcripts.size})}">Previous</a>
-        <a th:if="${not transcripts.hasPrevious()}" href="#" aria-disabled="true" class="disabled-link">Previous</a>
-    </span>
-    <span th:each="i : ${#numbers.sequence(0, transcripts.totalPages - 1)}" >
-            <a th:href="@{/m-transcript/showManageTranscript(page=${i}, size=${transcripts.size})}" th:text="${i + 1}">1</a>
+    <!--    START pagination-->
+    <div th:if="${not transcripts.isEmpty()}">
+        <span>
+            <a th:if="${transcripts.hasPrevious()}" th:href="@{/m-transcript/showManageTranscript(page=${transcripts.number - 1}, size=${transcripts.size})}">Previous</a>
+            <a th:if="${not transcripts.hasPrevious()}" href="#" aria-disabled="true" class="disabled-link">Previous</a>
         </span>
-    <span>
-            <a th:if="${transcripts.hasNext()}" th:href="@{/m-transcript/showManageTranscript(page=${transcripts.number + 1}, size=${transcripts.size})}" th:classappend="${i == transcripts.number} ? 'active' : ''">Next</a>
-            <a th:if="${not transcripts.hasNext()}" href="#" aria-disabled="true" class="disabled-link">Next</a>
-        </span>
-</div>
-<!--    END pagination-->
-<div>
-    <a class="btn btn-primary" th:href="@{/m-transcript/showFormAddTranscript}">Add Transcript</a>
-    <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
+        <span th:each="i : ${#numbers.sequence(0, transcripts.totalPages - 1)}" >
+                <a th:href="@{/m-transcript/showManageTranscript(page=${i}, size=${transcripts.size})}" th:text="${i + 1}">1</a>
+            </span>
+        <span>
+                <a th:if="${transcripts.hasNext()}" th:href="@{/m-transcript/showManageTranscript(page=${transcripts.number + 1}, size=${transcripts.size})}" th:classappend="${i == transcripts.number} ? 'active' : ''">Next</a>
+                <a th:if="${not transcripts.hasNext()}" href="#" aria-disabled="true" class="disabled-link">Next</a>
+            </span>
+    </div>
+    <!--    END pagination-->
+    <div>
+        <a class="btn btn-primary" th:href="@{/m-transcript/showFormAddTranscript}">Add Transcript</a>
+        <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
+    </div>
 </div>
 </body>
 <script src="/JavaScript/views/hidden.js"></script>

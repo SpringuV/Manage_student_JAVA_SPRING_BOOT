@@ -78,6 +78,19 @@
                 </ul>
             </div>
         </div>
+        <div class="mb-1">
+            <label class="form-label">Semester: </label>
+            <select th:field="*{semester}" required>
+                <option value="None">--Select Semester--</option>
+                <option th:value="1">1</option>
+                <option th:value="2">2</option>
+            </select>
+            <div th:if="${#fields.hasErrors('semester')}">
+                <ul>
+                    <li th:each="error: ${#fields.hasErrors('semester')}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
         <div>
             <label for="day_exam" class="form-label">Day Exam: </label>
             <input type="date" id="day_exam" th:field="*{dayExam}" placeholder="Input day exam" name="day-exam" required>

@@ -4,9 +4,14 @@
     flex-direction: column;
 }
 
+.hidden {
+    display: none;
+}
+
 table, th, td {
     border: 1px solid black;
     margin: 3px 3px 3px 3px;
+    text-align: center;
 }
 .even-row { background-color: #f0f0f0; }
 .odd-row { background-color: #ffb3b3; }

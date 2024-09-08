@@ -113,7 +113,7 @@
         </div>
         <div class="mt-1">
             <a sec:authorize="hasAnyRole('MANAGER','ADMIN')" class="btn btn-primary"
-               th:href="@{/m-user/showManageUser}">User Manage</a>
+               th:href="@{/m-user/auth/showManageUser}">User Manage</a>
         </div>
         <div class="mt-1">
             <a sec:authorize="hasAnyRole('ADMIN')" class="btn btn-primary" th:href="@{/m-class/showManageClass}">Class

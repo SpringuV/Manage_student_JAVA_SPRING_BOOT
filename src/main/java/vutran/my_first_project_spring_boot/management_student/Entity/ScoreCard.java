@@ -45,16 +45,20 @@ public class ScoreCard {
     @JsonBackReference
     private Transcript transcript;
 
+    @Column(name = "cs_semester")
+    private int semester;
+
     @Column(name = "cs_school_year")
     private String schoolYear;
 
     public ScoreCard() {
     }
 
-    public ScoreCard(String nameExam, Student student, Date dayExam, double score, Subject subject, School school, String schoolYear, Transcript transcript) {
+    public ScoreCard(String nameExam, Student student, Date dayExam, double score,int semester, Subject subject, School school, String schoolYear, Transcript transcript) {
         this.student = student;
         this.dayExam = dayExam;
         this.score = score;
+        this.semester = semester;
         this.subject = subject;
         this.school = school;
         this.schoolYear = schoolYear;
@@ -133,6 +137,14 @@ public class ScoreCard {
         this.subject = subject;
     }
 
+    public int getSemester() {
+        return semester;
+    }
+
+    public void setSemester(int semester) {
+        this.semester = semester;
+    }
+
     @Override
     public String toString() {
         return "ScoreCard{" +
@@ -142,7 +154,9 @@ public class ScoreCard {
                 ", school=" + school.getName() +
                 ", dayExam=" + dayExam +
                 ", score=" + score +
-                ", subject=" + subject +
+                ", subject=" + subject.getNameSubject() +
+                ", transcript=" + transcript.getId() +
+                ", semester=" + semester +
                 ", schoolYear='" + schoolYear + '\'' +
                 '}';
     }

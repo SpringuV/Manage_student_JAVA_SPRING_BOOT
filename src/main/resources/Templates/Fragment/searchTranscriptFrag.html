@@ -1,0 +1,5 @@
+<form class="form-floating mb-1" th:fragment="fragmentTranscriptSearch(searchAction)" th:action="@{${searchAction}}" method="get">
+    <input type="text" class="form-control" name="searchNameOfSchool" style="width: 300px;" id="sort-name">
+    <label class="form-label" for="sort-name">Search By Name School: </label>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
