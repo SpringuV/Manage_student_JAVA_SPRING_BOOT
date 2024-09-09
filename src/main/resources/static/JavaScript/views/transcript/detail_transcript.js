@@ -7,8 +7,17 @@ let below_average = document.getElementById('below_average');
 let weak = document.getElementById('weak');
 let poor = document.getElementById('poor');
 
+// display score, student and subject
 const classSelect = document.getElementById('transcript_class_select');
 let subject_columnspan = document.getElementById('subject_columnspan');
+
+// statistical display
+const statistical = document.getElementById('statistical');
+function hideStatistical(){
+    statistical.style.display = "none";
+}
+hideStatistical();
+
 classSelect.addEventListener('change', function () {
     const classId = classSelect.value;
     const semester = document.getElementById('semester').textContent;
@@ -27,7 +36,7 @@ classSelect.addEventListener('change', function () {
         fetch(`/event/getListStudentByClassForDetailTranscript/${classId}/${semester}`)
             .then(response => response.json())
             .then(students => {
-                // fetch subject by class
+                // fetch subject by grade of class
                 fetch(`/event/getListSubjectByGrade/${classId}`)
                 .then(response => response.json())
                 .then(subjects =>{
@@ -59,8 +68,8 @@ classSelect.addEventListener('change', function () {
 
                         // Build the row for each student
                         let row = `<tr>
-                                    <td>${student.id}</td>
-                                    <td>${student.firstName} ${student.lastName}</td>`;
+                                    <td>${student.studentDTO.id}</td>
+                                    <td>${student.studentDTO.firstName} ${student.studentDTO.lastName}</td>`;
                             // Add input cells for each subject
                             subjects.forEach(subject => {
                                 // Check if student already has a score for this subject
@@ -114,7 +123,10 @@ classSelect.addEventListener('change', function () {
                 .catch(error => console.error('Error fetching Subjects:', error));
             })
             .catch(error => console.error('Error fetching students:', error));
+            // display statistical
+            statistical.style.display = "block";
     } else {
+        hideStatistical(); // hide statistical
         const tableBody = document.querySelector('#studentsTable tbody');
         tableBody.innerHTML = ''; // Clear existing rows
         const subjectHeader =  document.querySelector('#nameSubject');

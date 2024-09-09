@@ -7,8 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import vutran.my_first_project_spring_boot.management_student.DTO.*;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.*;
+import vutran.my_first_project_spring_boot.management_student.Mapper.SchoolMapper;
+import vutran.my_first_project_spring_boot.management_student.Mapper.StudentMapper;
+import vutran.my_first_project_spring_boot.management_student.Mapper.SubjectMapper;
 import vutran.my_first_project_spring_boot.management_student.Service.*;
 
 import java.util.*;
@@ -40,39 +44,40 @@ public class EventFormController {
 
     @GetMapping("/event/getTeacherBySchoolAndClass/{schoolId}/{classId}")
     @ResponseBody
-    public List<Teacher> returnListTeacher(@PathVariable int schoolId, @PathVariable int classId){
-        return teacherService.getListTeacherBySchoolIdAndClassID(schoolId, classId);
+    public List<TeacherDTO> returnListTeacher(@PathVariable int schoolId, @PathVariable int classId){
+        return teacherService.getListTeacherDTOBySchoolIdAndClassID(schoolId, classId);
     }
 
     @GetMapping("/event/getStudentByClassAndSchool/{schoolId}/{classId}")
     @ResponseBody
-    public List<Student> getListStudent(@PathVariable("schoolId") int school_id, @PathVariable("classId") int class_id){
-        return  studentService.getListStudentByClassAndSchool(class_id, school_id);
+    public List<StudentDTO> getListStudent(@PathVariable("schoolId") int school_id, @PathVariable("classId") int class_id){
+        return studentService.getListStudentDTOByClassAndSchool(class_id, school_id);
     }
 
 
     @GetMapping("/event/getSubjectBySchool/{schoolId}")
     @ResponseBody
-    public List<Subject> returnListSubject(@PathVariable int schoolId){
-        return subjectService.getListSubjectOfSchoolId(schoolId);
+    public List<SubjectDTO> returnListSubject(@PathVariable int schoolId){
+        return subjectService.getListSubjectDTOBySchool(schoolId);
     }
 
     @GetMapping("/event/getSchoolById/{schoolId}")
     @ResponseBody
-    public School returnSchool(@PathVariable("schoolId") int id_school){
-        return  schoolService.getSchoolById(id_school);
+    public SchoolDTO returnListSchool(@PathVariable("schoolId") int id_school){
+        // convert to DTO
+        return SchoolMapper.INSTANCE.toDTO(schoolService.getSchoolById(id_school));
     }
 
     @GetMapping("/event/getClassBySchoolId/{schoolId}")
     @ResponseBody
-    public List<Classes> returnListClass(@PathVariable("schoolId") int schoolId){
-        return classService.getListClassByIdSchool(schoolId);
+    public List<ClassDTO> returnListClass(@PathVariable("schoolId") int schoolId){
+        return classService.getListClassDTOBySchool(schoolId);
     }
 
     @GetMapping("/event/getListStudentByClass/{classId}")
     @ResponseBody
-    public List<Student> returnListStudent(@PathVariable("classId") int class_id){
-        return studentService.getListByClassId(class_id);
+    public List<StudentDTO> returnListStudent(@PathVariable("classId") int class_id){
+        return studentService.getListStudentDTOByClassId(class_id);
     }
 
     @GetMapping("/event/getListStudentByClassForDetailTranscript/{classId}/{semester}")
@@ -83,9 +88,10 @@ public class EventFormController {
 
         for(Student student : studentList){
             Map<String, Object> studentData = new HashMap<>();
-            studentData.put("id", student.getId());
-            studentData.put("firstName", student.getFirstName());
-            studentData.put("lastName", student.getLastName());
+
+            // convert the Student entity to DTO using the mapper
+            StudentDTO studentDisplayDTO = StudentMapper.INSTANCE.toDTO(student);
+            studentData.put("studentDTO", studentDisplayDTO);
 
             // for each student, get their scores
             List<ScoreCard> scoreCardList = scoreCardService.getScorecardByStudentAndClassAndSemester(student.getId(), class_id, semester);
@@ -101,19 +107,19 @@ public class EventFormController {
 
     @GetMapping("/event/getTranscriptBySchool/{schoolId}")
     @ResponseBody
-    public List<Transcript> returnListTranscript(@PathVariable("schoolId") int id_school){
-        return transcriptService.getTranscriptBySchool(id_school);
+    public List<TranscriptDTO> returnListTranscript(@PathVariable("schoolId") int id_school){
+        return transcriptService.getListTranscriptDTOBySchool(id_school);
     }
 
     @GetMapping("/event/getListSubjectByGrade/{classId}")
     @ResponseBody
-    public List<Subject> returnListSubjectByGrade(@PathVariable("classId") int id_class){
+    public List<SubjectDTO> returnListSubjectByGrade(@PathVariable("classId") int id_class){
         String gradeClass = classService.getGrade(id_class);
         System.out.println("grade: "+ gradeClass);
-        ArrayList<Subject> subjectListFromData = (ArrayList<Subject>) subjectService.getSubjectByClassGrade(gradeClass);
-        subjectListFromData.sort(new Comparator<Subject>() {
+        ArrayList<SubjectDTO> subjectListFromData = (ArrayList<SubjectDTO>) subjectService.getListSubjectDTOByClassGrade(gradeClass);
+        subjectListFromData.sort(new Comparator<SubjectDTO>() {
             @Override
-            public int compare(Subject o1, Subject o2) {
+            public int compare(SubjectDTO o1, SubjectDTO o2) {
                 if(o1.getNameSubject().compareTo(o2.getNameSubject()) < 0){
                     return -1;
                 } else if(o1.getNameSubject().compareTo(o2.getNameSubject()) > 0){

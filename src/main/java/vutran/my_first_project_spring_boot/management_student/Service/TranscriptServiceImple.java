@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vutran.my_first_project_spring_boot.management_student.DTO.TranscriptDTO;
 import vutran.my_first_project_spring_boot.management_student.Dao.TranscriptRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Transcript;
 
@@ -59,5 +60,10 @@ public class TranscriptServiceImple implements TranscriptService{
     @Override
     public Page<Transcript> getTranscriptBySchoolName(String school_name, PageRequest pageRequest) {
         return transcriptRepository.getTranscriptBySchoolName(school_name, pageRequest);
+    }
+
+    @Override
+    public List<TranscriptDTO> getListTranscriptDTOBySchool(int school_id) {
+        return transcriptRepository.getListTranscriptDTOBySchool(school_id);
     }
 }

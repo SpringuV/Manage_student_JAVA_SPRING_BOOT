@@ -1,5 +1,6 @@
 package vutran.my_first_project_spring_boot.management_student.Service;
 
+import vutran.my_first_project_spring_boot.management_student.DTO.ClassDTO;
 import vutran.my_first_project_spring_boot.management_student.Entity.Classes;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface ClassService {
     Classes getClassByStudentAndSchool(int student_id, int school_id);
 
     String getGrade(int class_id);
+
+    List<ClassDTO> getListClassDTOBySchool(int school_id);
 }

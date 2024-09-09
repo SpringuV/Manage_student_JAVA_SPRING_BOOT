@@ -3,6 +3,7 @@ package vutran.my_first_project_spring_boot.management_student.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vutran.my_first_project_spring_boot.management_student.DTO.NotebookDetailDTO;
 import vutran.my_first_project_spring_boot.management_student.Dao.DetailNoteRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.NoteBookDetail;
 
@@ -53,6 +54,16 @@ public class DetailNoteServiceImple implements DetailNoteService{
     @Override
     public List<NoteBookDetail> getNoteBookDetailDuplicates(String time, int sub_id, Date teachDay) {
         return detailNoteRepository.getNoteBookDetailDuplicates(time, sub_id, teachDay);
+    }
+
+    @Override
+    public List<NotebookDetailDTO> getDetailNoteDTOByNoteBookId(int note_book_id) {
+        return detailNoteRepository.getDetailNoteDTOByNoteBookId(note_book_id);
+    }
+
+    @Override
+    public List<NotebookDetailDTO> getNoteDetailDTODuplicates(String time, int sub_id, Date dayTeach) {
+        return detailNoteRepository.getNoteDetailDTODuplicates(time, sub_id, dayTeach);
     }
 
 }

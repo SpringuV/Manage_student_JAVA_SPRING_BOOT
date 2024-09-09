@@ -13,8 +13,13 @@
 <h1>Modify User</h1>
 <div>
     <form th:action="@{/m-user/auth/modify-process}" th:object="${user}" method="post">
-        <div th:if="${Error}" class="alert alert-danger">
-            <span th:text="${Error}"></span>
+        <div>
+            <div th:if="${Error}" class="alert alert-danger">
+                <span th:text="${Error}"></span>
+            </div>
+            <div th:if="${success}">
+                <h3>You updated a user "<span th:text="${success}"></span> ",</h3>
+            </div>
         </div>
         <div>
             <label class="form-label">User Id: <span th:text="*{id}"></span></label>
@@ -27,9 +32,6 @@
             <button class="btn btn-primary" type="submit">Modify</button>
         </div>
     </form>
-    <div th:if="${success}">
-        <h3>You updated a user "<span th:text="${success}"></span> ",</h3>
-    </div>
 </div>
 <div>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>

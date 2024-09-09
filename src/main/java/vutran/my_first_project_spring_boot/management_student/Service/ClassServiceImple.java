@@ -3,6 +3,7 @@ package vutran.my_first_project_spring_boot.management_student.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vutran.my_first_project_spring_boot.management_student.DTO.ClassDTO;
 import vutran.my_first_project_spring_boot.management_student.Dao.ClassRepository;
 import vutran.my_first_project_spring_boot.management_student.Dao.StudentRepository;
 import vutran.my_first_project_spring_boot.management_student.Dao.TeacherRepository;
@@ -89,5 +90,10 @@ public class ClassServiceImple implements ClassService{
     @Override
     public String getGrade(int class_id) {
         return this.classRepository.getGrade(class_id);
+    }
+
+    @Override
+    public List<ClassDTO> getListClassDTOBySchool(int school_id) {
+        return classRepository.getListClassDTOBySchool(school_id);
     }
 }

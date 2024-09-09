@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import vutran.my_first_project_spring_boot.management_student.DTO.TranscriptDTO;
 import vutran.my_first_project_spring_boot.management_student.Entity.Transcript;
 
 import java.util.List;
@@ -24,4 +25,7 @@ public interface TranscriptRepository extends JpaRepository<Transcript, Integer>
 
     @Query("SELECT t FROM Transcript t WHERE t.school.name LIKE %:school_name%")
     Page<Transcript> getTranscriptBySchoolName(@Param("school_name") String school_name, PageRequest pageRequest);
+
+    @Query("SELECT new vutran.my_first_project_spring_boot.management_student.DTO.TranscriptDTO(t.id, t.semester, t.nameTranscript, t.schoolYear) FROM Transcript t WHERE t.school.id=:school_id")
+    List<TranscriptDTO> getListTranscriptDTOBySchool(@Param("school_id") int school_id);
 }

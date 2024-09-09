@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vutran.my_first_project_spring_boot.management_student.DTO.StudentDTO;
 import vutran.my_first_project_spring_boot.management_student.Dao.StudentRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Student;
 
@@ -32,7 +33,6 @@ public class StudentServiceImple implements StudentService{
     }
 
     @Override
-    @Transactional
     public void deleteStudentById(int id) {
         Student student = studentRepository.getReferenceById(id);
         student.setClasses(null);
@@ -91,5 +91,20 @@ public class StudentServiceImple implements StudentService{
     @Override
     public Page<Student> findStudentsByFirstName(String searchName, PageRequest pageRequest) {
         return studentRepository.findStudentsByFirstName(searchName, pageRequest);
+    }
+
+    @Override
+    public List<StudentDTO> getListStudentDTOBySchoolId(int school_id) {
+        return studentRepository.getListStudentDTOBySchoolId(school_id);
+    }
+
+    @Override
+    public List<StudentDTO> getListStudentDTOByClassAndSchool(int class_id, int school_id) {
+        return studentRepository.getListStudentDTOByClassAndSchool(class_id, school_id);
+    }
+
+    @Override
+    public List<StudentDTO> getListStudentDTOByClassId(int class_id) {
+        return studentRepository.getListStudentDTOByClassId(class_id);
     }
 }

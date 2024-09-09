@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import vutran.my_first_project_spring_boot.management_student.DTO.SchoolDTO;
 import vutran.my_first_project_spring_boot.management_student.Entity.School;
 
 import java.util.List;
@@ -23,5 +24,8 @@ public interface SchoolRepository extends JpaRepository<School, Integer> {
     School findByNameSchool(@Param("name") String name);
 
     @Query("SELECT s FROM School s WHERE s.level LIKE %:level%")
-    List<School> getListSchoolByLevel(String level);
+    List<School> getListSchoolByLevel(@Param("level") String level);
+
+    @Query("SELECT new vutran.my_first_project_spring_boot.management_student.DTO.SchoolDTO(s.id, s.name, s.address, s.phone) FROM School s WHERE s.level=:level")
+    List<SchoolDTO> getListSchoolDTOByLevel(@Param("level") String level);
 }

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import vutran.my_first_project_spring_boot.management_student.DTO.ClassDTO;
 import vutran.my_first_project_spring_boot.management_student.Entity.Classes;
 
 import java.util.List;
@@ -26,4 +27,7 @@ public interface ClassRepository extends JpaRepository<Classes, Integer> {
 
     @Query("SELECT c.grade FROM Classes c WHERE c.id = :id_class")
     String getGrade(@Param("id_class") int class_id);
+
+    @Query("SELECT new vutran.my_first_project_spring_boot.management_student.DTO.ClassDTO(c.id, c.grade, c.name) FROM Classes c WHERE c.school.id =:school_id")
+    List<ClassDTO> getListClassDTOBySchool(@Param("school_id") int school_id);
 }

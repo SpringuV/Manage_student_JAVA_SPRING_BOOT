@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vutran.my_first_project_spring_boot.management_student.DTO.TeacherDTO;
 import vutran.my_first_project_spring_boot.management_student.Dao.TeacherRepository;
 import vutran.my_first_project_spring_boot.management_student.Dao.UserRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
@@ -101,5 +102,25 @@ public class TeacherServiceImple implements TeacherService{
     @Override
     public List<Teacher> getListTeacherByClass(int id_class) {
         return teacherRepository.getListTeacherByClass(id_class);
+    }
+
+    @Override
+    public List<TeacherDTO> getListTeacherDTOByClass(int class_id) {
+        return teacherRepository.getListTeacherDTOByClass(class_id);
+    }
+
+    @Override
+    public List<TeacherDTO> getListTeacherDTOBySchoolIdAndClassID(int school_id, int class_id) {
+        return teacherRepository.getListTeacherDTOBySchoolIdAndClassID(school_id, class_id);
+    }
+
+    @Override
+    public List<TeacherDTO> getAllTeacherDTO() {
+        return teacherRepository.getAllTeacherDTO();
+    }
+
+    @Override
+    public List<TeacherDTO> getListTeacherDTOByIdSchool(int school_id) {
+        return teacherRepository.getListTeacherDTOByIdSchool(school_id);
     }
 }

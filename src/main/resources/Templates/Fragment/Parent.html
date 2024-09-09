@@ -6,7 +6,7 @@
             <option th:each="school : ${schoolList}" th:value="${school.id}"
                     th:text="${school.name} +' ('+${school.level}+')'"></option>
         </select>
-        <label th:if="${parent.school != null}"><span th:text="${parent.school.name}"></span></label>
+<!--        <label th:if="${parent.school != null}"><span th:text="${parent.school.name}"></span></label>-->
         <div th:if="${#fields.hasErrors('school')}">
             <ul>
                 <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
@@ -21,7 +21,7 @@
         <select id="parent_class_select" data-type="parent" class="class_select" th:field="*{classes}" required>
             <option value="0">--Select Class--</option>
         </select>
-        <label th:if="${parent.classes != null}"><span th:text="${parent.classes.name}"></span></label>
+<!--        <label th:if="${parent.classes != null}"><span th:text="${parent.classes.name}"></span></label>-->
         <div th:if="${#fields.hasErrors('classes')}">
             <ul>
                 <li th:each="error: ${#fields.hasErrors('classes')}" th:text="${error}"></li>
@@ -34,7 +34,7 @@
         <select id="parent_student_select" data-type="parent" class="student_select" th:field="*{student.id}" required>
             <option value="0">--Select Student--</option>
         </select>
-        <label th:if="${parent.student != null}"><span th:text="${parent.student.firstName} +' '+ ${parent.student.lastName}"></span></label>
+<!--        <label th:if="${parent.student != null}"><span th:text="${parent.student.firstName} +' '+ ${parent.student.lastName}"></span></label>-->
         <div th:if="${#fields.hasErrors('student.id')}">
             <ul>
                 <li th:each="error: ${#fields.hasErrors('student.id')}" th:text="${error}"></li>

@@ -15,5 +15,5 @@ public interface NotebookRepository extends JpaRepository<NoteBook, Integer> {
 
     // filter data matches
     @Query(value = "SELECT * FROM note_book WHERE note_class_id =:class_id AND school_id =:s_id ",nativeQuery = true)
-    public NoteBook findNoteBookByClassIdAndSchoolId(@Param("class_id") int classes_id,@Param("s_id") int school_id);
+    NoteBook findNoteBookByClassIdAndSchoolId(@Param("class_id") int classes_id,@Param("s_id") int school_id);
 }

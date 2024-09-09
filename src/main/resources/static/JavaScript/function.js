@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const studentSelects = document.querySelectorAll('.student_select');
         const transcriptSelects = document.querySelectorAll('.transcript_select');
 
-        const selectedSubjectId = [[${scoreCard.subject.id}]]; // Subject đã chọn trong cơ sở dữ liệu
+        const selectedSubjectId = '${scoreCard.subject.id}'; // Subject đã chọn trong cơ sở dữ liệu
 
         function getClassBySchoolId(schoolId, classSelect) {
             if (schoolId && schoolId !== "0") {

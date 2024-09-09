@@ -6,7 +6,7 @@
             <option th:each="school : ${schoolList}" th:value="${school.id}"
                     th:text="${school.name} +' ('+${school.level}+')'"></option>
         </select>
-        <label th:if="${teacher.school != null}"><span th:text="${teacher.school.name}"></span></label>
+<!--        <label th:if="${teacher.school != null}"><span th:text="${teacher.school.name}"></span></label>-->
         <div th:if="${#fields.hasErrors('school')}">
             <ul>
                 <li th:each="error: ${#fields.hasErrors('school')}" th:text="${error}"></li>
@@ -19,7 +19,7 @@
         <select name="subject" class="subject_select" data-type="teacher" id="teacher_subject_select" th:field="*{subject}" required>
             <option th:value="0">--Select Subject--</option>
         </select>
-        <label th:if="${teacher.subject != null}"><span th:text="${teacher.subject.nameSubject}"></span></label>
+<!--        <label th:if="${teacher.subject != null}"><span th:text="${teacher.subject.nameSubject}"></span></label>-->
         <div th:if="${#fields.hasErrors('subject')}">
             <ul>
                 <li th:each="error: ${#fields.hasErrors('subject')}" th:text="${error}"></li>
@@ -32,7 +32,7 @@
         <select name="classes" class="class_select" data-type="teacher" id="teacher_class_select" th:field="*{classes}" required>
             <option th:value="0">--Select Class--</option>
         </select>
-        <label th:if="${teacher.classes != null}"><span th:text="${teacher.classes.name}"></span></label>
+<!--        <label th:if="${teacher.classes != null}"><span th:text="${teacher.classes.name}"></span></label>-->
         <div th:if="${#fields.hasErrors('classes')}">
             <ul>
                 <li th:each="error: ${#fields.hasErrors('classes')}" th:text="${error}"></li>

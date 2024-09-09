@@ -20,12 +20,26 @@
     <div class="form-group mb-1">
         <form th:object="${transcript}" th:action="@{/m-transcript/modify-saveScores}" method="post">
             <input type="hidden" name="id_transcript" th:value="${transcript.id}">
-
-            School: <b><span th:text="${transcript.school.name}"></span></b><br>
-            Level: <b><span th:text="${transcript.school.level}"></span></b><br>
-            Transcript Name: <b><span th:text="${transcript.nameTranscript}"></span></b><br>
-            Semester: <b><span id="semester" th:text="${transcript.semester}"></span></b><br>
-            School Year: <b><span th:text="${transcript.schoolYear}"></span></b><br>
+            <div>
+                <label class="form-label">School: </label>
+                <b><span th:text="${transcript.school.name}"></span></b>
+            </div>
+            <div>
+                <label class="form-label">Level: </label>
+                <b><span th:text="${transcript.school.level}"></span></b>
+            </div>
+            <div>
+                <label class="form-label">Transcript Name: </label>
+                <b><span th:text="${transcript.nameTranscript}"></span></b>
+            </div>
+            <div>
+                <label class="form-label">Semester: </label>
+                <b><span id="semester" th:text="${transcript.semester}"></span></b>
+            </div>
+            <div>
+                <label class="form-label">School Year: </label>
+                <b><span th:text="${transcript.schoolYear}"></span></b>
+            </div>
 
             <label for="transcript_class_select">Select Class to Display Transcript</label>
             <select class="class_select" data-type="transcript" id="transcript_class_select" th:field="*{classesList}">
@@ -46,35 +60,38 @@
                 <tbody id="tableBody">
                 </tbody>
             </table>
-            <div>
-                <h3 class="text-center">Statistical:</h3>
-            </div>
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-4" id="statistical">
                     <div>
-                        <label class="form-label">Excellent Student (>=9.0):<b><span id="excellent">0</span></b></label>
+                        <h3 class="text-center">Statistical:</h3>
                     </div>
                     <div>
-                        <label class="form-label">Very Good Student (>=8.0): <b><span id="very_good">0</span></b></label>
+                        <label class="form-label">Excellent Student (>=9.0):</label>
+                        <b><span id="excellent">0</span></b>
                     </div>
                     <div>
-                        <label class="form-label">Fairly Student (>=6.5): <b><span id="fairly">0</span></b></label>
+                        <label class="form-label">Very Good Student (>=8.0): </label>
+                        <b><span id="very_good">0</span></b>
                     </div>
                     <div>
-                        <label class="form-label">Average Student (>=5.0): <b><span id="average">0</span></b></label>
+                        <label class="form-label">Fairly Student (>=6.5): </label>
+                        <b><span id="fairly">0</span></b>
                     </div>
                     <div>
-                        <label class="form-label">Below Average Student (>=4.0): <b><span id="below_average">0</span></b></label>
+                        <label class="form-label">Average Student (>=5.0): </label>
+                        <b><span id="average">0</span></b>
                     </div>
                     <div>
-                        <label class="form-label">Weak Student (>=2.5):
-                            <b><span id="weak">0</span></b>
-                        </label>
+                        <label class="form-label">Below Average Student (>=4.0): </label>
+                        <b><span id="below_average">0</span></b>
                     </div>
                     <div>
-                        <label class="form-label">Poor Student (<2.5):
-                            <b><span id="poor">0</span></b>
-                        </label>
+                        <label class="form-label">Weak Student (>=2.5):</label>
+                        <b><span id="weak">0</span></b>
+                    </div>
+                    <div>
+                        <label class="form-label">Poor Student (<2.5):</label>
+                        <b><span id="poor">0</span></b>
                     </div>
                 </div>
             </div>

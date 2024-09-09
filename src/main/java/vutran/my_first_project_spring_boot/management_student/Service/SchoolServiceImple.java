@@ -3,6 +3,7 @@ package vutran.my_first_project_spring_boot.management_student.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vutran.my_first_project_spring_boot.management_student.DTO.SchoolDTO;
 import vutran.my_first_project_spring_boot.management_student.Dao.SchoolRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.School;
 
@@ -57,5 +58,10 @@ public class SchoolServiceImple implements SchoolService{
     @Override
     public List<School> getListSchoolByLevel(String level) {
         return schoolRepository.getListSchoolByLevel(level);
+    }
+
+    @Override
+    public List<SchoolDTO> getListSchoolDTOByLevel(String level) {
+        return schoolRepository.getListSchoolDTOByLevel(level);
     }
 }

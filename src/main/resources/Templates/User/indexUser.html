@@ -32,7 +32,7 @@
                 <th>Address</th>
                 <th>Phone</th>
                 <th>Position</th>
-                <th>Feature</th>
+                <th sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">Feature</th>
             </thead>
             <tbody >
                 <tr th:each="user,iterStat : ${userList.content}" th:classappend="${iterStat.index % 2 == 0} ? 'even-row' : 'old-row'">
@@ -43,7 +43,7 @@
                     <td th:text="${user.address}"></td>
                     <td th:text="${user.phoneNumber}"></td>
                     <td th:text="${user.position}"></td>
-                    <td>
+                    <td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
                         <a th:href="@{/m-user/auth/showModifyFormUser(id=${user.id})}" class="btn btn-success">Modify</a>
                         <a th:href="@{/m-user/auth/modify-delete(id=${user.id})}" class="btn btn-danger">Delete</a>
                     </td>

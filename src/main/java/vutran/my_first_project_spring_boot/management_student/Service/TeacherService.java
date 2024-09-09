@@ -2,6 +2,7 @@ package vutran.my_first_project_spring_boot.management_student.Service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import vutran.my_first_project_spring_boot.management_student.DTO.TeacherDTO;
 import vutran.my_first_project_spring_boot.management_student.Entity.Teacher;
 
 import java.util.List;
@@ -24,4 +25,8 @@ public interface TeacherService {
     void updateTeachersBySubjectId(int subject_id);
     Page<Teacher> findTeachersByFirstName(String searchName, PageRequest pageRequest);
     List<Teacher> getListTeacherByClass(int id_class);
+    List<TeacherDTO> getListTeacherDTOByClass(int class_id);
+    List<TeacherDTO> getListTeacherDTOBySchoolIdAndClassID(int school_id, int class_id);
+    List<TeacherDTO> getAllTeacherDTO();
+    List<TeacherDTO> getListTeacherDTOByIdSchool(int school_id);
 }
