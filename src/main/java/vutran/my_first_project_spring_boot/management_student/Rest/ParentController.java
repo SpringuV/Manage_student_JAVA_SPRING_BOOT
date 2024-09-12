@@ -180,10 +180,6 @@ public class ParentController {
     public String deleteTeacher(@ModelAttribute Parent parent, RedirectAttributes redirectAttributes){
         Parent parentExist = parentService.getParentById(parent.getId());
         if(parentExist != null){
-            parentExist.getCollectionAuthority().clear();
-            // save then delete
-            parentService.updateParent(parentExist);
-            // delete
             parentService.deleteParentById(parentExist.getId());
             redirectAttributes.addFlashAttribute("success", "You have deleted parent have id: "+ parentExist.getId());
             return "redirect:/m-parent/showManageParent";

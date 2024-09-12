@@ -37,7 +37,7 @@
                 <th>Work at School</th>
                 <th>Class</th>
                 <th>Position</th>
-                <th>Feature</th>
+                <th sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">Feature</th>
             </thead>
             <tbody>
                 <tr th:each="teacher,iterStat : ${teacherList.content}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'odd-row'}">
@@ -62,7 +62,7 @@
                         <span th:if="${teacher.classes == null}">--null--</span>
                     </td>
                     <td th:text="${teacher.position != null ? teacher.position : 'null'}"></td>
-                    <td>
+                    <td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
                         <a th:href="@{/m-teacher/showModifyFormTeacher(id=${teacher.id})}"
                            class="btn btn-success">Modify</a>
                         <a th:href="@{/m-teacher/modify-delete(id=${teacher.id})}" class="btn btn-danger">Delete</a>
@@ -92,7 +92,7 @@
 <!--    END pagination-->
     <div>
         <div>
-            <a class="btn btn-primary" th:href="@{/m-teacher/showFormAddTeacher}">Add Teacher</a>
+            <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="btn btn-primary" th:href="@{/m-teacher/showFormAddTeacher}">Add Teacher</a>
             <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
         </div>
     </div>

@@ -36,11 +36,12 @@ public class SecurityConfiguration  {
 //        return new CustomAuthenticationSuccessHandler();
 //    }
 
+    // encode password form login
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserService userService){
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userService);
-        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
+        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder()); // encode password
         return daoAuthenticationProvider;
     }
 
@@ -48,7 +49,7 @@ public class SecurityConfiguration  {
     @Autowired
     public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource){
         JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
-        userDetailsManager.setUsersByUsernameQuery("SELECT username, password, enabled FROM user WHERE username = ?");
+        userDetailsManager.setUsersByUsernameQuery("SELECT username, password, enabled FROM user WHERE username = ?"); // jdbc, native query
         userDetailsManager.setAuthoritiesByUsernameQuery("SELECT authority.name, users.username FROM authority JOIN users ON users.authority_id = authority.id WHERE users.username = ?");
         return userDetailsManager;
     }
@@ -135,6 +136,10 @@ public class SecurityConfiguration  {
                         .requestMatchers(HttpMethod.POST, "/m-transcript/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/m-transcript/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/m-transcript/**").hasRole("ADMIN")
+
+                        // change pass
+                        .requestMatchers(HttpMethod.GET, "/changePassword/**").hasAnyRole("ADMIN", "MANAGER", "USER", "PARENT", "TEACHER")
+                        .requestMatchers(HttpMethod.POST, "/processChangePass/**").hasAnyRole("ADMIN", "MANAGER", "USER", "PARENT", "TEACHER")
 
                         .requestMatchers(HttpMethod.GET,"/event/**").permitAll()
                         .requestMatchers("/static/**", "/JavaScript/**", "/CSS/**", "/event/showLoginPage").permitAll() // access to static not authenticate

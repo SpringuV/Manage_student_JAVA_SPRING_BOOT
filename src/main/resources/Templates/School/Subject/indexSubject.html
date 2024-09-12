@@ -23,14 +23,14 @@
             <tr>
                 <th>Subject Id</th>
                 <th>Subject Name</th>
-                <th>Feature</th>
+                <th sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">Feature</th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="subject, iterStat : ${subjectList.content}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'old-row'}">
+            <tr th:each="subject, iterStat : ${subjectList}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'old-row'}">
                 <td class="subject-id" th:text="${subject.id != null ? subject.id : 'null'}" data-id="${subject.id}"></td>
                 <td th:text="${subject.nameSubject != null ? subject.nameSubject : 'null'}"></td>
-                <td>
+                <td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
                     <a class="btn btn-danger" th:href="@{/m-subject/modify-delete(id=${subject.id})}">Delete</a>
                 </td>
             </tr>
@@ -39,19 +39,19 @@
 </div>
 <!--    START pagination-->
 <div>
-        <span>
-            <a th:if="${subjectList.hasPrevious()}"
-               th:href="@{/m-subject/showManageSubject(page=${subjectList.number - 1}, size=${subjectList.size})}">Previous</a>
-            <a th:if="${not subjectList.hasPrevious()}" href="#" aria-disabled="true" class="disabled-link">Previous</a>
-        </span>
+    <span>
+        <a th:if="${subjectList.hasPrevious()}"
+           th:href="@{/m-subject/showManageSubject(page=${subjectList.number - 1}, size=${subjectList.size})}">Previous</a>
+        <a th:if="${not subjectList.hasPrevious()}" href="#" aria-disabled="true" class="disabled-link">Previous</a>
+    </span>
     <span th:each="i : ${#numbers.sequence(0, subjectList.totalPages - 1)}">
             <a th:href="@{/m-subject/showManageSubject(page=${i}, size=${subjectList.size})}" th:text="${i + 1}" th:classappend="${i == subjectList.number} ? 'active' : ''">1</a>
         </span>
     <span>
-            <a th:if="${subjectList.hasNext()}"
-               th:href="@{/m-subject/showManageSubject(page=${subjectList.number + 1}, size=${subjectList.size})}">Next</a>
-            <a th:if="${not subjectList.hasNext()}" href="#" aria-disabled="true" class="disabled-link">Next</a>
-        </span>
+        <a th:if="${subjectList.hasNext()}"
+           th:href="@{/m-subject/showManageSubject(page=${subjectList.number + 1}, size=${subjectList.size})}">Next</a>
+        <a th:if="${not subjectList.hasNext()}" href="#" aria-disabled="true" class="disabled-link">Next</a>
+    </span>
 </div>
 <!--    END pagination-->
 <div>

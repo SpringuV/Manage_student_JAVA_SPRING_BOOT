@@ -35,7 +35,7 @@
 </div>
 <div>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-    <a class="btn btn-primary" th:href="@{/m-user/auth/showManageUser}">User List Manage</a>
+    <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="btn btn-primary" th:href="@{/m-user/auth/showManageUser}">User List Manage</a>
 </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

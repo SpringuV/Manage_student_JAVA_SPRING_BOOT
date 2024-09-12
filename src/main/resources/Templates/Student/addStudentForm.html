@@ -34,7 +34,7 @@
             </div>
         </div>
         <div>
-            <a class="btn btn-primary" th:href="@{/m-student/showManageStudent}">Return ListStudent</a>
+            <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="btn btn-primary" th:href="@{/m-student/showManageStudent}">Return ListStudent</a>
             <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
         </div>
         <p class="mt-5 mb-3 text-body-secondary">© 2017–2024</p>

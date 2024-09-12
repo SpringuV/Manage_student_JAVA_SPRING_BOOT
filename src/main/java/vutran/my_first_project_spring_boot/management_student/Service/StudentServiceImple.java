@@ -34,17 +34,7 @@ public class StudentServiceImple implements StudentService{
 
     @Override
     public void deleteStudentById(int id) {
-        Student student = studentRepository.getReferenceById(id);
-        student.setClasses(null);
-        student.setSchool(null);
-        student.setTeacher(null);
-        student.setParent(null);
-        student.getTranscriptSet().clear();
-        student.getStudyRecordList().clear();
-        student.getSubjectList().clear();
-        student.getScoreCardList().clear();
-        studentRepository.saveAndFlush(student);
-        studentRepository.deleteById(student.getId());
+        studentRepository.deleteById(id);
     }
 
 

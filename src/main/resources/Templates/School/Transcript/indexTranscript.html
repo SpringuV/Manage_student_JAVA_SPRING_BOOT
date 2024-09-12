@@ -61,7 +61,7 @@
     </div>
     <!--    END pagination-->
     <div>
-        <a class="btn btn-primary" th:href="@{/m-transcript/showFormAddTranscript}">Add Transcript</a>
+        <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="btn btn-primary" th:href="@{/m-transcript/showFormAddTranscript}">Add Transcript</a>
         <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
     </div>
 </div>

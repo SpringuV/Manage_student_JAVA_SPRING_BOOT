@@ -123,4 +123,9 @@ public class TeacherServiceImple implements TeacherService{
     public List<TeacherDTO> getListTeacherDTOByIdSchool(int school_id) {
         return teacherRepository.getListTeacherDTOByIdSchool(school_id);
     }
+
+    @Override
+    public List<TeacherDTO> getListTeacherDTOBySchoolAndClassAndSubject(int school_id, int class_id, int subject_id) {
+        return teacherRepository.getListTeacherDTOBySchoolAndClassAndSubject(school_id, class_id, subject_id);
+    }
 }

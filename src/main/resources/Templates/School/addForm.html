@@ -67,7 +67,7 @@
 </div>
 <div>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-    <a class="btn btn-primary" th:href="@{/m-school/showManageSchool}">School List Manage</a>
+    <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="btn btn-primary" th:href="@{/m-school/showManageSchool}">School List Manage</a>
 </div>
 </body>
 <script src="/JavaScript/function.js"></script>

@@ -1,0 +1,80 @@
+<div th:fragment="fragAdd-ModifyNoteDetail">
+    <div class="mb-1">
+        <label class="form-label">Id NoteBook: </label>
+        <span th:text="${noteDetail.noteBook.id}"></span>
+        <input type="hidden" th:field="*{noteBook}" th:value="${noteDetail.noteBook.id}">
+    </div>
+    <div>
+        <label class="form-label">School:</label>
+        <span th:if="${noteDetail.noteBook.school != null}" th:text="${noteDetail.noteBook.school.name}"></span>
+        <span th:if="${noteDetail.noteBook.school == null}">[null]</span>
+        <input th:if="${noteDetail.noteBook.school != null}" type="hidden" id="note_school_selected" th:value="${noteDetail.noteBook.school.id}">
+    </div>
+    <div>
+        <label class="form-label">Class:</label>
+        <span th:if="${noteDetail.noteBook.classes != null}" th:text="${noteDetail.noteBook.classes.name}"></span>
+        <span th:if="${noteDetail.noteBook.classes == null}">[null]</span>
+        <input th:if="${noteDetail.noteBook.classes != null}" type="hidden" id="note_class_selected" th:value="${noteDetail.noteBook.classes.id}">
+    </div>
+    <div class="mb-1">
+        <label for="note_detail_subject_select" class="form-label">Subject: </label>
+        <select th:field="*{subject}" id="note_detail_subject_select" required>
+            <option value="0">--Select Subject--</option>
+        </select>
+        <label th:if="${noteDetail.subject != null}" th:text="${noteDetail.subject.nameSubject}"></label>
+        <div th:if="${#fields.hasErrors('subject')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('subject')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+    <div class="mb-1">
+        <label for="note_detail_teacher_select" class="form-label">Teacher: </label>
+        <select th:field="*{teacher}" id="note_detail_teacher_select" required>
+            <option value="0">--Select Teacher--</option>
+        </select>
+        <label th:if="${noteDetail.teacher != null}" th:text="${noteDetail.teacher.firstName}+' '+ ${noteDetail.teacher.lastName}"></label>
+        <div th:if="${#fields.hasErrors('teacher')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('teacher')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+    <div class="form-floating mb-1">
+        <textarea th:field="*{teacherComment}" placeholder="Input Comment of Teacher" name="comment" class="form-control"></textarea>
+        <label class="form-label">Teacher comment: </label>
+        <div th:if="${#fields.hasErrors('teacherComment')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('teacherComment')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="form-floating mb-1">
+        <input type="text" class="form-control" th:field="*{contentLecture}" placeholder="Input Content lecture" name="comment">
+        <label class="form-label">Content Lecture: </label>
+        <div th:if="${#fields.hasErrors('contentLecture')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('contentLecture')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+    <div  class="mb-1">
+        <label class="form-label">Teaching Hours: </label>
+        <input type="time" th:field="*{time}" placeholder="Input Time Teaching" name="time">
+        <div th:if="${#fields.hasErrors('time')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('time')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+    <div class="form-outline mb-1">
+        <label class="form-label">Teaching day: </label>
+        <input type="date" class="form-control" th:field="*{teachingDay}" name="teachingDay">
+        <div th:if="${#fields.hasErrors('teachingDay')}">
+            <ul>
+                <li th:each="error: ${#fields.hasErrors('teachingDay')}" th:text="${error}"></li>
+            </ul>
+        </div>
+    </div>
+</div>

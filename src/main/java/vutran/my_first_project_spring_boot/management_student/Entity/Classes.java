@@ -29,7 +29,6 @@ public class Classes {
     private List<Student> studentList;
 
     @OneToOne(mappedBy = "classes", cascade = CascadeType.ALL)
-//    @JsonIgnore
     private NoteBook noteBook;
 
     // nhiều lớp chỉ được một trường quản lý

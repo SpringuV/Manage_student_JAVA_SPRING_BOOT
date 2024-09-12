@@ -87,7 +87,7 @@
 
 <div>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-    <a class="btn btn-primary" th:href="@{/m-transcript/showManageTranscript}">Transcript List Manage</a>
+    <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="btn btn-primary" th:href="@{/m-transcript/showManageTranscript}">Transcript List Manage</a>
 </div>
 </body>
 <script src="/JavaScript/function.js"></script>

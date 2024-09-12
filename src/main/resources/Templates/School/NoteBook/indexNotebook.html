@@ -22,42 +22,43 @@
         <th>NoteBook Id</th>
         <th>Class</th>
         <th>School</th>
-        <th>Feature</th>
-        <tr th:each="note,iterStat : ${notebookList.content}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'old-row'}">
+        <th sec:authorize="hasAnyRole('ADMIN', 'MANAGER', 'TEACHER')">Feature</th>
+        <tr th:if="${notebookList.isEmpty()}">NoteBook List Empty !!!</tr>
+        <tr th:if="${not notebookList.isEmpty()}" th:each="note,iterStat : ${notebookList}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'old-row'}">
             <td th:text="${note.id}"></td>
             <td>
-                <span th:if="${note.classes != null}" th:utext="'Name: '+ ${note.classes.name != null ? note.classes.name : 'null'} +'<br>Class id: '+ ${note.classes.id != null ? note.classes.id : 'null'}+'<br>Class of School id: '+ ${note.classes.school.id != null ? note.classes.school.id : 'null'}"></span>
+                <span th:if="${note.classes != null}" th:utext="'Name: '+ ${note.classes.name != null ? note.classes.name : 'null'} +'<br>Class id: '+ ${note.classes.id != null ? note.classes.id : 'null'}"></span>
                 <span th:if="${note.classes == null}">[null]</span>
             </td>
             <td>
                 <span th:if="${note.school != null}" th:text="${note.school.name != null ? note.school.name : 'null'} +' ('+ ${note.school.id != null ? note.school.id : 'null'}+')'"></span>
                 <span th:if="${note.school == null}">[null]</span>
             </td>
-            <td>
+            <td sec:authorize="hasAnyRole('ADMIN', 'MANAGER', 'TEACHER')">
                 <a th:href="@{/m-note/showModifyFormNote(id=${note.id})}" class="btn btn-success">Modify</a>
                 <a th:href="@{/m-note-detail/showManageDetailNote(id=${note.id})}" class="btn btn-primary">Detail</a>
-                <a th:href="@{/m-note/modify-delete(id=${note.id})}" class="btn btn-danger">Delete</a>
+                <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" th:href="@{/m-note/modify-delete(id=${note.id})}" class="btn btn-danger">Delete</a>
             </td>
         </tr>
     </table>
 </div>
 <!--    START pagination-->
-<div>
-        <span>
-            <a th:if="${notebookList.hasPrevious()}" th:href="@{/m-note/showManageNotebook(page=${notebookList.number - 1}, size=${notebookList.size})}">Previous</a>
-            <a th:if="${not notebookList.hasPrevious()}" href="#" aria-disabled="true" class="disabled-link">Previous</a>
-        </span>
-    <span th:each="i : ${#numbers.sequence(0, notebookList.totalPages - 1)}" >
-            <a th:href="@{/m-note/showManageNotebook(page=${i}, size=${notebookList.size})}" th:text="${i + 1}" th:classappend="${i == notebookList.number} ? 'active' : ''">1</a>
-        </span>
+<div th:if="${not notebookList.isEmpty()}">
     <span>
-            <a th:if="${notebookList.hasNext()}" th:href="@{/m-note/showManageNotebook(page=${notebookList.number + 1}, size=${notebookList.size})}">Next</a>
-            <a th:if="${not notebookList.hasNext()}" href="#" aria-disabled="true" class="disabled-link">Next</a>
-        </span>
+        <a th:if="${notebookList.hasPrevious()}" th:href="@{/m-note/showManageNotebook(page=${notebookList.number - 1}, size=${notebookList.size})}">Previous</a>
+        <a th:if="${not notebookList.hasPrevious()}" href="#" aria-disabled="true" class="disabled-link">Previous</a>
+    </span>
+    <span th:each="i : ${#numbers.sequence(0, notebookList.totalPages - 1)}" >
+        <a th:href="@{/m-note/showManageNotebook(page=${i}, size=${notebookList.size})}" th:text="${i + 1}" th:classappend="${i == notebookList.number} ? 'active' : ''">1</a>
+    </span>
+    <span>
+        <a th:if="${notebookList.hasNext()}" th:href="@{/m-note/showManageNotebook(page=${notebookList.number + 1}, size=${notebookList.size})}">Next</a>
+        <a th:if="${not notebookList.hasNext()}" href="#" aria-disabled="true" class="disabled-link">Next</a>
+    </span>
 </div>
 <!--    END pagination-->
 <div>
-    <a class="btn btn-primary" th:href="@{/m-note/showFormAddNotebook}">Add Notebook</a>
+    <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER', 'TEACHER')" class="btn btn-primary" th:href="@{/m-note/showFormAddNotebook}">Add Notebook</a>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
 </div>
 </body>

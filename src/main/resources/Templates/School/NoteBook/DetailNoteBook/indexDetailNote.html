@@ -20,49 +20,51 @@
     </div>
     <table>
         <thead>
-            <th>Detail NoteBook Id</th>
+            <th>Detail Id</th>
             <th>Class</th>
             <th>Teacher</th>
             <th>Subject</th>
             <th>Content Lecture</th>
             <th>Date Written</th>
             <th>Comment Teacher</th>
-            <th>Feature</th>
+            <th sec:authorize="hasAnyRole('ADMIN', 'MANAGER', 'TEACHER')">Feature</th>
         </thead>
         <tbody>
-            <tr th:each="note,iterStat : ${detailNoteList.content}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'old-row'}">
+            <tr th:if="${not detailNoteList.isEmpty()}" th:each="note,iterStat : ${detailNoteList}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'old-row'}">
                 <td th:text="${note.id}"></td>
-                <td th:text="'Name: ' + ${note.noteBook.classes.name != null ? note.noteBook.classes.name : 'null'} +'<br>Class id: '+ ${note.noteBook.classes.id != null ? note.noteBook.classes.id : 'null'}+'<br>School id: '+ ${note.noteBook.classes.school.id != null ? note.noteBook.classes.school.id : 'null'}"></td>
-                <td th:text="'('+${teacher.id} + ') '+ ${teacher.firstName != null ? teacher.firstName : 'null'}"></td>
+                <td th:utext="'Name: ' + ${note.noteBook.classes.name != null ? note.noteBook.classes.name : 'null'} +'<br>Class id: '+ ${note.noteBook.classes.id != null ? note.noteBook.classes.id : 'null'}+'<br>School id: '+ ${note.noteBook.classes.school.id != null ? note.noteBook.classes.school.id : 'null'}"></td>
+                <td th:text="'('+${note.teacher.id} + ') '+ ${note.teacher.firstName} +' '+ ${note.teacher.lastName}"></td>
+                <td th:text="${note.subject.nameSubject}"></td>
                 <td th:text="${note.contentLecture}"></td>
                 <td th:text="${note.teachingDay}"></td>
                 <td th:text="${note.teacherComment}"></td>
-                <td>
+                <td sec:authorize="hasAnyRole('ADMIN', 'MANAGER', 'TEACHER')">
                     <a th:href="@{/m-note-detail/showModifyFormNoteDetail(id=${note.id})}"
                        class="btn btn-success">Modify</a>
-                    <a th:href="@{/m-note-detail/modify-delete(id=${note.id})}" class="btn btn-danger">Delete</a>
+                    <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" th:href="@{/m-note-detail/modify-delete(id=${note.id})}" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
+            <tr th:if="${detailNoteList.isEmpty()}">Detail Note Empty !!!</tr>
         </tbody>
     </table>
 </div>
 <!--    START pagination-->
-<div>
-        <span>
-            <a th:if="${detailNoteList.hasPrevious()}" th:href="@{/m-note-detail/showManageDetailNote(page=${detailNoteList.number - 1}, size=${detailNoteList.size})}">Previous</a>
-            <a th:if="${not detailNoteList.hasPrevious()}" href="#" aria-disabled="true" class="disabled-link">Previous</a>
-        </span>
-    <span th:each="i : ${#numbers.sequence(0, detailNoteList.totalPages - 1)}" >
-            <a th:href="@{/m-note-detail/showManageDetailNote(page=${i}, size=${detailNoteList.size})}" th:text="${i + 1}" th:classappend="${i == detailNoteList.number} ? 'active' : ''">1</a>
-        </span>
+<div th:if="${not detailNoteList.isEmpty()}">
     <span>
-            <a th:if="${detailNoteList.hasNext()}" th:href="@{/m-note-detail/showManageDetailNote(page=${detailNoteList.number + 1}, size=${detailNoteList.size})}">Next</a>
-            <a th:if="${not detailNoteList.hasNext()}" href="#" aria-disabled="true" class="disabled-link">Next</a>
-        </span>
+        <a th:if="${detailNoteList.hasPrevious()}" th:href="@{/m-note-detail/showManageDetailNote(page=${detailNoteList.number - 1}, size=${detailNoteList.size})}">Previous</a>
+        <a th:if="${not detailNoteList.hasPrevious()}" href="#" aria-disabled="true" class="disabled-link">Previous</a>
+    </span>
+    <span th:each="i : ${#numbers.sequence(0, detailNoteList.totalPages - 1)}" >
+        <a th:href="@{/m-note-detail/showManageDetailNote(page=${i}, size=${detailNoteList.size})}" th:text="${i + 1}" th:classappend="${i == detailNoteList.number} ? 'active' : ''">1</a>
+    </span>
+    <span>
+        <a th:if="${detailNoteList.hasNext()}" th:href="@{/m-note-detail/showManageDetailNote(page=${detailNoteList.number + 1}, size=${detailNoteList.size})}">Next</a>
+        <a th:if="${not detailNoteList.hasNext()}" href="#" aria-disabled="true" class="disabled-link">Next</a>
+    </span>
 </div>
 <!--    END pagination-->
 <div>
-    <a class="btn btn-primary" th:href="@{/m-note-detail/showFormAddNoteDetail(id=${noteBook_id})}">Add Note Detail</a>
+    <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER', 'TEACHER')" class="btn btn-primary" th:href="@{/m-note-detail/showFormAddNoteDetail(id=${noteBook_id})}">Add Note Detail</a>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
 </div>
 </body>

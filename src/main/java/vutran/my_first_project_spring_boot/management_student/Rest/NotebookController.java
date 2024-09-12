@@ -52,12 +52,6 @@ public class NotebookController {
         }
     }
 
-    @GetMapping("/getClassBySchool/{schoolId}")
-    @ResponseBody
-    public List<Classes> returnListClass(@PathVariable("schoolId") int id_school) {
-        return classService.getListClassByIdSchool(id_school);
-    }
-
     @GetMapping("/showFormAddNotebook")
     public String showForm(Model model) {
         model.addAttribute("NoteBook", new NoteBook());

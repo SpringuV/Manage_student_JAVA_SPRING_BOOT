@@ -35,7 +35,7 @@
                 <th sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">Feature</th>
             </thead>
             <tbody >
-                <tr th:each="user,iterStat : ${userList.content}" th:classappend="${iterStat.index % 2 == 0} ? 'even-row' : 'old-row'">
+                <tr th:if="${not userList.isEmpty()}" th:each="user,iterStat : ${userList}" th:classappend="${iterStat.index % 2 == 0} ? 'even-row' : 'old-row'">
                     <td th:text="${user.id}"></td>
                     <td th:text="${user.firstName}"></td>
                     <td th:text="${user.lastName}"></td>
@@ -49,14 +49,14 @@
                     </td>
                 </tr>
                 <!-- Hiển thị thông báo khi danh sách trống -->
-                <tr th:if="${userList.content.isEmpty()}">
+                <tr th:if="${userList.isEmpty()}">
                     <td colspan="8">List Empty!!!</td>
                 </tr>
             </tbody>
         </table>
     </div>
     <div class="row">
-        <div>
+        <div th:if="${not userList.isEmpty()}">
             <span>
                 <a th:if="${userList.hasPrevious()}" th:href="@{/m-user/auth/showManageUser(page=${userList.number - 1}, size=${userList.size})}">Previous</a>
                 <a th:if="${not userList.hasPrevious()}" href="#" class="disabled-link" aria-disabled="true">Previous</a>

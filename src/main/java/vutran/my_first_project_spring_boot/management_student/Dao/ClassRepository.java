@@ -16,13 +16,13 @@ public interface ClassRepository extends JpaRepository<Classes, Integer> {
 
     Page<Classes> findAll(Pageable pageable);
 
-    @Query(value = "SELECT * FROM class WHERE class.class_name =:name AND class.c_school_id = :id", nativeQuery = true)
+    @Query("SELECT c FROM Classes c WHERE c.name=:name AND c.school.id=:id")
     Classes findClassByNameAndSchoolId(@Param("name") String name, @Param("id") int id);
 
-    @Query(value = "SELECT * FROM class WHERE class.c_school_id=:school_id", nativeQuery = true)
+    @Query("SELECT c FROM Classes c WHERE c.school.id=:school_id")
     List<Classes> getListClassByIdSchool(@Param("school_id") int id_school);
 
-    @Query(value = "SELECT * FROM class AS c JOIN student AS s ON c.c_id = s.class_id WHERE s.id=:stu_id AND c.c_school_id=:school_id", nativeQuery = true)
+    @Query("SELECT c FROM Classes c JOIN c.studentList st WHERE st.id=:stu_id AND c.school.id=:school_id")
     Classes getClassByStudentAndSchool(@Param("stu_id") int student_id, @Param("school_id") int school_id);
 
     @Query("SELECT c.grade FROM Classes c WHERE c.id = :id_class")

@@ -56,4 +56,7 @@ public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
 
     @Query("SELECT new vutran.my_first_project_spring_boot.management_student.DTO.TeacherDTO(t.id, t.firstName, t.lastName) FROM Teacher t WHERE t.school.id=:school_id")
     List<TeacherDTO> getListTeacherDTOByIdSchool(@Param("school_id") int school_id);
+
+    @Query("SELECT new vutran.my_first_project_spring_boot.management_student.DTO.TeacherDTO(t.id, t.firstName, t.lastName) FROM Teacher t WHERE t.school.id=:school_id AND t.classes.id=:class_id AND t.subject.id=:subject_id")
+    List<TeacherDTO> getListTeacherDTOBySchoolAndClassAndSubject(@Param("school_id") int school_id, @Param("class_id") int class_id, @Param("subject_id") int subject_id);
 }

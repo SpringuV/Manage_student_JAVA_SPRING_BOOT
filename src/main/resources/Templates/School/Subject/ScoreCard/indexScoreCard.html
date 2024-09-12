@@ -32,11 +32,11 @@
             <th>Subject</th>
             <th>School Year</th>
             <th>Semester</th>
-            <th>Feature</th>
+            <th sec:authorize="hasAnyRole('ADMIN', 'MANAGER', 'TEACHER')">Feature</th>
         </thead>
         <tbody>
             <tr th:if="${scoreCardList.isEmpty()}">
-                <td colspan="10" class="text-center">No Score Card Available</td>
+                <td colspan="10" class="text-center">No ScoreCard Available</td>
             </tr>
             <tr th:if="${not scoreCardList.isEmpty()}" th:each="scoreCard,iterStat : ${scoreCardList}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'old-row'}">
                 <td th:text="${scoreCard.id != null ? scoreCard.id : 'null'}"></td>
@@ -49,7 +49,7 @@
                 <td th:text="${scoreCard.subject.nameSubject != null ? scoreCard.subject.nameSubject : 'null'}"></td>
                 <td th:text="${scoreCard.schoolYear != null ? scoreCard.schoolYear : 'null'}"></td>
                 <td th:text="${scoreCard.semester != null ? scoreCard.semester : 'null'}"></td>
-                <td>
+                <td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
                     <a th:href="@{/m-score-card/showModifyFormScoreCard(id=${scoreCard.id})}"
                        class="btn btn-success">Modify</a>
                     <a th:href="@{/m-score-card/modify-delete(id=${scoreCard.id})}" class="btn btn-danger">Delete</a>
@@ -74,7 +74,7 @@
 </div>
 <!--    END pagination-->
 <div>
-    <a class="btn btn-primary" th:href="@{/m-score-card/showFormAddScoreCard}">Add New Score-Card</a>
+    <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER', 'TEACHER')" class="btn btn-primary" th:href="@{/m-score-card/showFormAddScoreCard}">Add New Score-Card</a>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
 </div>
 </body>

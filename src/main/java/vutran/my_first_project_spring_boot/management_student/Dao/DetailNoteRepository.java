@@ -22,7 +22,7 @@ public interface DetailNoteRepository extends JpaRepository<NoteBookDetail, Inte
     List<NoteBookDetail> getDetailNoteByNoteBookId(@Param("id") int id);
 
     // check for duplicates
-    @Query(value = "SELECT * FROM notebook_detail as nd WHERE nd.note_time =:time AND nd.subject_id =:sub_id AND nd.note_teachday =:day_teach", nativeQuery = true)
+    @Query("SELECT nd FROM NoteBookDetail nd WHERE nd.time=:time AND nd.subject.id=:sub_id AND nd.teachingDay=:day_teach")
     List<NoteBookDetail> getNoteBookDetailDuplicates(@Param("time") String time, @Param("sub_id") int sub_id, @Param("day_teach") Date dayTeach);
 
     @Query("SELECT new vutran.my_first_project_spring_boot.management_student.DTO.NotebookDetailDTO(nb.id, nb.contentLecture, nb.time, nb.teacherComment, nb.teachingDay) FROM NoteBookDetail nb WHERE nb.time=:time AND nb.subject.id=:sub_id AND nb.teachingDay=:day_teach")

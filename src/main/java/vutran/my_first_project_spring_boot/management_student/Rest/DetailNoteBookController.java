@@ -34,15 +34,15 @@ public class DetailNoteBookController {
     }
 
     @GetMapping("/showManageDetailNote")
-    public String showManage(@ModelAttribute NoteBook noteBook, Model model, RedirectAttributes redirectAttributes, @RequestParam(defaultValue = "0") int page,
+    public String showManage(@RequestParam("id") int noteId, Model model, RedirectAttributes redirectAttributes, @RequestParam(defaultValue = "0") int page,
                              @RequestParam(defaultValue = "15") int size){
         // check note id is the valid
-        if(noteBook.getId() < 0){
+        if(noteId < 0){
             redirectAttributes.addFlashAttribute("Error", "Invalid NoteBook ID!");
             return "redirect:/m-note/showManageNotebook";
         }
         // check noteId exist
-        NoteBook noteBookExist = notebookService.getNoteBookById(noteBook.getId());
+        NoteBook noteBookExist = notebookService.getNoteBookById(noteId);
         if(noteBookExist == null){
             redirectAttributes.addFlashAttribute("Error", "Not found NoteBook, processing detail note book !!!");
             return "redirect:/m-note/showManageNotebook";
@@ -51,12 +51,9 @@ public class DetailNoteBookController {
         // check list is empty
         if(noteBookDetailPage.isEmpty()){
             model.addAttribute("detailNoteList", new ArrayList<>());
-            // save idNoteBook
-            model.addAttribute("noteBook_id", noteBookExist.getId());
             model.addAttribute("Error", "List Detail empty!!!");
             return "School/NoteBook/DetailNoteBook/indexDetailNote";
         }
-        // save idNoteBook
         model.addAttribute("noteBook_id", noteBookExist.getId());
         model.addAttribute("detailNoteList", noteBookDetailPage);
         return "School/NoteBook/DetailNoteBook/indexDetailNote";
@@ -64,34 +61,52 @@ public class DetailNoteBookController {
 
     @GetMapping("/showFormAddNoteDetail")
     public String showFormAdd(NoteBook noteBook, Model model){
-        model.addAttribute("noteDetail", new NoteBookDetail());
-        List<Teacher> teacherList = noteBook.getClasses().getTeacherList();
-        List<Subject> subjectList = noteBook.getSchool().getSubjectList();
-        model.addAttribute("teacherList", teacherList);
-        model.addAttribute("subjectList", subjectList);
-        model.addAttribute("noteBook_id", noteBook.getId());
+        NoteBook noteBookExist = notebookService.getNoteBookById(noteBook.getId());
+        if(noteBookExist == null){
+            model.addAttribute("Error", "Not found Note");
+        }
+
+        NoteBookDetail noteBookDetail = new NoteBookDetail();
+        noteBookDetail.setNoteBook(noteBookExist); // set notebook
+        model.addAttribute("noteDetail", noteBookDetail);
         return "School/NoteBook/DetailNoteBook/addFormDetailNote";
     }
 
     @PostMapping("/add-process")
     public String addProcess(@ModelAttribute NoteBookDetail noteBookDetail, Model model){
+        System.out.println(noteBookDetail);
         // Check if note already exists - time, subject_id, teachday
-        List<NoteBookDetail> listExist = detailNoteService.getNoteBookDetailDuplicates(noteBookDetail.getTime(), noteBookDetail.getSubject().getId(), noteBookDetail.getTeachingDay());
-        if(listExist != null){
-            model.addAttribute("Error", "Error, NoteBookDetail existed !!!");
+//        List<NoteBookDetail> listExist = detailNoteService.getNoteBookDetailDuplicates(noteBookDetail.getTime(), noteBookDetail.getSubject().getId(), noteBookDetail.getTeachingDay());
+//        if(listExist != null){
+//            model.addAttribute("Error", "Error, NoteBookDetail existed !!!");
+//            model.addAttribute("noteDetail", new NoteBookDetail());
+//            return "School/NoteBook/DetailNoteBook/addFormDetailNote";
+//        }
+        NoteBook noteBookExist = notebookService.getNoteBookById(noteBookDetail.getNoteBook().getId());
+        if(noteBookExist == null){
+            model.addAttribute("Error", "Error, NoteBook not found !!!");
             model.addAttribute("noteDetail", new NoteBookDetail());
             return "School/NoteBook/DetailNoteBook/addFormDetailNote";
         }
         // valid
-        NoteBookDetail newNoteBookDetail = detailNoteService.addNoteBookDetail(noteBookDetail);
-        model.addAttribute("success", "You created new notebook detail have id: "+ newNoteBookDetail.getId());
+        NoteBookDetail newNoteBookDetail = new NoteBookDetail();
+        newNoteBookDetail.setNoteBook(noteBookExist);
+        System.out.println("NoteBook has id: "+ noteBookExist.getId());
+        newNoteBookDetail.setTime(noteBookDetail.getTime());
+        newNoteBookDetail.setSubject(noteBookDetail.getSubject());
+        newNoteBookDetail.setTeacher(noteBookDetail.getTeacher());
+        newNoteBookDetail.setTeachingDay(noteBookDetail.getTeachingDay());
+        newNoteBookDetail.setContentLecture(noteBookDetail.getContentLecture());
+        newNoteBookDetail.setTeacherComment(noteBookDetail.getTeacherComment());
+        detailNoteService.addNoteBookDetail(newNoteBookDetail);
+        model.addAttribute("success", "You created new notebook detail has id: "+ newNoteBookDetail.getId() +"of Class: "+ newNoteBookDetail.getNoteBook().getClasses().getName());
         model.addAttribute("noteDetail", newNoteBookDetail);
         return "School/NoteBook/DetailNoteBook/addFormDetailNote";
     }
 
     @GetMapping("/showModifyFormNoteDetail")
-    public String showFormModify(@ModelAttribute NoteBookDetail  noteBookDetail, Model model){
-        NoteBookDetail noteBookDetailExist = detailNoteService.getNoteBookDetailById(noteBookDetail.getId());
+    public String showFormModify(@RequestParam("id") int note_detail_id, Model model){
+        NoteBookDetail noteBookDetailExist = detailNoteService.getNoteBookDetailById(note_detail_id);
         // if exist
         if(noteBookDetailExist != null){
             model.addAttribute("noteDetail", noteBookDetailExist);
@@ -109,8 +124,8 @@ public class DetailNoteBookController {
         NoteBookDetail noteBookDetailExist = detailNoteService.getNoteBookDetailById(noteBookDetail.getId());
         if(noteBookDetailExist == null){
             model.addAttribute("Error", "Error, NoteBookDetail Not Exist!!!");
-            model.addAttribute("NoteBook", new NoteBook());
-            return "School/NoteBook/modifyFormNotebook";
+            model.addAttribute("noteDetail", new NoteBookDetail());
+            return "School/NoteBook/DetailNoteBook/modifyFormDetailNote";
         }
         noteBookDetailExist.setTeacherComment(noteBookDetail.getTeacherComment());
         noteBookDetailExist.setTeacher(noteBookDetail.getTeacher());
@@ -118,9 +133,10 @@ public class DetailNoteBookController {
         noteBookDetailExist.setTeachingDay(noteBookDetail.getTeachingDay());
         noteBookDetailExist.setTime(noteBookDetail.getTime());
         noteBookDetailExist.setSubject(noteBookDetail.getSubject());
+        // update
         detailNoteService.updateNoteBookDetail(noteBookDetailExist);
         model.addAttribute("success", "You modified NoteBookDetail have id: " + noteBookDetailExist.getId());
-        model.addAttribute("NoteBook", noteBookDetailExist);
+        model.addAttribute("noteDetail", noteBookDetailExist);
         return "School/NoteBook/DetailNoteBook/modifyFormDetailNote";
     }
 

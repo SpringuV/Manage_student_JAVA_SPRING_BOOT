@@ -29,4 +29,5 @@ public interface TeacherService {
     List<TeacherDTO> getListTeacherDTOBySchoolIdAndClassID(int school_id, int class_id);
     List<TeacherDTO> getAllTeacherDTO();
     List<TeacherDTO> getListTeacherDTOByIdSchool(int school_id);
+    List<TeacherDTO> getListTeacherDTOBySchoolAndClassAndSubject(int school_id, int class_id, int subject_id);
 }

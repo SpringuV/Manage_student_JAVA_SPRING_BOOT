@@ -38,7 +38,7 @@
 
     <div>
         <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-        <a class="btn btn-primary" th:href="@{/m-student/showManageStudent}">Student List Manage</a>
+        <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="btn btn-primary" th:href="@{/m-student/showManageStudent}">Student List Manage</a>
     </div>
 </div>
 

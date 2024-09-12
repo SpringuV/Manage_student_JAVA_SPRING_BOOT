@@ -74,7 +74,7 @@
 </div>
 <div>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-    <a class="btn btn-primary" th:href="@{/m-class/showManageClass}">ClassList Manage</a>
+    <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="btn btn-primary" th:href="@{/m-class/showManageClass}">ClassList Manage</a>
 </div>
 </body>
 <script src="/JavaScript/views/classes/add-modify.js"></script>

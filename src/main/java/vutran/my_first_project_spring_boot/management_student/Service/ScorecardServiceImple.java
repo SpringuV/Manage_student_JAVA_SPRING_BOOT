@@ -3,6 +3,7 @@ package vutran.my_first_project_spring_boot.management_student.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vutran.my_first_project_spring_boot.management_student.DTO.ScorecardDTO;
 import vutran.my_first_project_spring_boot.management_student.Dao.ScorecardRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.ScoreCard;
 
@@ -52,5 +53,10 @@ public class ScorecardServiceImple implements ScoreCardService{
     @Override
     public List<ScoreCard> getScorecardByStudentAndClassAndSemester(int student_id, int class_id, int semester) {
         return this.scorecardRepository.getScorecardByStudentAndClassAndSemester(student_id, class_id, semester);
+    }
+
+    @Override
+    public List<ScorecardDTO> getScorecardDTOByStudentAndClassAndSemester(int student_id, int class_id, int semester) {
+        return scorecardRepository.getScorecardDTOByStudentAndClassAndSemester(student_id, class_id, semester);
     }
 }

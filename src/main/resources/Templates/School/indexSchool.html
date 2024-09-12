@@ -23,45 +23,41 @@
         <th>School Address</th>
         <th>School Phone</th>
         <th>School Level</th>
-        <th>Feature</th>
-        <tr th:each="school,iterStat : ${schoolList.content}"
+        <th sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">Feature</th>
+        <tr th:if="${not schoolList.content.isEmpty()}" th:each="school,iterStat : ${schoolList.content}"
             th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'old-row'}">
             <td th:text="${school.id}"></td>
             <td th:text="${school.name}"></td>
             <td th:text="${school.address}"></td>
             <td th:text="${school.phone}"></td>
             <td th:text="${school.level}"></td>
-            <td>
+            <td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
                 <a th:href="@{/m-school/showModifyForm(id=${school.id})}" class="btn btn-success">Modify</a>
                 <a th:href="@{/m-school/modify-delete(id=${school.id})}" class="btn btn-danger">Delete</a>
-                <!--                    <form th:action="@{/api-school/modify-delete}" th:object="${school}" method="post">-->
-                <!--                        <input type="hidden" th:value="${school.id}">-->
-                <!--                        <button type="submit" class="btn btn-danger">Delete</button>-->
-                <!--                    </form>-->
             </td>
         </tr>
     </table>
 </div>
 
 <!--    START pagination-->
-<div>
-        <span>
-            <a th:if="${schoolList.hasPrevious()}"
-               th:href="@{/m-school/showManageSchool(page=${schoolList.number - 1}, size=${schoolList.size})}">Previous</a>
-            <a th:if="${not schoolList.hasPrevious()}" href="#" aria-disabled="true" class="disabled-link">Previous</a>
-        </span>
-    <span th:each="i : ${#numbers.sequence(0, schoolList.totalPages - 1)}">
-            <a th:href="@{/m-school/showManageSchool(page=${i}, size=${schoolList.size})}" th:text="${i + 1}" th:classappend="${i == schoolList.number} ? 'active' : ''">1</a>
-        </span>
+<div th:if="${not schoolList.isEmpty()}">
     <span>
-            <a th:if="${schoolList.hasNext()}"
-               th:href="@{/m-school/showManageSchool(page=${schoolList.number + 1}, size=${schoolList.size})}">Next</a>
-            <a th:if="${not schoolList.hasNext()}" href="#" aria-disabled="true" class="disabled-link">Next</a>
-        </span>
+        <a th:if="${schoolList.hasPrevious()}"
+           th:href="@{/m-school/showManageSchool(page=${schoolList.number - 1}, size=${schoolList.size})}">Previous</a>
+        <a th:if="${not schoolList.hasPrevious()}" href="#" aria-disabled="true" class="disabled-link">Previous</a>
+    </span>
+    <span th:each="i : ${#numbers.sequence(0, schoolList.totalPages - 1)}">
+        <a th:href="@{/m-school/showManageSchool(page=${i}, size=${schoolList.size})}" th:text="${i + 1}" th:classappend="${i == schoolList.number} ? 'active' : ''">1</a>
+    </span>
+    <span>
+        <a th:if="${schoolList.hasNext()}"
+           th:href="@{/m-school/showManageSchool(page=${schoolList.number + 1}, size=${schoolList.size})}">Next</a>
+        <a th:if="${not schoolList.hasNext()}" href="#" aria-disabled="true" class="disabled-link">Next</a>
+    </span>
 </div>
 <!--    END pagination-->
 <div>
-    <a class="btn btn-primary" th:href="@{/m-school/showFormAddSchool}">Add school</a>
+    <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" class="btn btn-primary" th:href="@{/m-school/showFormAddSchool}">Add school</a>
     <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
 </div>
 </body>

@@ -14,10 +14,10 @@
     <div class="row">
         <div id="autoHide">
             <div th:if="${Error}">
-                <span th:text="${Error}" class="alert-danger"></span>
+                <span th:text="${Error}" class="alert alert-danger"></span>
             </div>
             <div th:if="${success}">
-                <span th:text="${success}" class="alert-success"></span>
+                <span th:text="${success}" class="alert alert-success"></span>
             </div>
         </div>
         <!--        START SEARCH-->
@@ -36,7 +36,7 @@
                 <th>Homeroom Teacher</th>
                 <th>Study at School</th>
                 <th>Parent</th>
-                <th>Feature</th>
+                <th sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">Feature</th>
             </thead>
             <tbody>
                 <tr th:each="student,iterStat : ${studentList}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'old-row'}">
@@ -66,7 +66,7 @@
                               th:utext="${student.parent.lastName}+ ' '+${student.parent.firstName} + ' (' +${student.parent.id}+ ')'"></span>
                         <span th:if="${student.parent == null}">--null--</span>
                     </td>
-                    <td>
+                    <td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
                         <div>
                             <a th:href="@{/m-student/showModifyFormStudent(id=${student.id})}" class="btn btn-success">Modify</a>
                         </div>
@@ -98,12 +98,12 @@
     </div>
     <!--    END pagination-->
     <div>
-        <a class="btn btn-primary" th:href="@{/m-student/showFormAddStudent}">Add Student</a>
+        <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER', 'TEACHER')" class="btn btn-primary" th:href="@{/m-student/showFormAddStudent}">Add Student</a>
         <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
     </div>
 </div>
 </body>
-
+<script src="/JavaScript/views/hidden.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>

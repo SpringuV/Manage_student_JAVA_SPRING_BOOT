@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import vutran.my_first_project_spring_boot.management_student.DTO.UserPassDTO;
 import vutran.my_first_project_spring_boot.management_student.Entity.User;
 
 import java.util.List;
@@ -27,4 +28,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT u FROM User u WHERE u.firstName LIKE %:searchName%")
     Page<User> findUsersByFirstName(@Param("searchName") String searchName, PageRequest pageRequest);
+
+    @Query("SELECT new vutran.my_first_project_spring_boot.management_student.DTO.UserPassDTO(u.id, u.username, u.password) FROM User u WHERE u.id=:id")
+    UserPassDTO getUserPassDTOById(@Param("id") int id);
 }

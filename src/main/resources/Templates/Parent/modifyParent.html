@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="form-outline mb-1">
-            <label class="form-label" for="parentid">Parent Id: <span th:text="*{id}"></span></label>
+            <label class="form-label" for="parent_id">Parent Id: <span th:text="*{id}"></span></label>
             <input type="hidden" th:field="*{id}" name="parent_id" id="parent_id">
         </div>
         <!-- START Fragment/CommonFieldInputUser-->
@@ -35,7 +35,7 @@
     </form>
     <div>
         <a class="btn btn-primary" th:href="@{/backHomepage}">Return HomePage</a>
-        <a class="btn btn-primary" th:href="@{/m-parent/showManageParent}">Parent List Manage</a>
+        <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER','TEACHER')" class="btn btn-primary" th:href="@{/m-parent/showManageParent}">Parent List Manage</a>
     </div>
 </div>
 </body>

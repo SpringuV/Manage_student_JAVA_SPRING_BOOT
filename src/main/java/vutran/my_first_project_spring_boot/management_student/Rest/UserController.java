@@ -49,9 +49,6 @@ public class UserController {
     public String showListUser(Model model, @RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "15") int size){
         Page<User> userPage = userRepository.findAll(PageRequest.of(page, size, Sort.by("firstName").ascending()));
-        // Necessary update if insert by mysql workbench
-        //        updateRole();
-        // check List
         if(userPage.isEmpty()){
             model.addAttribute("Error", "Error, List User Empty!!");
             model.addAttribute("userList", new ArrayList<>());

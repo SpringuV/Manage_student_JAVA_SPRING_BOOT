@@ -126,7 +126,7 @@ public class NoteBookDetail {
         return "NoteBookDetail{" +
                 "id=" + id +
                 ", noteBook=" + noteBook.getId() +
-                ", teacher=" + teacher +
+                ", teacher=" + teacher.getId() +
                 ", contentLecture='" + contentLecture + '\'' +
                 ", teachingDay=" + teachingDay +
                 ", time='" + time + '\'' +

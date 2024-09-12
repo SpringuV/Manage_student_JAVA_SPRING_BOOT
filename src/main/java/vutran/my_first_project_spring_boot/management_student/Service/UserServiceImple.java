@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vutran.my_first_project_spring_boot.management_student.DTO.UserPassDTO;
 import vutran.my_first_project_spring_boot.management_student.Dao.UserRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Authority;
 import vutran.my_first_project_spring_boot.management_student.Entity.User;
@@ -72,6 +73,11 @@ public class UserServiceImple implements UserService{
     @Override
     public Page<User> getListUserByFirstName(String firstName, PageRequest pageRequest) {
         return userRepository.findUsersByFirstName(firstName, pageRequest);
+    }
+
+    @Override
+    public UserPassDTO getUserPassDTOById(int id) {
+        return userRepository.getUserPassDTOById(id);
     }
 
 

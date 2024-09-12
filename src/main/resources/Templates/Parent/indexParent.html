@@ -36,7 +36,7 @@
                 <th>Phone</th>
 <!--                <th>Position</th>-->
                 <th>Student</th>
-                <th>Feature</th>
+                <th sec:authorize="hasAnyRole('ADMIN', 'MANAGER','TEACHER')">Feature</th>
             </thead>
             <tbody>
                 <tr th:each="parent, iterStat : ${parentList.content}" th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'odd-row'}">
@@ -51,9 +51,9 @@
                         <span th:if="${parent.student == null}">[null]</span>
                     </td>
 <!--                    <td th:text="${parent.position}"></td>-->
-                    <td>
+                    <td sec:authorize="hasAnyRole('ADMIN', 'MANAGER','TEACHER')">
                         <a th:href="@{/m-parent/showModifyFormParent(id=${parent.id})}" class="btn btn-success">Modify</a>
-                        <a th:href="@{/m-parent/modify-delete(id=${parent.id})}" class="btn btn-danger">Delete</a>
+                        <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" th:href="@{/m-parent/modify-delete(id=${parent.id})}" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
                 <!-- Hiển thị thông báo khi danh sách trống -->
@@ -81,7 +81,7 @@
     <!--    END pagination-->
     <div>
         <div>
-            <a class="btn btn-primary" th:href="@{/m-parent/showFormAddParent}">Add Parent</a>
+            <a sec:authorize="hasAnyRole('ADMIN', 'MANAGER','TEACHER')" class="btn btn-primary" th:href="@{/m-parent/showFormAddParent}">Add Parent</a>
             <a class="btn btn-primary" th:href="@{/backHomepage}">Return Home</a>
         </div>
     </div>

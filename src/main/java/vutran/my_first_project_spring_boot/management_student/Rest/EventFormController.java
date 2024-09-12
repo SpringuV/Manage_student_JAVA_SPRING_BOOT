@@ -3,6 +3,7 @@ package vutran.my_first_project_spring_boot.management_student.Rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -11,9 +12,10 @@ import vutran.my_first_project_spring_boot.management_student.DTO.*;
 import vutran.my_first_project_spring_boot.management_student.Dao.AuthorityRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.*;
 import vutran.my_first_project_spring_boot.management_student.Mapper.SchoolMapper;
-import vutran.my_first_project_spring_boot.management_student.Mapper.StudentMapper;
-import vutran.my_first_project_spring_boot.management_student.Mapper.SubjectMapper;
+import vutran.my_first_project_spring_boot.management_student.Mapper.UserPassMapper;
 import vutran.my_first_project_spring_boot.management_student.Service.*;
+import vutran.my_first_project_spring_boot.management_student.Util.EncodeUtils;
+import vutran.my_first_project_spring_boot.management_student.Util.StringUtils;
 
 import java.util.*;
 
@@ -28,9 +30,10 @@ public class EventFormController {
     private TeacherService teacherService;
     private TranscriptService transcriptService;
     private ScoreCardService scoreCardService;
+    private ParentService parentService;
 
     @Autowired
-    public EventFormController(ScoreCardService scoreCardService, TranscriptService transcriptService, UserService userService, TeacherService teacherService, StudentService studentService, AuthorityRepository authorityRepository,SubjectService subjectService, SchoolService schoolService, ClassService classService){
+    public EventFormController(ParentService parentService, ScoreCardService scoreCardService, TranscriptService transcriptService, UserService userService, TeacherService teacherService, StudentService studentService, AuthorityRepository authorityRepository,SubjectService subjectService, SchoolService schoolService, ClassService classService){
         this.userService = userService;
         this.subjectService = subjectService;
         this.authorityRepository = authorityRepository;
@@ -40,6 +43,13 @@ public class EventFormController {
         this.teacherService = teacherService;
         this.transcriptService = transcriptService;
         this.scoreCardService = scoreCardService;
+        this.parentService = parentService;
+    }
+
+    @GetMapping("/event/getTeacherBySchoolAndClassAndSubject/{schoolId}/{classId}/{subjectId}")
+    @ResponseBody
+    public List<TeacherDTO> returnListTeacherBySchool_Subject_Class(@PathVariable("schoolId") int schoolId, @PathVariable("classId") int classId, @PathVariable("subjectId") int subjectId){
+        return teacherService.getListTeacherDTOBySchoolAndClassAndSubject(schoolId, classId, subjectId);
     }
 
     @GetMapping("/event/getTeacherBySchoolAndClass/{schoolId}/{classId}")
@@ -83,19 +93,16 @@ public class EventFormController {
     @GetMapping("/event/getListStudentByClassForDetailTranscript/{classId}/{semester}")
     @ResponseBody
     public ResponseEntity<?> returnListStudentAndScore(@PathVariable("classId") int class_id, @PathVariable("semester") int semester){
-        List<Student> studentList = studentService.getListByClassId(class_id);
+        List<StudentDTO> studentList = studentService.getListStudentDTOByClassId(class_id);
         List<Map<String, Object>> result = new ArrayList<>();
 
-        for(Student student : studentList){
+        for(StudentDTO student : studentList){
             Map<String, Object> studentData = new HashMap<>();
-
-            // convert the Student entity to DTO using the mapper
-            StudentDTO studentDisplayDTO = StudentMapper.INSTANCE.toDTO(student);
-            studentData.put("studentDTO", studentDisplayDTO);
+            studentData.put("studentDTO", student);
 
             // for each student, get their scores
             List<ScoreCard> scoreCardList = scoreCardService.getScorecardByStudentAndClassAndSemester(student.getId(), class_id, semester);
-            Map<Integer, Double> subjectScores = new HashMap<>();
+            Map<Integer, Double> subjectScores = new HashMap<>(); // {idSubject, score}
             for(ScoreCard scoreCard : scoreCardList){
                 subjectScores.put(scoreCard.getSubject().getId(), scoreCard.getScore());
             }
@@ -129,6 +136,59 @@ public class EventFormController {
         });
         return subjectListFromData;
     }
+
+// START CHANGE PASSWORD
+    @GetMapping("/changePassword")
+    public String showFormChangePass(@RequestParam("user") String encodeString, Model model){
+        String username = EncodeUtils.decodeString(encodeString);
+        User user = userService.findUserByName(username);
+        // convert to DTO
+        UserPassDTO userPassDTO = UserPassMapper.INSTANCE.toDTO(user);
+        System.out.println(userPassDTO);
+
+        // encode id
+        String encodeId = EncodeUtils.encodeId(userPassDTO.getId());
+        model.addAttribute("id", encodeId);
+        return "User/changePassword";
+    }
+
+    @PostMapping("/processChangePass")
+    public String processChangePass(@RequestParam("user") String encodeId,@RequestParam("old_password") String old_pass, @RequestParam("input_password") String pass1, @RequestParam("confirm_password") String confirmPass, Model model){
+        System.out.println(old_pass);
+        System.out.println(pass1);
+        System.out.println(confirmPass);
+        // decode id
+        int user_id = EncodeUtils.decodeId(encodeId);
+        UserPassDTO userPassDTO = userService.getUserPassDTOById(user_id);
+        // compare string 2 string pass
+        if(!pass1.equals(confirmPass)){ // if not same
+            model.addAttribute("Error", "Password not same !!!");
+            return "User/changePassword";
+        } else {
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            // check match old_pass from the database
+            if(bCryptPasswordEncoder.matches(old_pass, userPassDTO.getPassword())){
+
+                // if old pass is matched, encode new pass
+                String newPassEncode = bCryptPasswordEncoder.encode(confirmPass);
+                // save pass
+                // to Entity
+                User userEntity = userService.getUserById(userPassDTO.getId());
+                userEntity.setPassword(newPassEncode);
+                // update user
+                userService.updateUser(userEntity);
+
+                model.addAttribute("success", "Change Password Successfully");
+            } else {
+                model.addAttribute("Error", "The OldPassword not matched, type wrong the password !!!");
+            }
+        }
+
+        model.addAttribute("id", encodeId); // id encoded
+        return "User/changePassword";
+    }
+
+// END CHANGE PASSWORD
 
     // after login success return to home
     @GetMapping()

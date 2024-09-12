@@ -195,17 +195,6 @@ public class StudentController {
             redirectAttributes.addFlashAttribute("Error", "Error, Student doesn't exist!!");
             return "redirect:/m-student/showManageStudent";
         } else {
-            studentExist.setParent(null);
-            studentExist.setClasses(null);
-            studentExist.setSchool(null);
-            studentExist.setTeacher(null);
-            studentExist.getScoreCardList().clear();
-            studentExist.getSubjectList().clear();
-            studentExist.getTranscriptSet().clear();
-            studentExist.getCollectionAuthority().clear();
-            studentExist.getStudyRecordList().clear();
-            // save then delete
-            studentService.updateStudent(studentExist);
             // delete
             studentService.deleteStudentById(studentExist.getId());
             redirectAttributes.addFlashAttribute("success", "You deleted student have id: "+studentExist.getId()+" Name: "+studentExist.getFirstName());
