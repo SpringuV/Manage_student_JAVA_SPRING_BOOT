@@ -67,12 +67,14 @@
                         <span th:if="${student.parent == null}">--null--</span>
                     </td>
                     <td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
-                        <div>
-                            <a th:href="@{/m-student/showModifyFormStudent(id=${student.id})}" class="btn btn-success">Modify</a>
-                        </div>
-                        <div>
-                            <a th:href="@{/m-student/modify-delete(id=${student.id})}" class="btn btn-danger">Delete</a>
-                        </div>
+                        <form th:action="@{/m-student/showModifyFormStudent}" method="post">
+                            <input type="hidden" name="idStudent" th:value="${student.id}">
+                            <button type="submit" class="btn btn-success">Modify</button>
+                        </form>
+                        <form th:action="@{/m-student/modify-delete}" method="post">
+                            <input type="hidden" name="idStudent" th:value="${student.id}">
+                            <button type="submit" class="btn btn-success">Delete</button>
+                        </form>
                     </td>
                 </tr>
                 <!-- Hiển thị thông báo khi danh sách trống -->

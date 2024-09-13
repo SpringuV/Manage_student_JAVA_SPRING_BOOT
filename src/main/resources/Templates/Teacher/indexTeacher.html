@@ -63,9 +63,14 @@
                     </td>
                     <td th:text="${teacher.position != null ? teacher.position : 'null'}"></td>
                     <td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
-                        <a th:href="@{/m-teacher/showModifyFormTeacher(id=${teacher.id})}"
-                           class="btn btn-success">Modify</a>
-                        <a th:href="@{/m-teacher/modify-delete(id=${teacher.id})}" class="btn btn-danger">Delete</a>
+                        <form th:action="@{/m-teacher/showModifyFormTeacher}" method="post">
+                            <input type="hidden" th:value="${teacher.id}" name="teacherId">
+                            <button type="submit" class="btn btn-success">Modify</button>
+                        </form>
+                        <form th:action="@{/m-teacher/modify-delete}" method="post">
+                            <input type="hidden" th:value="${teacher.id}" name="teacherId">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
                     </td>
                 </tr>
                 <!-- Hiển thị thông báo khi danh sách trống -->

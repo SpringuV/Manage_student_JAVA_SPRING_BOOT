@@ -26,16 +26,6 @@ public class SecurityConfiguration  {
         return  new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public CustomAuthenticationEntryPoint customAuthenticationEntryPoint(){
-//        return new CustomAuthenticationEntryPoint();
-//    }
-//
-//    @Bean
-//    public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
-//        return new CustomAuthenticationSuccessHandler();
-//    }
-
     // encode password form login
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserService userService){
@@ -54,23 +44,6 @@ public class SecurityConfiguration  {
         return userDetailsManager;
     }
 
-//    @Bean
-//    public SpringTemplateEngine templateEngine() {
-//        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-//        templateEngine.setTemplateResolver(templateResolver());
-//        return templateEngine;
-//    }
-//
-//    @Bean
-//    public ITemplateResolver templateResolver() {
-//        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
-//        templateResolver.setPrefix("classpath:/Templates/");
-//        templateResolver.setSuffix(".html");
-//        templateResolver.setTemplateMode(TemplateMode.HTML);
-//        templateResolver.setCacheable(false);
-//        return templateResolver;
-//    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.authorizeHttpRequests(
@@ -79,67 +52,67 @@ public class SecurityConfiguration  {
                         // register
                         .requestMatchers(HttpMethod.GET,"/m-user/showFormAddUser").permitAll()
                         .requestMatchers(HttpMethod.POST,"/m-user/add-process").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/m-user/auth/**").hasAnyRole("ADMIN", "MANAGER", "USER", "PARENT", "TEACHER")
-                        .requestMatchers(HttpMethod.DELETE, "/m-user/auth/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/m-user/auth/**").hasAnyRole("ADMIN", "MANAGER", "USER", "PARENT","STUDENT", "TEACHER")
+                        .requestMatchers(HttpMethod.DELETE, "/m-user/auth/**").hasAnyRole("ADMIN", "MANAGER")
                         // class
-                        .requestMatchers(HttpMethod.GET, "/m-class/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/m-class/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/m-class/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/m-class/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/m-class/**").hasAnyRole("ADMIN", "MANAGER", "USER", "STUDENT", "PARENT", "TEACHER")
+                        .requestMatchers(HttpMethod.POST, "/m-class/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/m-class/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/m-class/**").hasAnyRole("ADMIN")
                         // teacher
-                        .requestMatchers(HttpMethod.GET, "/m-teacher/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/m-teacher/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/m-teacher/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/m-teacher/**").hasAnyRole("ADMIN", "MANAGER", "STUDENT", "USER", "PARENT", "TEACHER")
+                        .requestMatchers(HttpMethod.POST, "/m-teacher/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/m-teacher/**").hasAnyRole("ADMIN", "MANAGER", "TEACHER")
                         .requestMatchers(HttpMethod.DELETE, "/m-teacher/**").hasRole("ADMIN")
                         // note book
-                        .requestMatchers(HttpMethod.GET, "/m-note/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/m-note/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/m-note/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/m-note/**").hasAnyRole("ADMIN", "MANAGER", "TEACHER")
+                        .requestMatchers(HttpMethod.POST, "/m-note/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/m-note/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/m-note/**").hasRole("ADMIN")
                         // note book detail
-                        .requestMatchers(HttpMethod.GET, "/m-note-detail/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/m-note-detail/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/m-note-detail/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/m-note-detail/**").hasAnyRole("ADMIN", "MANAGER", "TEACHER")
+                        .requestMatchers(HttpMethod.POST, "/m-note-detail/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/m-note-detail/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/m-note-detail/**").hasRole("ADMIN")
                         // school
-                        .requestMatchers(HttpMethod.GET, "/m-school/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/m-school/**").hasAnyRole("ADMIN", "MANAGER", "USER", "PARENT", "TEACHER")
                         .requestMatchers(HttpMethod.POST, "/m-school/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/m-school/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/m-school/**").hasRole("ADMIN")
                         // student
-                        .requestMatchers(HttpMethod.GET, "/m-student/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/m-student/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/m-student/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/m-student/**").hasAnyRole("ADMIN", "MANAGER", "PARENT","USER", "TEACHER", "STUDENT")
+                        .requestMatchers(HttpMethod.POST, "/m-student/**").hasAnyRole("ADMIN", "MANAGER", "STUDENT")
+                        .requestMatchers(HttpMethod.PUT, "/m-student/**").hasAnyRole("ADMIN", "MANAGER", "STUDENT")
                         .requestMatchers(HttpMethod.DELETE, "/m-student/**").hasRole("ADMIN")
                         // parent
-                        .requestMatchers(HttpMethod.GET, "/m-parent/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/m-parent/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/m-parent/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/m-parent/**").hasAnyRole("ADMIN", "MANAGER", "PARENT","USER", "TEACHER", "STUDENT")
+                        .requestMatchers(HttpMethod.POST, "/m-parent/**").hasAnyRole("ADMIN", "MANAGER", "PARENT")
+                        .requestMatchers(HttpMethod.PUT, "/m-parent/**").hasAnyRole("ADMIN", "MANAGER", "PARENT")
                         .requestMatchers(HttpMethod.DELETE, "/m-parent/**").hasRole("ADMIN")
                         // scorecard
-                        .requestMatchers(HttpMethod.GET, "/m-score-card/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/m-score-card/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/m-score-card/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/m-score-card/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/m-score-card/**").hasAnyRole("ADMIN", "MANAGER", "PARENT", "TEACHER", "STUDENT")
+                        .requestMatchers(HttpMethod.POST, "/m-score-card/**").hasAnyRole("ADMIN", "MANAGER", "TEACHER")
+                        .requestMatchers(HttpMethod.PUT, "/m-score-card/**").hasAnyRole("ADMIN", "MANAGER", "TEACHER")
+                        .requestMatchers(HttpMethod.DELETE, "/m-score-card/**").hasAnyRole("ADMIN", "MANAGER", "TEACHER")
                         // study-record
-                        .requestMatchers(HttpMethod.GET, "/m-study-record/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/m-study-record/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/m-study-record/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/m-study-record/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/m-study-record/**").hasAnyRole("ADMIN", "MANAGER", "PARENT", "TEACHER", "STUDENT")
+                        .requestMatchers(HttpMethod.POST, "/m-study-record/**").hasAnyRole("ADMIN", "MANAGER", "TEACHER")
+                        .requestMatchers(HttpMethod.PUT, "/m-study-record/**").hasAnyRole("ADMIN", "MANAGER", "TEACHER")
+                        .requestMatchers(HttpMethod.DELETE, "/m-study-record/**").hasAnyRole("ADMIN", "MANAGER")
                         // subject
-                        .requestMatchers(HttpMethod.GET, "/m-subject/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/m-subject/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/m-subject/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/m-subject/**").hasAnyRole("ADMIN", "MANAGER", "PARENT", "TEACHER", "STUDENT")
+                        .requestMatchers(HttpMethod.POST, "/m-subject/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/m-subject/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/m-subject/**").hasRole("ADMIN")
                         // transcript
-                        .requestMatchers(HttpMethod.GET, "/m-transcript/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/m-transcript/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/m-transcript/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/m-transcript/**").hasAnyRole("ADMIN", "MANAGER", "PARENT", "TEACHER", "STUDENT")
+                        .requestMatchers(HttpMethod.POST, "/m-transcript/**").hasAnyRole("ADMIN", "MANAGER", "TEACHER")
+                        .requestMatchers(HttpMethod.PUT, "/m-transcript/**").hasAnyRole("ADMIN", "MANAGER", "TEACHER")
                         .requestMatchers(HttpMethod.DELETE, "/m-transcript/**").hasRole("ADMIN")
 
                         // change pass
-                        .requestMatchers(HttpMethod.GET, "/changePassword/**").hasAnyRole("ADMIN", "MANAGER", "USER", "PARENT", "TEACHER")
-                        .requestMatchers(HttpMethod.POST, "/processChangePass/**").hasAnyRole("ADMIN", "MANAGER", "USER", "PARENT", "TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/changePassword/**").hasAnyRole("ADMIN", "MANAGER", "USER", "PARENT", "TEACHER", "STUDENT")
+                        .requestMatchers(HttpMethod.POST, "/processChangePass/**").hasAnyRole("ADMIN", "MANAGER", "USER", "PARENT", "TEACHER", "STUDENT")
 
                         .requestMatchers(HttpMethod.GET,"/event/**").permitAll()
                         .requestMatchers("/static/**", "/JavaScript/**", "/CSS/**", "/event/showLoginPage").permitAll() // access to static not authenticate

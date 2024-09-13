@@ -37,14 +37,14 @@ public class School {
     private List<Classes> classesList;
 
     // một trường làm việc với nhiều giáo viên
-    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Teacher> teacherList;
 
     // không sử dụng orphanremoval =true đối với entity là con người. Ví dụ: xóa trường thì người vẫn còn
 
     // một trường có nhiều học sinh, nhiều học sinh học ở 1 trường
-    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Student> studentList;
 
@@ -66,7 +66,7 @@ public class School {
     @JsonManagedReference
     private List<ScoreCard> scoreCardList;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "school", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "school", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Parent> parentList;
 

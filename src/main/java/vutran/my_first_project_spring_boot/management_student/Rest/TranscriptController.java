@@ -91,15 +91,15 @@ public class TranscriptController {
         return "School/Transcript/addFormTranscript";
     }
 
-    @GetMapping("/showModifyFormTranscript")
-    public String showFormModify(@ModelAttribute Transcript transcript, Model model) {
+    @PostMapping("/showModifyFormTranscript")
+    public String showFormModify(@RequestParam("idTranscript") int idTranscript, Model model) {
         // check transcript exist
-        Transcript transcriptExist = transcriptService.getTranscriptById(transcript.getId());
+        Transcript transcriptExist = transcriptService.getTranscriptById(idTranscript);
         if (transcriptExist != null) {
             model.addAttribute("transcript", transcriptExist);
             model.addAttribute("schoolList", schoolService.getAllSchools());
         } else {
-            model.addAttribute("Error", "Transcript has id: " + transcript.getId() + " not existed !!!");
+            model.addAttribute("Error", "Transcript has id: " + idTranscript + " not existed !!!");
             model.addAttribute("transcript", new Transcript());
             model.addAttribute("schoolList", schoolService.getAllSchools());
         }
@@ -127,10 +127,10 @@ public class TranscriptController {
         return "School/Transcript/modifyFormTranscript";
     }
 
-    @GetMapping("/modify-delete")
-    public String processDelete(@ModelAttribute Transcript transcript, RedirectAttributes redirectAttributes) {
+    @PostMapping("/modify-delete")
+    public String processDelete(@RequestParam("idTranscript") int idTranscript, RedirectAttributes redirectAttributes) {
         // check transcript exist
-        Transcript transcriptExist = transcriptService.getTranscriptById(transcript.getId());
+        Transcript transcriptExist = transcriptService.getTranscriptById(idTranscript);
         if (transcriptExist != null) {
             transcriptExist.getStudentSet().clear();
             transcriptExist.getStudyRecordList().clear();
@@ -139,17 +139,17 @@ public class TranscriptController {
             // update then delete
             transcriptService.updateTranscript(transcriptExist);
             transcriptService.deleteTranscriptById(transcriptExist.getId());
-            redirectAttributes.addFlashAttribute("success", "You deleted a transcript has id: " + transcript.getId());
+            redirectAttributes.addFlashAttribute("success", "You deleted a transcript has id: " + idTranscript);
         } else {
-            redirectAttributes.addFlashAttribute("Error", "Transcript has id: " + transcript.getId() + " not existed !!!");
+            redirectAttributes.addFlashAttribute("Error", "Transcript has id: " + idTranscript + " not existed !!!");
         }
         return "redirect:/m-transcript/showManageTranscript";
     }
 
-    @GetMapping("/detailTranscript")
-    public String showDetailForm(@RequestParam("id") int id, Model model){
+    @PostMapping("/detailTranscript")
+    public String showDetailForm(@RequestParam("idTranscript") int idTranscript, Model model){
         // check transcript exist
-        Transcript transcriptExist = transcriptService.getTranscriptById(id);
+        Transcript transcriptExist = transcriptService.getTranscriptById(idTranscript);
         if (transcriptExist != null){
             List<Classes> classList = classService.getListClassByIdSchool(transcriptExist.getSchool().getId());
             model.addAttribute("transcript", transcriptExist);

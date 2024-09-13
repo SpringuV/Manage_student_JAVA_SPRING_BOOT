@@ -32,8 +32,14 @@
             <td th:text="${school.phone}"></td>
             <td th:text="${school.level}"></td>
             <td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
-                <a th:href="@{/m-school/showModifyForm(id=${school.id})}" class="btn btn-success">Modify</a>
-                <a th:href="@{/m-school/modify-delete(id=${school.id})}" class="btn btn-danger">Delete</a>
+                <form th:action="@{/m-school/showModifyForm}" method="post">
+                    <input type="hidden" th:value="${school.id}" name="idSchool">
+                    <button type="submit" class="btn btn-success">Modify</button>
+                </form>
+                <form th:action="@{/m-school/modify-delete}" method="post">
+                    <input type="hidden" th:value="${school.id}" name="idSchool">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
             </td>
         </tr>
     </table>

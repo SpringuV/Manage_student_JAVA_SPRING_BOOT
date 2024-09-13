@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -30,4 +31,8 @@ public interface ParentRepository extends JpaRepository<Parent, Integer> {
 
     @Query("SELECT p FROM Parent p WHERE p.firstName LIKE %:searchName%")
     Page<Parent> findParentsByFirstName(@Param("searchName") String searchName, PageRequest pageRequest);
+
+    @Modifying
+    @Query("UPDATE Parent p SET p.classes.id= NULL WHERE p.classes.id=:class_id")
+    void updateClassIdToNullForClass(@Param("class_id") int classId);
 }

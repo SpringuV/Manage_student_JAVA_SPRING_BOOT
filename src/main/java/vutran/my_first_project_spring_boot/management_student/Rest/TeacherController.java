@@ -79,14 +79,14 @@ public class TeacherController {
         return "Teacher/indexTeacher";
     }
 
-    @GetMapping("/showModifyFormTeacher")
-    public String showForm(@Valid @ModelAttribute Teacher teacher, Model model){
-        Teacher teacherExist = teacherService.getTeacherById(teacher.getId());
+    @PostMapping("/showModifyFormTeacher")
+    public String showForm(@RequestParam("teacherIds") int idTeacher, Model model){
+        Teacher teacherExist = teacherService.getTeacherById(idTeacher);
 
         if(teacherExist == null){
             model.addAttribute("teacher", new Teacher());
             model.addAttribute("schoolList", schoolService.getAllSchools());
-            model.addAttribute("Error", "Not found Teacher have id: "+teacher.getId());
+            model.addAttribute("Error", "Not found Teacher have id: "+idTeacher);
             return "Teacher/modifyFormTeacher";
         }
         model.addAttribute("schoolList", schoolService.getAllSchools());
@@ -192,9 +192,9 @@ public class TeacherController {
         return "Teacher/addTeacher";
     }
 
-    @GetMapping("/modify-delete")
-    public String deleteTeacher(@ModelAttribute Teacher teacher, RedirectAttributes redirectAttributes){
-        Teacher teacherExist = teacherService.getTeacherById(teacher.getId());
+    @PostMapping("/modify-delete")
+    public String deleteTeacher(@RequestParam("teacherId") int idTeacher, RedirectAttributes redirectAttributes){
+        Teacher teacherExist = teacherService.getTeacherById(idTeacher);
         if(teacherExist != null){
             teacherExist.getNoteBookDetailList().clear();
             teacherExist.getStudentList().clear();
@@ -203,7 +203,7 @@ public class TeacherController {
             teacherService.updateTeacher(teacherExist);
             // delete
             teacherService.deleteTeacherById(teacherExist.getId());
-            redirectAttributes.addFlashAttribute("success", "You have deleted teacher have id: "+ teacher.getId());
+            redirectAttributes.addFlashAttribute("success", "You have deleted teacher have id: "+ idTeacher);
             List<Teacher> teacherList = teacherService.getListTeacherByPosition();
             redirectAttributes.addFlashAttribute("teacherList", teacherList);
             return "redirect:/m-teacher/showManageTeacher";

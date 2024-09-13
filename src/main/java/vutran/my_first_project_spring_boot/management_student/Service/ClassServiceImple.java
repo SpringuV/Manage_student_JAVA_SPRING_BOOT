@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vutran.my_first_project_spring_boot.management_student.DTO.ClassDTO;
 import vutran.my_first_project_spring_boot.management_student.Dao.ClassRepository;
+import vutran.my_first_project_spring_boot.management_student.Dao.ParentRepository;
 import vutran.my_first_project_spring_boot.management_student.Dao.StudentRepository;
 import vutran.my_first_project_spring_boot.management_student.Dao.TeacherRepository;
 import vutran.my_first_project_spring_boot.management_student.Entity.Classes;
@@ -20,12 +21,14 @@ public class ClassServiceImple implements ClassService{
     private ClassRepository classRepository;
     private StudentRepository studentRepository;
     private TeacherRepository teacherRepository;
+    private ParentRepository parentRepository;
 
     @Autowired
-    public ClassServiceImple(ClassRepository classRepository, StudentRepository studentRepository, TeacherRepository teacherRepository) {
+    public ClassServiceImple(ParentRepository parentRepository, ClassRepository classRepository, StudentRepository studentRepository, TeacherRepository teacherRepository) {
         this.classRepository = classRepository;
         this.studentRepository = studentRepository;
         this.teacherRepository = teacherRepository;
+        this.parentRepository = parentRepository;
     }
 
     @Override
@@ -58,6 +61,7 @@ public class ClassServiceImple implements ClassService{
                 teacher.setClasses(null);
                 teacherRepository.saveAndFlush(teacher);
             }
+            parentRepository.updateClassIdToNullForClass(id);
             classRepository.deleteById(id);
         } catch (Exception e){
             // Xử lý lỗi nếu có

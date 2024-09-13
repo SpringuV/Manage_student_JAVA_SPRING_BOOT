@@ -136,9 +136,9 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/showModifyFormStudent")
-    public String formModifyStudent(Student student,Model model){
-        Student studentExist = studentService.getStudentById(student.getId());
+    @PostMapping("/showModifyFormStudent")
+    public String formModifyStudent(@RequestParam("idStudent") int idStudent,Model model){
+        Student studentExist = studentService.getStudentById(idStudent);
 
         // check student exist
         if(studentExist != null){
@@ -147,7 +147,7 @@ public class StudentController {
             return "Student/modifyFormStudent";
         } else{
             model.addAttribute("student", new Student());
-            model.addAttribute("Error", "Not found student");
+            model.addAttribute("Error", "Not found student has id: "+idStudent);
             model.addAttribute("schoolList", schoolService.getAllSchools());
             return "Student/modifyFormStudent";
         }
@@ -187,10 +187,10 @@ public class StudentController {
         }
     }
 
-    @GetMapping("modify-delete")
-    public String processDelete(@ModelAttribute Student student, RedirectAttributes redirectAttributes){
+    @PostMapping("modify-delete")
+    public String processDelete(@RequestParam("idStudent") int idStudent, RedirectAttributes redirectAttributes){
         // check student exist
-        Student studentExist = studentService.getStudentById(student.getId());
+        Student studentExist = studentService.getStudentById(idStudent);
         if(studentExist == null){
             redirectAttributes.addFlashAttribute("Error", "Error, Student doesn't exist!!");
             return "redirect:/m-student/showManageStudent";

@@ -38,9 +38,18 @@
                 <td th:text="${transcript.schoolYear}"></td>
                 <td th:text="${transcript.semester}"></td>
                 <td>
-                    <a th:href="@{/m-transcript/showModifyFormTranscript(id=${transcript.id})}" class="btn btn-success">Modify</a>
-                    <a th:href="@{/m-transcript/detailTranscript(id=${transcript.id})}" class="btn btn-primary">Detail</a>
-                    <a th:href="@{/m-transcript/modify-delete(id=${transcript.id})}" class="btn btn-danger">Delete</a>
+                    <form th:action="@{/m-transcript/showModifyFormTranscript}" method="post">
+                        <input type="hidden" th:value="${transcript.id}" name="idTranscript">
+                        <button type="submit" class="btn btn-success">Modify</button>
+                    </form>
+                    <form th:action="@{/m-transcript/detailTranscript}" method="post">
+                        <input type="hidden" th:value="${transcript.id}" name="idTranscript">
+                        <button type="submit" class="btn btn-primary">Detail</button>
+                    </form>
+                    <form th:action="@{/m-transcript/modify-delete}" method="post">
+                        <input type="hidden" th:value="${transcript.id}" name="idTranscript">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
                 </td>
             </tr>
         </tbody>

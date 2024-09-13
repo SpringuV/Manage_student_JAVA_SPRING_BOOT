@@ -110,12 +110,12 @@ public class SchoolController {
     }
 
     // modify school
-    @GetMapping("/showModifyForm")
-    public String showModifyForm(@Valid @ModelAttribute School school, Model model){
-        School existSchool = schoolService.getSchoolById(school.getId());
+    @PostMapping("/showModifyForm")
+    public String showModifyForm(@RequestParam("idSchool") int idSchool, Model model){
+        School existSchool = schoolService.getSchoolById(idSchool);
         if(existSchool == null){
             model.addAttribute("school", new School());
-            model.addAttribute("Error", "Not found school with id: "+ school.getId());
+            model.addAttribute("Error", "Not found school with id: "+ idSchool);
             return "School/indexSchool";
         }
 
@@ -148,19 +148,10 @@ public class SchoolController {
         return "School/modifyForm";
     }
 
-    @GetMapping("/modify-delete")
-    public String processDelete(@Valid @ModelAttribute School school , RedirectAttributes redirectAttributes){
-        School existSchool = schoolService.getSchoolById(school.getId());
+    @PostMapping("/modify-delete")
+    public String processDelete(@RequestParam("idSchool") int idSchool , RedirectAttributes redirectAttributes){
+        School existSchool = schoolService.getSchoolById(idSchool);
         if(existSchool != null){
-            existSchool.getSubjectList().clear();
-            existSchool.getClassesList().clear();
-            existSchool.getNoteBookSet().clear();
-            existSchool.getParentList().clear();
-            existSchool.getScoreCardList().clear();
-            existSchool.getStudentList().clear();
-            existSchool.getStudyRecordList().clear();
-            existSchool.getTeacherList().clear();
-            existSchool.getTranscriptList().clear();
             // update and delete
             schoolService.updateSchool(existSchool);
             // delete

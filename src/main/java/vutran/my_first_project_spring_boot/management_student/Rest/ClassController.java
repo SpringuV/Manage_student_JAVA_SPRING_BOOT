@@ -51,12 +51,6 @@ public class ClassController {
         }
     }
 
-    @GetMapping("/getClassByStudentAndSchool/{schoolId}/{studentId}")
-    @ResponseBody
-    public Classes returnClass(@PathVariable("schoolId") int school_id, @PathVariable("studentId") int student_id){
-        return  classService.getClassByStudentAndSchool(school_id, student_id);
-    }
-
     @GetMapping("/showFormAddClass")
     public String addClass(Model model){
         model.addAttribute("classes", new Classes());
